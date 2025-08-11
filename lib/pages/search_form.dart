@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../components/button.dart";
 import "../components/input_box.dart";
+import "../components/ui_scaffold.dart";
 import "search_results.dart";
 
 class SearchForm extends StatefulWidget {
@@ -16,10 +17,9 @@ class _SearchFormState extends State<SearchForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
-      appBar: AppBar(backgroundColor: Colors.lightGreen.shade400, title: Text("Search")),
-      body: Center(
+    return UIScaffold(
+      appBarTitle: "Search",
+      scaffoldBody: Center(
         child: Container(
           width: 500,
           height: 300,

@@ -1,6 +1,7 @@
 import "dart:typed_data";
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
+import "../components/ui_scaffold.dart";
 import "../helpers/list_to_string.dart";
 import "../api.dart";
 
@@ -25,10 +26,9 @@ class _WorkoutInfoPageState extends State<WorkoutInfoPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
-      appBar: AppBar(backgroundColor: Colors.lightGreen.shade400, title: Text("Exercise details")),
-      body: FutureBuilder(
+    return UIScaffold(
+      appBarTitle: "Search",
+      scaffoldBody: FutureBuilder(
         future: image, 
         builder: (context, snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting) {

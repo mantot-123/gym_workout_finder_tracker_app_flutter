@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "../components/ui_scaffold.dart";
 
 class SavedWorkoutsPage extends StatefulWidget {
   const SavedWorkoutsPage({super.key});
@@ -10,10 +11,9 @@ class SavedWorkoutsPage extends StatefulWidget {
 class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
-      appBar: AppBar(backgroundColor: Colors.lightGreen.shade400, title: Text("Saved workouts")),
-      body: Center(
+    return UIScaffold(
+      appBarTitle: "Saved workouts",
+      scaffoldBody: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

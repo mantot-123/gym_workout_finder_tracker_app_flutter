@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../components/workout_tile.dart";
+import "../components/ui_scaffold.dart";
 import "../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
@@ -24,10 +25,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
-      appBar: AppBar(backgroundColor: Colors.lightGreen.shade400, title: Text("Search results for: ${widget.query}")),
-      body: FutureBuilder<dynamic>(
+    return UIScaffold(
+      appBarTitle: "Search results for: ${widget.query}",
+      scaffoldBody: FutureBuilder<dynamic>(
         future: results,
         builder: (context, snapshot) {
           if(snapshot.connectionState == ConnectionState.waiting) {
