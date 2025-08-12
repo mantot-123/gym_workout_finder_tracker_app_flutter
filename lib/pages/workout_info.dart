@@ -2,6 +2,7 @@ import "dart:typed_data";
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../components/ui_scaffold.dart";
+import "../components/workout_info_pane.dart";
 import "../helpers/list_to_string.dart";
 import "../api.dart";
 
@@ -27,74 +28,32 @@ class _WorkoutInfoPageState extends State<WorkoutInfoPage> {
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: "Search",
-      scaffoldBody: FutureBuilder(
-        future: image, 
-        builder: (context, snapshot) {
-          if(snapshot.connectionState == ConnectionState.waiting) {
-            return Center(
-              child: LoadingAnimationWidget.fourRotatingDots(
-                color: Colors.lightGreen.shade900, size: 100
-              )
-            );
-          } 
-          else if(snapshot.hasError) {
-            return Center(child: Text("Unable to get workout data. Please try again later."));
-          }
-          else if(!snapshot.hasData || snapshot.data!.isEmpty) {
-            return Center(child: Text("Unable to get workout data. Please try again later."));
-          }
-          else {
-            // print(snapshot.data);
-            return Column(children:[
-              Image.memory(snapshot.data!), // NULL AWARE OPERATOR - SETS A DEFAULT VALUE TO THE VARIABLE WHEN IT SEES A NULL
-              Expanded(child: workoutInfoPane(widget.data))
-            ]);
-          }
-        }
+      appBarTitle: "Exercise details",
+      scaffoldBody: Column(
+        children: [
+          FutureBuilder(
+            future: image, 
+            builder: (context, snapshot) {
+              try {
+                if(snapshot.connectionState == ConnectionState.waiting) {
+                  return LoadingAnimationWidget.fourRotatingDots(
+                    color: Colors.lightGreen.shade900, size: 60
+                  );
+                } 
+                else if(!snapshot.hasData || snapshot.data!.isEmpty) {
+                  return Placeholder(child: Text("Sorry, there is currently no image data available for this exercise."));
+                }
+                else {
+                  return Image.memory(snapshot.data!); // NULL AWARE OPERATOR -  ONLY THROWS A RUNTIME ERROR WHEN IT SEES A NULL
+                }
+              } catch(ex) {
+                return Placeholder(child: Text("An error has occurred while trying to get image data for the exercise. Please try again later."));
+              }
+            }
+          ),
+          Expanded(child: workoutInfoPane(widget.data))
+        ],
       ) 
     );;
   }
-}
-
-// DISPLAY WORKOUT INFORMATION IN THIS WIDGET
-Container workoutInfoPane(Map<String, dynamic> data) {
-  return Container(
-    padding: EdgeInsets.symmetric(horizontal: 15),
-    child: ListView(
-      children: [
-        Text("ID:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["id"]),
-        SizedBox(height: 10),
-    
-        Text("Name:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["name"]),
-        SizedBox(height: 10),
-
-        Text("Difficulty:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["difficulty"]),
-        SizedBox(height: 10),
-        
-        Text("Description:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["description"]),
-        SizedBox(height: 10),
-    
-        Text("Target muscles worked:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["target"]),
-        SizedBox(height: 15),
-    
-        Text("Secondary muscles:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(listToString(data["secondaryMuscles"])),
-        SizedBox(height: 15),
-    
-        Text("Description:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["description"]),
-        SizedBox(height: 15),
-    
-        Text("Instructions:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(toNumberedListString(data["instructions"])),
-        SizedBox(height: 15),
-      ],
-    ),
-  );
 }
