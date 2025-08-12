@@ -19,5 +19,5 @@ flutter run --dart-define=API_KEY=<YOUR_API_KEY_HERE>
 Note that some of the features from the command line version are not yet available in this app. They are shown in this list here. 
 * Target muscle search
 * Add and manage saved workouts
-* Workout recommender - Automatically suggests a set of exercises based on the target muscle groups (for example: Push, Pull and Leg days), number of total exercises to do, difficulty and intensity
+* Personalised workout plan generator - Automatically suggests a set of exercises based on workout frequency, current build, goal, age, height, experience, target muscle groups, number of total exercises to do
 
