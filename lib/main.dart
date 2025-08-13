@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import "db.dart";
 import "pages/home.dart";
 import "pages/search_form.dart";
 import "pages/saved_workouts.dart";
 import "pages/api_key_empty_error.dart";
 import "components/ui_scaffold.dart";
 
-void main() {
+void main() async {
+  await WorkoutsDB.initDb();
   runApp(MainApp());
 }
 
