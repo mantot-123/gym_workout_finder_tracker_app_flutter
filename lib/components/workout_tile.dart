@@ -5,6 +5,10 @@ class WorkoutTile extends StatelessWidget {
   Map<String, dynamic> data;
   WorkoutTile({super.key, required this.data});
 
+  void saveExercise() {
+    // TODO SAVE EXERCISE
+  }
+
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -15,7 +19,8 @@ class WorkoutTile extends StatelessWidget {
       },
       title: Text(data["name"]), 
       subtitle: Text(data["description"]),
-      leading: Icon(Icons.fitness_center)
-    );;
+      leading: Icon(Icons.fitness_center),
+      trailing: IconButton(icon: Icon(Icons.save), onPressed: saveExercise)
+    );
   }
 }

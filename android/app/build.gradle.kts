@@ -8,7 +8,7 @@ plugins {
 android {
     namespace = "com.example.gym_workout_finder_tracker_app_flutter"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = flutter.ndkVersion
+    ndkVersion = "29.0.13599879"
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
