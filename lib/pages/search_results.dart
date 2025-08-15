@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../components/workout_tile.dart";
 import "../components/ui_scaffold.dart";
+import "../db.dart";
 import "../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
@@ -22,6 +23,18 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     Search search = Search();
     results = search.getData(widget.type, widget.query);
   }
+
+
+  // ADD EXERCISE TO SAVED LIST
+  void saveExercise(BuildContext context, Map<String, dynamic> data) {
+    setState(() {
+      final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' successfully saved."));
+      WorkoutsDB.addToSavedWorkouts(data); // add
+      WorkoutsDB.updateSavedWorkouts();
+      ScaffoldMessenger.of(context).showSnackBar(msgBar);
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +63,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     child: ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
-                        return WorkoutTile(data: snapshot.data[index]);
+                        return WorkoutTile(data: snapshot.data[index], actionBtnOnPressed: () {
+                          saveExercise(context, snapshot.data[index]);
+                        });
                       }
                     ),
                   ),

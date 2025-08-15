@@ -15,7 +15,16 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   void initState() {
     super.initState();
   }
-  
+
+  // REMOVE EXERCISE FROM SAVED LIST
+  void removeSavedExercise(BuildContext context, Map<String, dynamic> data) {
+    setState(() {
+      final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' removed."));
+      WorkoutsDB.removeFromSavedWorkouts(data); // remove
+      WorkoutsDB.updateSavedWorkouts();
+      ScaffoldMessenger.of(context).showSnackBar(msgBar);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +50,13 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
                   child: ListView.builder(
                     itemCount: WorkoutsDB.getSavedWorkouts().length,
                     itemBuilder: (context, index) {
-                      return WorkoutTile(data: WorkoutsDB.getSavedWorkouts()[index], actionBtnType: 1);
+                      return WorkoutTile(
+                        data: WorkoutsDB.getSavedWorkouts()[index], 
+                        actionBtnType: 1,
+                        actionBtnOnPressed: () {
+                          removeSavedExercise(context, WorkoutsDB.getSavedWorkouts()[index]);
+                        },
+                      );
                     }
                   ),
                 )

@@ -5,7 +5,8 @@ import "../db.dart";
 class WorkoutTile extends StatefulWidget {
   Map<String, dynamic> data;
   int actionBtnType; // ACTION BUTTON: 0 = SAVE WORKOUT, 1 = DELETE WORKOUT, 2 = NO BUTTON
-  WorkoutTile({ super.key, required this.data, this.actionBtnType = 0 });
+  VoidCallback actionBtnOnPressed;
+  WorkoutTile({ super.key, required this.data, this.actionBtnType = 0, required this.actionBtnOnPressed });
 
   @override
   State<WorkoutTile> createState() => _WorkoutTileState();
@@ -13,37 +14,11 @@ class WorkoutTile extends StatefulWidget {
 
 
 class _WorkoutTileState extends State<WorkoutTile> {
-  // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedExercise(BuildContext context) {
-    setState(() {
-      final msgBar = SnackBar(content: Text("Exercise '${widget.data["name"]}' removed."));
-      WorkoutsDB.removeFromSavedWorkouts(widget.data); // remove
-      WorkoutsDB.updateSavedWorkouts();
-      ScaffoldMessenger.of(context).showSnackBar(msgBar);
-    });
-  }
-
-
-  // ADD EXERCISE TO SAVED LIST
-  void saveExercise(BuildContext context) {
-    setState(() {
-      final msgBar = SnackBar(content: Text("Exercise '${widget.data["name"]}' successfully saved."));
-      WorkoutsDB.addToSavedWorkouts(widget.data); // add
-      WorkoutsDB.updateSavedWorkouts();
-      ScaffoldMessenger.of(context).showSnackBar(msgBar);
-    });
-  }
-
-
   // ACTION BUTTON SELECTOR METHOD
   Widget getActionBtn(BuildContext context) {
     List<Widget> actionBtnList = [
-      IconButton(icon: Icon(Icons.save), onPressed: () {
-        saveExercise(context);
-      }),
-      IconButton(icon: Icon(Icons.delete), onPressed: () {
-        removeSavedExercise(context);
-      }),
+      IconButton(icon: Icon(Icons.save), onPressed: widget.actionBtnOnPressed),
+      IconButton(icon: Icon(Icons.delete), onPressed: widget.actionBtnOnPressed),
       SizedBox()
     ];
     return actionBtnList[widget.actionBtnType];
