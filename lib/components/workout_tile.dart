@@ -1,26 +1,67 @@
 import 'package:flutter/material.dart';
 import "../pages/workout_info.dart";
+import "../db.dart";
 
-class WorkoutTile extends StatelessWidget {
+class WorkoutTile extends StatefulWidget {
   Map<String, dynamic> data;
-  WorkoutTile({super.key, required this.data});
+  int actionBtnType; // ACTION BUTTON: 0 = SAVE WORKOUT, 1 = DELETE WORKOUT, 2 = NO BUTTON
+  WorkoutTile({ super.key, required this.data, this.actionBtnType = 0 });
 
-  void saveExercise() {
-    // TODO SAVE EXERCISE
+  @override
+  State<WorkoutTile> createState() => _WorkoutTileState();
+}
+
+
+class _WorkoutTileState extends State<WorkoutTile> {
+  // REMOVE EXERCISE FROM SAVED LIST
+  void removeSavedExercise(BuildContext context) {
+    setState(() {
+      final msgBar = SnackBar(content: Text("Exercise '${widget.data["name"]}' removed."));
+      WorkoutsDB.removeFromSavedWorkouts(widget.data); // remove
+      WorkoutsDB.updateSavedWorkouts();
+      ScaffoldMessenger.of(context).showSnackBar(msgBar);
+    });
+  }
+
+
+  // ADD EXERCISE TO SAVED LIST
+  void saveExercise(BuildContext context) {
+    setState(() {
+      final msgBar = SnackBar(content: Text("Exercise '${widget.data["name"]}' successfully saved."));
+      WorkoutsDB.addToSavedWorkouts(widget.data); // add
+      WorkoutsDB.updateSavedWorkouts();
+      ScaffoldMessenger.of(context).showSnackBar(msgBar);
+    });
+  }
+
+
+  // ACTION BUTTON SELECTOR METHOD
+  Widget getActionBtn(BuildContext context) {
+    List<Widget> actionBtnList = [
+      IconButton(icon: Icon(Icons.save), onPressed: () {
+        saveExercise(context);
+      }),
+      IconButton(icon: Icon(Icons.delete), onPressed: () {
+        removeSavedExercise(context);
+      }),
+      SizedBox()
+    ];
+    return actionBtnList[widget.actionBtnType];
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget actionBtn = getActionBtn(context);
     return ListTile(
       onTap: () { 
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return WorkoutInfoPage(data: this.data);
+          return WorkoutInfoPage(data: this.widget.data);
         })); 
       },
-      title: Text(data["name"]), 
-      subtitle: Text(data["description"]),
+      title: Text(widget.data["name"]), 
+      subtitle: Text(widget.data["description"]),
       leading: Icon(Icons.fitness_center),
-      trailing: IconButton(icon: Icon(Icons.save), onPressed: saveExercise)
+      trailing: actionBtn
     );
   }
 }

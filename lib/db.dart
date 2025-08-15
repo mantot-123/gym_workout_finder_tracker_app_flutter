@@ -11,6 +11,10 @@ class WorkoutsDB {
     box = await Hive.openBox("saved");
   }
 
+  static List getSavedWorkouts() {
+    return savedWorkouts;
+  }
+
   static void loadSavedWorkouts() {
     savedWorkouts = box.get("workouts") ?? [];
   }
@@ -19,8 +23,16 @@ class WorkoutsDB {
     savedWorkouts.add(workout);
   }
 
+  static void removeFromSavedWorkouts(Map<String, dynamic> workout) {
+    savedWorkouts.remove(workout);
+  }
+
   static void updateSavedWorkouts() {
-    box.put("workouts", savedWorkouts);
+    if(savedWorkouts.length > 0) {
+      box.put("workouts", savedWorkouts);
+    } else {
+      box.put("workouts", null);
+    }
   }
 
   static void getLatestWorkoutInfo() async {

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import "../components/ui_scaffold.dart";
+import "../components/workout_tile.dart";
+import "../db.dart";
 
 class SavedWorkoutsPage extends StatefulWidget {
   const SavedWorkoutsPage({super.key});
@@ -10,20 +12,41 @@ class SavedWorkoutsPage extends StatefulWidget {
 
 class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   @override
+  void initState() {
+    super.initState();
+  }
+  
+
+  @override
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Saved workouts",
-      scaffoldBody: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Saved workouts", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Icon(Icons.close, size: 60),
-            SizedBox(height: 10),
-            Text("This feature is not available yet and is still being worked on.\nPlease check back later.", textAlign: TextAlign.center)
-          ],
-        )
-      ) 
+      scaffoldBody: 
+        WorkoutsDB.getSavedWorkouts().isEmpty
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Saved workouts", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Icon(Icons.save, size: 60),
+                SizedBox(height: 10),
+                Text("All of your saved workouts will show here.", textAlign: TextAlign.center)
+              ],
+            )
+          ) 
+        : Column(
+            children:
+              [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: WorkoutsDB.getSavedWorkouts().length,
+                    itemBuilder: (context, index) {
+                      return WorkoutTile(data: WorkoutsDB.getSavedWorkouts()[index], actionBtnType: 1);
+                    }
+                  ),
+                )
+              ]
+          )
     );;
   }
 }
