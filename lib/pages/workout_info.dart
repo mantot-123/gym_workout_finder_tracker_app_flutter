@@ -1,8 +1,8 @@
 import "dart:typed_data";
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
-import "../components/ui_scaffold.dart";
-import "../components/workout_info_pane.dart";
+import "../widgets/ui_scaffold.dart";
+import "../widgets/workout_info_pane.dart";
 import "../helpers/list_to_string.dart";
 import "../api.dart";
 

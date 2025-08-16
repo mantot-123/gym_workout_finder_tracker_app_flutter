@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "../components/ui_scaffold.dart";
-import "../components/workout_tile.dart";
+import "../widgets/ui_scaffold.dart";
+import "../widgets/workout_tile.dart";
 import "../db.dart";
 
 class SavedWorkoutsPage extends StatefulWidget {

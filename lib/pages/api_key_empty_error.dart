@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../components/ui_scaffold.dart";
+import "../widgets/ui_scaffold.dart";
 
 class APIKeyEmptyErrorPage extends StatelessWidget {
   APIKeyEmptyErrorPage({super.key});

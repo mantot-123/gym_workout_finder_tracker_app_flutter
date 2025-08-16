@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "../components/button.dart";
-import "../components/ui_scaffold.dart";
+import "../widgets/button.dart";
+import "../widgets/ui_scaffold.dart";
 import "dart:io";
 
 class HomePage extends StatelessWidget {
