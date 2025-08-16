@@ -24,7 +24,11 @@ class WorkoutsDB {
   }
 
   static void removeFromSavedWorkouts(Map<String, dynamic> workout) {
-    savedWorkouts.remove(workout);
+    for(int i = 0; i < savedWorkouts.length; i++) {
+      if(savedWorkouts[i]["id"] == workout["id"]) {
+        savedWorkouts.removeAt(i);
+      }
+    }
   }
 
   static void updateSavedWorkouts() {
@@ -35,8 +39,13 @@ class WorkoutsDB {
     }
   }
 
-  static void getLatestWorkoutInfo() async {
-    
+  static bool isWorkoutSaved(String id) {
+    for(var w in WorkoutsDB.getSavedWorkouts()) {
+      if(w["id"] == id) {
+        return true;
+      }
+    }
+    return false;
   }
 
 }

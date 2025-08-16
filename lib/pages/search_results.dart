@@ -26,10 +26,21 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
 
   // ADD EXERCISE TO SAVED LIST
-  void saveExercise(BuildContext context, Map<String, dynamic> data) {
+  void saveWorkout(BuildContext context, Map<String, dynamic> data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' successfully saved."));
       WorkoutsDB.addToSavedWorkouts(data); // add
+      WorkoutsDB.updateSavedWorkouts();
+      ScaffoldMessenger.of(context).showSnackBar(msgBar);
+    });
+  }
+
+
+  // REMOVE EXERCISE FROM SAVED LIST
+  void removeSavedWorkout(BuildContext context, Map<String, dynamic> data) {
+    setState(() {
+      final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' removed."));
+      WorkoutsDB.removeFromSavedWorkouts(data); // remove
       WorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
@@ -63,8 +74,15 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                     child: ListView.builder(
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
+                        // returns a workout list tile with either a delete or save button 
+                        if(WorkoutsDB.isWorkoutSaved(snapshot.data[index]["id"])) {
+                          return WorkoutTile(data: snapshot.data[index], actionBtnType: 1, actionBtnOnPressed: () {
+                            removeSavedWorkout(context, snapshot.data[index]);
+                          });
+                        }
+
                         return WorkoutTile(data: snapshot.data[index], actionBtnOnPressed: () {
-                          saveExercise(context, snapshot.data[index]);
+                          saveWorkout(context, snapshot.data[index]);
                         });
                       }
                     ),
