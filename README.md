@@ -8,16 +8,36 @@ To run this app, type the command below and replace `<YOUR_API_KEY_HERE>` with t
 ```
 flutter run --dart-define=API_KEY=<YOUR_API_KEY_HERE>
 ```
+For building, run this command instead:
+```
+flutter build <platform> --dart-define=API_KEY=<YOUR_API_KEY_HERE>
+```
 
 ### Features (current)
-* Search (currently only allows you to search by name)
+* Search using the API
 * Workout viewer - it explains the exercise + adds GIF images fetched from the ExerciseDB API showing how to do it
+* Save and manage saved workouts
 
 
 ### Features (planned)
 
-Note that some of the features from the command line version are not yet available in this app. They are shown in this list here. 
-* Target muscle search
-* Add and manage saved workouts
-* Personalised workout plan generator - Automatically suggests a set of exercises based on workout frequency, current build, goal, age, height, experience, target muscle groups, number of total exercises to do
-
+* Personalised workout plan generator 
+    - Automatically suggests a set of exercises based on: 
+        - Workout frequency
+        - Current build 
+        - Goal
+        - Age
+        - Height
+        - Experience
+        - Target muscle groups
+        - Number of total exercises to do
+        - Previous health conditions<br>
+        etc.
+* Set up and manage workout routines
+    - Set a time for the routine to start
+    - Which days to do the routine
+    - Add workouts to the routine and mark each one of them as completed 
+    - Sends push notifications/alarms when the user should start doing the routine
+* Leveling system for completed routines
+    - Has multiple tiers: Beginner, Intermediate, Advanced, Elite, Master, Legend
+    - Experience points (XP) gained when a user completes the routine for all the selected days
