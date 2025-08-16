@@ -17,9 +17,9 @@ class _WorkoutTileState extends State<WorkoutTile> {
   // ACTION BUTTON SELECTOR METHOD
   Widget getActionBtn(BuildContext context) {
     List<Widget> actionBtnList = [
-      IconButton(icon: Icon(Icons.save), onPressed: widget.actionBtnOnPressed),
-      IconButton(icon: Icon(Icons.delete), onPressed: widget.actionBtnOnPressed),
-      SizedBox()
+      IconButton(icon: Icon(Icons.save), onPressed: widget.actionBtnOnPressed), // save button
+      IconButton(icon: Icon(Icons.delete), onPressed: widget.actionBtnOnPressed), // delete button
+      SizedBox() // no button
     ];
     return actionBtnList[widget.actionBtnType];
   }
