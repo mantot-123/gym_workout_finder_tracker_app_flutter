@@ -7,7 +7,7 @@ import "../helpers/list_to_string.dart";
 import "../api.dart";
 
 class WorkoutInfoPage extends StatefulWidget {
-  Map<String, dynamic> data;
+  Map<dynamic, dynamic> data;
   WorkoutInfoPage({super.key, required this.data});
 
   @override

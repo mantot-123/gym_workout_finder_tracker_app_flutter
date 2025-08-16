@@ -3,7 +3,7 @@ import "../pages/workout_info.dart";
 import "../db.dart";
 
 class WorkoutTile extends StatefulWidget {
-  Map<String, dynamic> data;
+  Map<dynamic, dynamic> data;
   int actionBtnType; // ACTION BUTTON: 0 = SAVE WORKOUT, 1 = DELETE WORKOUT, 2 = NO BUTTON
   VoidCallback actionBtnOnPressed;
   WorkoutTile({ super.key, required this.data, this.actionBtnType = 0, required this.actionBtnOnPressed });

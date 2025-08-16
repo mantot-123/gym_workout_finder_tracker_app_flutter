@@ -17,7 +17,7 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   }
 
   // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedWorkout(BuildContext context, Map<String, dynamic> data) {
+  void removeSavedWorkout(BuildContext context, Map<dynamic, dynamic> data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' removed."));
       WorkoutsDB.removeFromSavedWorkouts(data); // remove

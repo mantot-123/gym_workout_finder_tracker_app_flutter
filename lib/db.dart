@@ -2,13 +2,14 @@ import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 
 class WorkoutsDB {
-  static List<Map<String, dynamic>> savedWorkouts = [];
+  static List<dynamic> savedWorkouts = [];
   static late Box box;
 
   static Future<void> initDb() async {
     // initialises the database 
     await Hive.initFlutter();
     box = await Hive.openBox("saved");
+    loadSavedWorkouts();
   }
 
   static List getSavedWorkouts() {
@@ -19,11 +20,11 @@ class WorkoutsDB {
     savedWorkouts = box.get("workouts") ?? [];
   }
 
-  static void addToSavedWorkouts(Map<String, dynamic> workout) {
+  static void addToSavedWorkouts(Map<dynamic, dynamic> workout) {
     savedWorkouts.add(workout);
   }
 
-  static void removeFromSavedWorkouts(Map<String, dynamic> workout) {
+  static void removeFromSavedWorkouts(Map<dynamic, dynamic> workout) {
     for(int i = 0; i < savedWorkouts.length; i++) {
       if(savedWorkouts[i]["id"] == workout["id"]) {
         savedWorkouts.removeAt(i);

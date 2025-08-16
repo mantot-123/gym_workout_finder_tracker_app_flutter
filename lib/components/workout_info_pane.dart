@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "../helpers/list_to_string.dart";
 
 // DISPLAY WORKOUT INFORMATION IN THIS WIDGET
-Container workoutInfoPane(Map<String, dynamic> data) {
+Container workoutInfoPane(Map<dynamic, dynamic> data) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 15),
     child: ListView(
