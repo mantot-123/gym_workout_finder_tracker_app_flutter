@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../widgets/ui_scaffold.dart";
+import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/workout_tile.dart";
 import "../db.dart";
 

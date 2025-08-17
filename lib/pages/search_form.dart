@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import "../widgets/button.dart";
-import "../widgets/input_box.dart";
-import "../widgets/ui_scaffold.dart";
+import "../widgets/ui/ui_button.dart";
+import "../widgets/ui/ui_input_box.dart";
+import "../widgets/ui/ui_scaffold.dart";
 import "search_results.dart";
 
 class SearchForm extends StatefulWidget {

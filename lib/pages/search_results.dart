@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../widgets/workout_tile.dart";
-import "../widgets/ui_scaffold.dart";
+import "../widgets/ui/ui_scaffold.dart";
 import "../db.dart";
 import "../api.dart";
 
