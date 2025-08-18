@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../pages/workout_info.dart";
+import "../pages/workout_info_page.dart";
 import "../db.dart";
 
 class WorkoutTile extends StatefulWidget {

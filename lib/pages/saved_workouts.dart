@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/workout_tile.dart";
+import "../models/workout.dart";
 import "../db.dart";
 
 class SavedWorkoutsPage extends StatefulWidget {
@@ -51,10 +52,10 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
                     itemCount: WorkoutsDB.getSavedWorkouts().length,
                     itemBuilder: (context, index) {
                       return WorkoutTile(
-                        data: WorkoutsDB.getSavedWorkouts()[index], 
+                        data: WorkoutsDB.getSavedWorkouts()[index].toMap(), 
                         actionBtnType: 1,
                         actionBtnOnPressed: () {
-                          removeSavedWorkout(context, WorkoutsDB.getSavedWorkouts()[index]);
+                          removeSavedWorkout(context, WorkoutsDB.getSavedWorkouts()[index].toMap());
                         },
                       );
                     }

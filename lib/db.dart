@@ -1,14 +1,20 @@
 import "package:hive/hive.dart";
+import "models/workout.dart";
 import "package:hive_flutter/hive_flutter.dart";
 
 class WorkoutsDB {
-  static List<dynamic> savedWorkouts = [];
-  static late Box box;
+  static List<Workout> savedWorkouts = [];
+  static late Box<List<Workout>?> box;
+
+  static void closeConn() {
+    Hive.close();
+  }
 
   static Future<void> initDb() async {
     // initialises the database 
     await Hive.initFlutter();
-    box = await Hive.openBox("saved");
+    Hive.registerAdapter(WorkoutAdapter());
+    box = await Hive.openBox<List<Workout>?>("saved");
     loadSavedWorkouts();
   }
 
@@ -21,12 +27,13 @@ class WorkoutsDB {
   }
 
   static void addToSavedWorkouts(Map<dynamic, dynamic> workout) {
-    savedWorkouts.add(workout);
+    Workout data = Workout.fromMap(workout);
+    savedWorkouts.add(data);
   }
 
   static void removeFromSavedWorkouts(Map<dynamic, dynamic> workout) {
     for(int i = 0; i < savedWorkouts.length; i++) {
-      if(savedWorkouts[i]["id"] == workout["id"]) {
+      if(savedWorkouts[i].id == workout["id"]) {
         savedWorkouts.removeAt(i);
       }
     }
@@ -41,8 +48,8 @@ class WorkoutsDB {
   }
 
   static bool isWorkoutSaved(String id) {
-    for(var w in WorkoutsDB.getSavedWorkouts()) {
-      if(w["id"] == id) {
+    for(var w in savedWorkouts) {
+      if(w.id == id) {
         return true;
       }
     }

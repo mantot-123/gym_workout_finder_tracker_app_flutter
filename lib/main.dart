@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import "package:gym_workout_finder_tracker_app_flutter/models/workout.dart";
+import "package:hive/hive.dart";
 import "db.dart";
 import "pages/home.dart";
 import "pages/search_form.dart";
@@ -27,6 +29,12 @@ class _MainAppState extends State<MainApp> {
     SearchForm(),
     SavedWorkoutsPage()
   ];
+
+  @override
+  void dispose() {
+    WorkoutsDB.closeConn();
+    super.dispose();
+  }
 
   @override
   void initState() {

@@ -1,0 +1,73 @@
+import "package:hive/hive.dart";
+
+part "workout.g.dart"; // <== Generated model adapter file
+
+@HiveType(typeId: 0)
+class Workout {
+  @HiveField(0) 
+  late String bodyPart;
+
+  @HiveField(1) 
+  late String equipment;
+  
+  @HiveField(2)
+  late String id;
+
+  @HiveField(3) 
+  late String name;
+
+  @HiveField(4) 
+  late String target;
+
+  @HiveField(5) 
+  late List<dynamic> secondaryMuscles;
+
+  @HiveField(6) 
+  late List<dynamic> instructions;
+
+  @HiveField(7) 
+  late String description;
+
+  @HiveField(8) 
+  late String difficulty;
+
+  Workout(
+    {
+      this.bodyPart = "",
+      this.equipment = "",
+      this.id = "",
+      this.name = "",
+      this.target = "",
+      required this.secondaryMuscles,
+      required this.instructions,
+      this.description = "",
+      this.difficulty = ""
+    }
+  );
+
+  Workout.fromMap(Map<dynamic, dynamic> data) {
+    bodyPart = data["bodyPart"];
+    equipment = data["equipment"];
+    id = data["id"];
+    name = data["name"];
+    target = data["target"];
+    secondaryMuscles = data["secondaryMuscles"];
+    instructions = data["instructions"];
+    description = data["description"];
+    difficulty = data["difficulty"];
+  }
+
+  Map<dynamic, dynamic> toMap() {
+    return {
+      "bodyPart": bodyPart,
+      "equipment": equipment,
+      "id": id,
+      "name": name,
+      "target": target,
+      "secondaryMuscles": secondaryMuscles,
+      "instructions": instructions,
+      "description": description,
+      "difficulty": difficulty,
+    };
+  }
+}

@@ -50,6 +50,7 @@ class Search {
 
       // Converts the JSON response into a list/map
       var dataList = convert.jsonDecode(response.body);
+
       return Future.value(dataList);
     } catch(ex) {
       print("An error occurrred while fetching data. Check that the API is currently reachable and try again.");
