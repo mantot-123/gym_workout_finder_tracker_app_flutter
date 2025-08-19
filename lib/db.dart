@@ -1,6 +1,6 @@
 import "package:hive/hive.dart";
-import "models/workout.dart";
 import "package:hive_flutter/hive_flutter.dart";
+import "models/workout.dart";
 
 class WorkoutsDB {
   static List<Workout> savedWorkouts = [];

@@ -64,7 +64,17 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             } 
             else if(!snapshot!.hasData || snapshot.data!.isEmpty) {
               // print(snapshot.data);
-              return Center(child: Text("No results found."));
+              return Center(
+                child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text("No results", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                  Icon(Icons.search, size: 60),
+                  SizedBox(height: 10),
+                  Text("Sorry, we can't find any exercises based on your criteria", textAlign: TextAlign.center)
+                ],
+              )
+              );
             } 
             else {
               // print(snapshot.data);
