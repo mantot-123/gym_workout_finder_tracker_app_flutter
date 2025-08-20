@@ -9,7 +9,11 @@ class UIScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.lightGreen.shade100,
-      appBar: AppBar(backgroundColor: Colors.lightGreen.shade400, title: Text(appBarTitle)),
+      appBar: AppBar(
+        backgroundColor: Colors.lightGreen.shade400, 
+        title: Text(appBarTitle, style: TextStyle(
+          fontFamily: "Overused Grotesk Medium"
+        ))),
       body: scaffoldBody
     );
   }

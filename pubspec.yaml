@@ -23,6 +23,12 @@ dev_dependencies:
   flutter_lints: ^5.0.0
 
 flutter:
+  fonts:
+    - family: "Overused Grotesk Medium"
+      fonts:
+        - asset: fonts/OverusedGrotesk-Medium.ttf
   assets:
     - assets/logo.png
+    - fonts/Anton-Regular.ttf
+    - fonts/OverusedGrotesk-Medium.ttf
   uses-material-design: true

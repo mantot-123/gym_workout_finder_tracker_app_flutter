@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import "../pages/workout_info_page.dart";
+import "../models/workout.dart";
 import "../db.dart";
 
 class WorkoutTile extends StatefulWidget {
-  Map<dynamic, dynamic> data;
+  Workout data;
   int actionBtnType; // ACTION BUTTON: 0 = SAVE WORKOUT, 1 = DELETE WORKOUT, 2 = NO BUTTON
   VoidCallback actionBtnOnPressed;
   WorkoutTile({ super.key, required this.data, this.actionBtnType = 0, required this.actionBtnOnPressed });
@@ -33,8 +34,8 @@ class _WorkoutTileState extends State<WorkoutTile> {
           return WorkoutInfoPage(data: this.widget.data);
         })); 
       },
-      title: Text(widget.data["name"]), 
-      subtitle: Text(widget.data["description"]),
+      title: Text(widget.data.name), 
+      subtitle: Text(widget.data.description),
       leading: Icon(Icons.fitness_center),
       trailing: actionBtn
     );

@@ -1,13 +1,14 @@
 import "dart:typed_data";
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
+import "../models/workout.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/workout_info_pane.dart";
 import "../helpers/list_to_string.dart";
 import "../api.dart";
 
 class WorkoutInfoPage extends StatefulWidget {
-  Map<dynamic, dynamic> data;
+  Workout data;
   WorkoutInfoPage({super.key, required this.data});
 
   @override
@@ -21,8 +22,8 @@ class _WorkoutInfoPageState extends State<WorkoutInfoPage> {
   @override
   void initState() {
     super.initState();
-    Search search = Search();
-    image = search.getImage(widget.data["id"]); 
+    WorkoutSearch search = WorkoutSearch();
+    image = search.getImage(widget.data.id); 
   }
 
   @override

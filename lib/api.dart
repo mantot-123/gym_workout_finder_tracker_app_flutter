@@ -2,8 +2,9 @@ import "dart:io";
 import "dart:typed_data";
 import "package:http/http.dart" as http;
 import "dart:convert" as convert;
+import "models/workout.dart";
 
-class Search {
+class WorkoutSearch {
   final String API_KEY = const String.fromEnvironment("API_KEY");
 
     // Gets the URI object based on the workout attribute selected and data passed to it
@@ -36,7 +37,6 @@ class Search {
     return url;
   }
 
-  // GET JSON EXERCISE DATA
   Future<dynamic> getData([String attribute = "", String data = ""]) async {
     try {
       Uri url = getUri(attribute, data);
@@ -49,9 +49,8 @@ class Search {
       );
 
       // Converts the JSON response into a list/map
-      var dataList = convert.jsonDecode(response.body);
-
-      return Future.value(dataList);
+      var responseData = convert.jsonDecode(response.body);
+      return Future.value(responseData);
     } catch(ex) {
       print("An error occurrred while fetching data. Check that the API is currently reachable and try again.");
       return {};

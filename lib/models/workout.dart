@@ -20,10 +20,10 @@ class Workout {
   late String target;
 
   @HiveField(5) 
-  late List<dynamic> secondaryMuscles;
+  late List<String> secondaryMuscles;
 
   @HiveField(6) 
-  late List<dynamic> instructions;
+  late List<String> instructions;
 
   @HiveField(7) 
   late String description;
@@ -51,8 +51,8 @@ class Workout {
     id = data["id"];
     name = data["name"];
     target = data["target"];
-    secondaryMuscles = data["secondaryMuscles"];
-    instructions = data["instructions"];
+    secondaryMuscles = data["secondaryMuscles"].cast<String>();
+    instructions = data["instructions"].cast<String>();
     description = data["description"];
     difficulty = data["difficulty"];
   }
@@ -69,5 +69,13 @@ class Workout {
       "description": description,
       "difficulty": difficulty,
     };
+  }
+
+  static List<Workout> fromMapList(List<Map<dynamic, dynamic>> list) {
+    List<Workout> newList = [];
+    list.forEach((item) {
+      newList.add(Workout.fromMap(item));
+    });
+    return newList;
   }
 }

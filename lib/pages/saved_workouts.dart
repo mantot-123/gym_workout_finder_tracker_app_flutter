@@ -18,9 +18,9 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   }
 
   // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedWorkout(BuildContext context, Map<dynamic, dynamic> data) {
+  void removeSavedWorkout(BuildContext context, Workout data) {
     setState(() {
-      final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' removed."));
+      final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
       WorkoutsDB.removeFromSavedWorkouts(data); // remove
       WorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
@@ -52,10 +52,10 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
                     itemCount: WorkoutsDB.getSavedWorkouts().length,
                     itemBuilder: (context, index) {
                       return WorkoutTile(
-                        data: WorkoutsDB.getSavedWorkouts()[index].toMap(), 
+                        data: WorkoutsDB.getSavedWorkouts()[index], 
                         actionBtnType: 1,
                         actionBtnOnPressed: () {
-                          removeSavedWorkout(context, WorkoutsDB.getSavedWorkouts()[index].toMap());
+                          removeSavedWorkout(context, WorkoutsDB.getSavedWorkouts()[index]);
                         },
                       );
                     }

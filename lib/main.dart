@@ -54,6 +54,9 @@ class _MainAppState extends State<MainApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        fontFamily: "Overused Grotesk Medium"
+      ),
       debugShowCheckedModeBanner: false,
       home: 
         apiKeySet 

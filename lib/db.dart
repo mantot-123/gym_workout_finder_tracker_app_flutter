@@ -4,7 +4,7 @@ import "models/workout.dart";
 
 class WorkoutsDB {
   static List<Workout> savedWorkouts = [];
-  static late Box<List<Workout>?> box;
+  static late Box<List<dynamic>> box;
 
   static void closeConn() {
     Hive.close();
@@ -14,7 +14,8 @@ class WorkoutsDB {
     // initialises the database 
     await Hive.initFlutter();
     Hive.registerAdapter(WorkoutAdapter());
-    box = await Hive.openBox<List<Workout>?>("saved");
+    box = await Hive.openBox<List<dynamic>>("saved");
+    // box.clear();
     loadSavedWorkouts();
   }
 
@@ -23,17 +24,17 @@ class WorkoutsDB {
   }
 
   static void loadSavedWorkouts() {
-    savedWorkouts = box.get("workouts") ?? [];
+    // savedWorkouts = (box.get("workouts") ?? []).cast<Workout>();
+    savedWorkouts = box.get("workouts", defaultValue: [])!.cast<Workout>();
   }
 
-  static void addToSavedWorkouts(Map<dynamic, dynamic> workout) {
-    Workout data = Workout.fromMap(workout);
-    savedWorkouts.add(data);
+  static void addToSavedWorkouts(Workout workout) {
+    savedWorkouts.add(workout);
   }
 
-  static void removeFromSavedWorkouts(Map<dynamic, dynamic> workout) {
+  static void removeFromSavedWorkouts(Workout workout) {
     for(int i = 0; i < savedWorkouts.length; i++) {
-      if(savedWorkouts[i].id == workout["id"]) {
+      if(savedWorkouts[i].id == workout.id) {
         savedWorkouts.removeAt(i);
       }
     }
@@ -43,7 +44,7 @@ class WorkoutsDB {
     if(savedWorkouts.length > 0) {
       box.put("workouts", savedWorkouts);
     } else {
-      box.put("workouts", null);
+      box.put("workouts", []);
     }
   }
 

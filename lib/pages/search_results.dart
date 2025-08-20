@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../widgets/workout_tile.dart";
 import "../widgets/ui/ui_scaffold.dart";
+import "../models/workout.dart";
 import "../db.dart";
 import "../api.dart";
 
@@ -20,15 +21,15 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   @override
   void initState() {
     super.initState();
-    Search search = Search();
+    WorkoutSearch search = WorkoutSearch();
     results = search.getData(widget.type, widget.query);
   }
 
 
   // ADD EXERCISE TO SAVED LIST
-  void saveWorkout(BuildContext context, Map<dynamic, dynamic> data) {
+  void saveWorkout(BuildContext context, Workout data) {
     setState(() {
-      final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' successfully saved."));
+      final msgBar = SnackBar(content: Text("Exercise '${data.name}' successfully saved."));
       WorkoutsDB.addToSavedWorkouts(data); // add
       WorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
@@ -37,9 +38,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
 
 
   // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedWorkout(BuildContext context, Map<dynamic, dynamic> data) {
+  void removeSavedWorkout(BuildContext context, Workout data) {
     setState(() {
-      final msgBar = SnackBar(content: Text("Exercise '${data["name"]}' removed."));
+      final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
       WorkoutsDB.removeFromSavedWorkouts(data); // remove
       WorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
@@ -66,33 +67,34 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
               // print(snapshot.data);
               return Center(
                 child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text("No results", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                  Icon(Icons.search, size: 60),
-                  SizedBox(height: 10),
-                  Text("Sorry, we can't find any exercises based on your criteria", textAlign: TextAlign.center)
-                ],
-              )
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text("No results", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                    Icon(Icons.search, size: 60),
+                    SizedBox(height: 10),
+                    Text("Sorry, we can't find any exercises based on your criteria", textAlign: TextAlign.center)
+                  ],
+                )
               );
             } 
             else {
               // print(snapshot.data);
+              List<Workout> dataConverted = Workout.fromMapList(snapshot.data.cast<Map<dynamic, dynamic>>()).cast<Workout>();
               return Column(
                 children: [
                   Expanded(
                     child: ListView.builder(
-                      itemCount: snapshot.data.length,
+                      itemCount: dataConverted.length,
                       itemBuilder: (context, index) {
                         // returns a workout list tile with either a delete or save button 
-                        if(WorkoutsDB.isWorkoutSaved(snapshot.data[index]["id"])) {
-                          return WorkoutTile(data: snapshot.data[index], actionBtnType: 1, actionBtnOnPressed: () {
-                            removeSavedWorkout(context, snapshot.data[index]);
+                        if(WorkoutsDB.isWorkoutSaved(dataConverted[index].id)) {
+                          return WorkoutTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
+                            removeSavedWorkout(context, dataConverted[index]);
                           });
                         }
 
-                        return WorkoutTile(data: snapshot.data[index], actionBtnOnPressed: () {
-                          saveWorkout(context, snapshot.data[index]);
+                        return WorkoutTile(data: dataConverted[index], actionBtnOnPressed: () {
+                          saveWorkout(context, dataConverted[index]);
                         });
                       }
                     ),
@@ -102,7 +104,9 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             }
 
           } catch(ex) {
-            return Center(child: Text("An error occurrred while getting data. Check your internet connection and try again."));
+            return Center(
+              child: Text("An error occurred while getting data. Check your internet connection and try again.", textAlign: TextAlign.center),
+            );
           }
         }
       ),

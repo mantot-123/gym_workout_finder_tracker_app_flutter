@@ -1,42 +1,43 @@
 import 'package:flutter/material.dart';
+import "../models/workout.dart";
 import "../helpers/list_to_string.dart";
 
 // DISPLAY WORKOUT INFORMATION IN THIS WIDGET
-Container workoutInfoPane(Map<dynamic, dynamic> data) {
+Container workoutInfoPane(Workout data) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 15),
     child: ListView(
       children: [
         Text("ID:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["id"]),
+        Text(data.id),
         SizedBox(height: 10),
     
         Text("Name:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["name"]),
+        Text(data.name),
         SizedBox(height: 10),
 
         Text("Difficulty:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["difficulty"]),
+        Text(data.difficulty),
         SizedBox(height: 10),
         
         Text("Description:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["description"]),
+        Text(data.description),
         SizedBox(height: 10),
     
         Text("Target muscles worked:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["target"]),
+        Text(data.target),
         SizedBox(height: 15),
     
         Text("Secondary muscles:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(listToString(data["secondaryMuscles"])),
+        Text(listToString(data.secondaryMuscles)),
         SizedBox(height: 15),
     
         Text("Description:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(data["description"]),
+        Text(data.description),
         SizedBox(height: 15),
     
         Text("Instructions:", style: TextStyle(fontWeight: FontWeight.bold)),
-        Text(toNumberedListString(data["instructions"])),
+        Text(toNumberedListString(data.instructions)),
         SizedBox(height: 15),
       ],
     ),
