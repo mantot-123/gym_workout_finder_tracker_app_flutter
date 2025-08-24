@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/workout_tile.dart";
 import "../models/workout.dart";
-import "../db.dart";
+import "../saved_workouts_db.dart";
 
 class SavedWorkoutsPage extends StatefulWidget {
   const SavedWorkoutsPage({super.key});
@@ -21,8 +21,8 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   void removeSavedWorkout(BuildContext context, Workout data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
-      WorkoutsDB.removeFromSavedWorkouts(data); // remove
-      WorkoutsDB.updateSavedWorkouts();
+      SavedWorkoutsDB.removeFromSavedWorkouts(data); // remove
+      SavedWorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
@@ -32,7 +32,7 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
     return UIScaffold(
       appBarTitle: "Saved workouts",
       scaffoldBody: 
-        WorkoutsDB.getSavedWorkouts().isEmpty
+        SavedWorkoutsDB.getSavedWorkouts().isEmpty
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -49,13 +49,13 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
               [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: WorkoutsDB.getSavedWorkouts().length,
+                    itemCount: SavedWorkoutsDB.getSavedWorkouts().length,
                     itemBuilder: (context, index) {
                       return WorkoutTile(
-                        data: WorkoutsDB.getSavedWorkouts()[index], 
+                        data: SavedWorkoutsDB.getSavedWorkouts()[index], 
                         actionBtnType: 1,
                         actionBtnOnPressed: () {
-                          removeSavedWorkout(context, WorkoutsDB.getSavedWorkouts()[index]);
+                          removeSavedWorkout(context, SavedWorkoutsDB.getSavedWorkouts()[index]);
                         },
                       );
                     }

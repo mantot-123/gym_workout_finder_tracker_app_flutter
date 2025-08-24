@@ -2,7 +2,7 @@ import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "models/workout.dart";
 
-class WorkoutsDB {
+class SavedWorkoutsDB {
   static List<Workout> savedWorkouts = [];
   static late Box<List<dynamic>> box;
 

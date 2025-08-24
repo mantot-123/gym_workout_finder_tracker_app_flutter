@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/models/workout.dart";
 import "package:hive/hive.dart";
-import "db.dart";
 import "pages/home.dart";
+import "pages/saved_routines.dart";
 import "pages/search_form.dart";
 import "pages/saved_workouts.dart";
 import "pages/api_key_empty_error.dart";
 import "widgets/ui/ui_scaffold.dart";
+import "saved_workouts_db.dart";
+import "saved_routines_db.dart";
 
 void main() async {
-  await WorkoutsDB.initDb();
+  await SavedWorkoutsDB.initDb();
   runApp(MainApp());
 }
 
@@ -26,13 +28,14 @@ class _MainAppState extends State<MainApp> {
 
   List<Widget> pages = [
     HomePage(),
+    RoutinesPage(),
     SearchForm(),
     SavedWorkoutsPage()
   ];
 
   @override
   void dispose() {
-    WorkoutsDB.closeConn();
+    SavedWorkoutsDB.closeConn();
     super.dispose();
   }
 
@@ -63,12 +66,14 @@ class _MainAppState extends State<MainApp> {
         ? Scaffold(
           body: pages[selectedPage],
           bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
             backgroundColor: Colors.lightGreen[200],
             selectedItemColor: Colors.lightGreen[900],
             currentIndex: selectedPage,
             onTap: changePage,
             items: [
               BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(icon: Icon(Icons.alarm), label: "Routines"),
               BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
               BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Saved")
             ]

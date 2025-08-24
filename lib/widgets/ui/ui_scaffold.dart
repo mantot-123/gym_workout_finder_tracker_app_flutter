@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class UIScaffold extends StatelessWidget {
   String appBarTitle;
   Widget scaffoldBody;
-  UIScaffold({super.key, required this.appBarTitle, required this.scaffoldBody });
+  List<Widget>? actionBtns;
+  UIScaffold({ super.key, required this.appBarTitle, required this.scaffoldBody, this.actionBtns });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,9 @@ class UIScaffold extends StatelessWidget {
         backgroundColor: Colors.lightGreen.shade400, 
         title: Text(appBarTitle, style: TextStyle(
           fontFamily: "Overused Grotesk Medium"
-        ))),
+        )),
+        actions: actionBtns ?? []
+      ),
       body: scaffoldBody
     );
   }

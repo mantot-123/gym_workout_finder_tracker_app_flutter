@@ -3,7 +3,7 @@ import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../widgets/workout_tile.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../models/workout.dart";
-import "../db.dart";
+import "../saved_workouts_db.dart";
 import "../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
@@ -30,8 +30,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   void saveWorkout(BuildContext context, Workout data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' successfully saved."));
-      WorkoutsDB.addToSavedWorkouts(data); // add
-      WorkoutsDB.updateSavedWorkouts();
+      SavedWorkoutsDB.addToSavedWorkouts(data); // add
+      SavedWorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
@@ -41,8 +41,8 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   void removeSavedWorkout(BuildContext context, Workout data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
-      WorkoutsDB.removeFromSavedWorkouts(data); // remove
-      WorkoutsDB.updateSavedWorkouts();
+      SavedWorkoutsDB.removeFromSavedWorkouts(data); // remove
+      SavedWorkoutsDB.updateSavedWorkouts();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
@@ -87,7 +87,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
                       itemCount: dataConverted.length,
                       itemBuilder: (context, index) {
                         // returns a workout list tile with either a delete or save button 
-                        if(WorkoutsDB.isWorkoutSaved(dataConverted[index].id)) {
+                        if(SavedWorkoutsDB.isWorkoutSaved(dataConverted[index].id)) {
                           return WorkoutTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
                             removeSavedWorkout(context, dataConverted[index]);
                           });
