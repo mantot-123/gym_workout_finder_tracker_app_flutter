@@ -12,6 +12,7 @@ import "saved_routines_db.dart";
 
 void main() async {
   await SavedWorkoutsDB.initDb();
+  await SavedRoutinesDB.initDb();
   runApp(MainApp());
 }
 
@@ -36,6 +37,7 @@ class _MainAppState extends State<MainApp> {
   @override
   void dispose() {
     SavedWorkoutsDB.closeConn();
+    SavedRoutinesDB.closeConn();
     super.dispose();
   }
 

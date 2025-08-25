@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../widgets/ui/ui_button.dart";
 import "../widgets/ui/ui_scaffold.dart";
+import "../pages/new_routine.dart";
 import "dart:io";
 
 class RoutinesPage extends StatelessWidget {
@@ -22,7 +23,11 @@ class RoutinesPage extends StatelessWidget {
         )
       ),
       actionBtns: [
-        IconButton(icon: Icon(Icons.add), onPressed: () {})
+        IconButton(icon: Icon(Icons.add), onPressed: () {
+          Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return NewRoutinePage();
+          }));
+        })
       ],
     );
   }

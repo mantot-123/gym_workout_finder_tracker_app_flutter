@@ -1,4 +1,5 @@
 import "package:hive/hive.dart";
+import "package:hive_flutter/adapters.dart";
 import "package:hive_flutter/hive_flutter.dart";
 
 class SavedRoutinesDB {
@@ -11,6 +12,8 @@ class SavedRoutinesDB {
 
   static Future<void> initDb() async {
     await Hive.initFlutter();
-    box = await Hive.openBox<dynamic>("saved");
+    Hive.registerAdapter(TimeOfDayAdapter());
+    box = await Hive.openBox<dynamic>("savedRoutines");
+    savedRoutines = box.values.toList();
   }
 }

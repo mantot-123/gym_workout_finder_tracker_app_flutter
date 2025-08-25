@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import "package:hive/hive.dart";
 
 part "routine.g.dart";
@@ -11,7 +12,7 @@ class Routine {
     List<String> days;
 
     @HiveField(2)
-    DateTime timeStart;
+    TimeOfDay timeStart;
 
     Routine({ required this.name, required this.days, required this.timeStart });
 }
