@@ -14,9 +14,12 @@ class SavedWorkoutsDB {
     // initialises the database 
     await Hive.initFlutter();
     Hive.registerAdapter(WorkoutAdapter());
-    box = await Hive.openBox<List<dynamic>>("saved");
+
+    if(!Hive.isBoxOpen("saved")) {
+      box = await Hive.openBox<List<dynamic>>("saved");
+      loadSavedWorkouts();
+    }
     // box.clear();
-    loadSavedWorkouts();
   }
 
   static List getSavedWorkouts() {

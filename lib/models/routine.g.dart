@@ -19,7 +19,7 @@ class RoutineAdapter extends TypeAdapter<Routine> {
     return Routine(
       name: fields[0] as String,
       days: (fields[1] as List).cast<String>(),
-      timeStart: fields[2] as DateTime,
+      timeStart: fields[2] as TimeOfDay,
     );
   }
 

@@ -23,7 +23,7 @@ class RoutinesPage extends StatelessWidget {
         )
       ),
       actionBtns: [
-        IconButton(icon: Icon(Icons.add), onPressed: () {
+        IconButton(icon: Icon(Icons.add, color: Colors.black), onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return NewRoutinePage();
           }));

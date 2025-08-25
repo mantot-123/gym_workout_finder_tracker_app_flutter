@@ -13,7 +13,18 @@ class SavedRoutinesDB {
   static Future<void> initDb() async {
     await Hive.initFlutter();
     Hive.registerAdapter(TimeOfDayAdapter());
-    box = await Hive.openBox<dynamic>("savedRoutines");
-    savedRoutines = box.values.toList();
+
+    if(!Hive.isBoxOpen("saved")) {
+      box = await Hive.openBox<dynamic>("saved");
+      loadSavedRoutines();
+    }
+  }
+  
+  static void loadSavedRoutines() {
+    savedRoutines = box.get("workouts", defaultValue: [])!.cast<dynamic>();
+  }
+
+  static List getSavedRoutines() {
+    return savedRoutines;
   }
 }
