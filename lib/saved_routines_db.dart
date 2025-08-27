@@ -17,10 +17,10 @@ class SavedRoutinesDB {
     Hive.registerAdapter(RoutineAdapter());
     Hive.registerAdapter(TimeOfDayAdapter());
 
-    if(!Hive.isBoxOpen("saved")) {
-      box = await Hive.openBox<List<dynamic>>("saved");
+    if(!Hive.isBoxOpen("saved_routines")) {
+      box = await Hive.openBox<List<dynamic>>("saved_routines");
     } else {
-      box = Hive.box<List<dynamic>>("saved");
+      box = Hive.box<List<dynamic>>("saved_routines");
     }
     
     loadSavedRoutines();

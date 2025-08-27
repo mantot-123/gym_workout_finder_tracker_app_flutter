@@ -16,10 +16,10 @@ class SavedWorkoutsDB {
   static Future<void> initDb() async {
     Hive.registerAdapter(WorkoutAdapter());
 
-    if(!Hive.isBoxOpen("saved")) {
-      box = await Hive.openBox<List<dynamic>>("saved");
+    if(!Hive.isBoxOpen("saved_workouts")) {
+      box = await Hive.openBox<List<dynamic>>("saved_workouts");
     } else {
-      box = Hive.box<List<dynamic>>("saved");
+      box = Hive.box<List<dynamic>>("saved_workouts");
     }
 
     loadSavedWorkouts();
