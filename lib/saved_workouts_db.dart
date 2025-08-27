@@ -1,6 +1,9 @@
 import "package:hive/hive.dart";
+import "package:hive_flutter/adapters.dart";
 import "package:hive_flutter/hive_flutter.dart";
+import "models/routine.dart";
 import "models/workout.dart";
+import "models/task.dart";
 
 class SavedWorkoutsDB {
   static List<Workout> savedWorkouts = [];
@@ -11,14 +14,15 @@ class SavedWorkoutsDB {
   }
 
   static Future<void> initDb() async {
-    // initialises the database 
-    await Hive.initFlutter();
     Hive.registerAdapter(WorkoutAdapter());
 
     if(!Hive.isBoxOpen("saved")) {
       box = await Hive.openBox<List<dynamic>>("saved");
-      loadSavedWorkouts();
+    } else {
+      box = Hive.box<List<dynamic>>("saved");
     }
+
+    loadSavedWorkouts();
     // box.clear();
   }
 

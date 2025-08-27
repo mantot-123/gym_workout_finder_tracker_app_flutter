@@ -1,30 +1,61 @@
 import "package:hive/hive.dart";
 import "package:hive_flutter/adapters.dart";
 import "package:hive_flutter/hive_flutter.dart";
+import "models/routine.dart";
+import "models/workout.dart";
+import "models/task.dart";
 
 class SavedRoutinesDB {
-  static List<dynamic> savedRoutines = [];
-  static late Box<dynamic> box;
+  static List<Routine> savedRoutines = [];
+  static late Box<List<dynamic>> box;
 
   static void closeConn() {
     Hive.close();
   }
 
   static Future<void> initDb() async {
-    await Hive.initFlutter();
+    Hive.registerAdapter(RoutineAdapter());
     Hive.registerAdapter(TimeOfDayAdapter());
 
     if(!Hive.isBoxOpen("saved")) {
-      box = await Hive.openBox<dynamic>("saved");
-      loadSavedRoutines();
+      box = await Hive.openBox<List<dynamic>>("saved");
+    } else {
+      box = Hive.box<List<dynamic>>("saved");
     }
+    
+    loadSavedRoutines();
   }
   
-  static void loadSavedRoutines() {
-    savedRoutines = box.get("workouts", defaultValue: [])!.cast<dynamic>();
-  }
-
   static List getSavedRoutines() {
     return savedRoutines;
+  }
+
+  static void loadSavedRoutines() {
+    savedRoutines = box.get("routines", defaultValue: [])!.cast<Routine>();
+  }
+
+  static void addToSavedRoutines(Routine routine) {
+    savedRoutines.add(routine);
+  }
+
+  static void removeFromSavedRoutines(Routine routine) {
+    for(int i = 0; i < savedRoutines.length; i++) {
+      if(savedRoutines[i].id == routine.id) {
+        savedRoutines.removeAt(i);
+      }
+    }
+  }
+
+  static void updateSavedRoutines() {
+    box.put("routines", savedRoutines);
+  }
+
+  static bool isRoutineSaved(String id) {
+    for(var r in savedRoutines) {
+      if(r.id == id) {
+        return true;
+      }
+    }
+    return false;
   }
 }

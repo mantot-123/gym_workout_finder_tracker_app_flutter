@@ -6,13 +6,13 @@ part "routine.g.dart";
 @HiveType(typeId: 1)
 class Routine {
     @HiveField(0)
-    String name;
+    String id;
 
     @HiveField(1)
-    List<String> days;
+    String name;
 
     @HiveField(2)
     TimeOfDay timeStart;
 
-    Routine({ required this.name, required this.days, required this.timeStart });
+    Routine({ required this.id, required this.name, required this.timeStart });
 }

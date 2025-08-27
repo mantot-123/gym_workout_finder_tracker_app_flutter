@@ -1,33 +1,53 @@
 import 'package:flutter/material.dart';
+import "package:gym_workout_finder_tracker_app_flutter/saved_routines_db.dart";
 import "../widgets/ui/ui_button.dart";
 import "../widgets/ui/ui_scaffold.dart";
+import "../widgets/routine_tile.dart";
 import "../pages/new_routine.dart";
 import "dart:io";
 
-class RoutinesPage extends StatelessWidget {
+class RoutinesPage extends StatefulWidget {
   const RoutinesPage({super.key});
 
+  @override
+  State<RoutinesPage> createState() => _RoutinesPageState();
+}
+
+class _RoutinesPageState extends State<RoutinesPage> {
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Saved routines",
-      scaffoldBody: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text("Saved routines", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Icon(Icons.alarm, size: 60),
-            SizedBox(height: 10),
-            Text("You have not created your routines yet. Click on the '+' button above to start adding one", textAlign: TextAlign.center)
-          ],
-        )
-      ),
+      scaffoldBody: 
+        SavedRoutinesDB.getSavedRoutines().isEmpty
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Saved routines", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Icon(Icons.alarm, size: 60),
+                SizedBox(height: 10),
+                Text("You have not created your routines yet. Click on the '+' button above to start adding one", textAlign: TextAlign.center)
+              ],
+            )
+          )
+        : ListView.builder(
+            itemCount: SavedRoutinesDB.getSavedRoutines().length,
+            itemBuilder: (context, index) {
+              return RoutineTile(data: SavedRoutinesDB.getSavedRoutines()[index]);
+            },
+        ),
+
       actionBtns: [
+        IconButton(icon: Icon(Icons.refresh, color: Colors.black), onPressed: () {
+          setState(() { });
+        }),
+
         IconButton(icon: Icon(Icons.add, color: Colors.black), onPressed: () {
           Navigator.of(context).push(MaterialPageRoute(builder: (context) {
             return NewRoutinePage();
           }));
-        })
+        }),
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/models/workout.dart";
 import "package:hive/hive.dart";
+import "package:hive_flutter/hive_flutter.dart";
 import "pages/home.dart";
 import "pages/saved_routines.dart";
 import "pages/search_form.dart";
@@ -11,6 +12,9 @@ import "saved_workouts_db.dart";
 import "saved_routines_db.dart";
 
 void main() async {
+  // initialises the database 
+  await Hive.initFlutter();
+  
   await SavedWorkoutsDB.initDb();
   await SavedRoutinesDB.initDb();
   runApp(MainApp());

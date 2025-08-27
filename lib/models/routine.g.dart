@@ -17,8 +17,8 @@ class RoutineAdapter extends TypeAdapter<Routine> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Routine(
-      name: fields[0] as String,
-      days: (fields[1] as List).cast<String>(),
+      id: fields[0] as String,
+      name: fields[1] as String,
       timeStart: fields[2] as TimeOfDay,
     );
   }
@@ -28,9 +28,9 @@ class RoutineAdapter extends TypeAdapter<Routine> {
     writer
       ..writeByte(3)
       ..writeByte(0)
-      ..write(obj.name)
+      ..write(obj.id)
       ..writeByte(1)
-      ..write(obj.days)
+      ..write(obj.name)
       ..writeByte(2)
       ..write(obj.timeStart);
   }

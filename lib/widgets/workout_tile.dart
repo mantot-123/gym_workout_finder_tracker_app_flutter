@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../pages/workout_info_page.dart";
+import "../pages/workout_info.dart";
 import "../models/workout.dart";
 import "../saved_workouts_db.dart";
 
