@@ -9,6 +9,6 @@ class RngStrGen {
     for(int i = 0; i < length; i++) {
       result += chars[random.nextInt(chars.length)];
     }
-    return "";
+    return result;
   }
 }

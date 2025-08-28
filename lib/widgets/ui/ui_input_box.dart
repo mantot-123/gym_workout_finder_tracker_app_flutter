@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class UIInputBox extends StatelessWidget {
   TextEditingController inputController;
   String label;
-  UIInputBox({super.key, required this.label, required this.inputController});
+  String value;
+  UIInputBox({super.key, required this.label, required this.inputController, this.value = ""});
 
   @override
   Widget build(BuildContext context) {

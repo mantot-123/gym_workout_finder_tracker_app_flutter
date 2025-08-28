@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/workout_tile.dart";
 import "../models/workout.dart";
-import "../saved_workouts_db.dart";
+import "../workouts_db_handler.dart";
 
 class SavedWorkoutsPage extends StatefulWidget {
   const SavedWorkoutsPage({super.key});

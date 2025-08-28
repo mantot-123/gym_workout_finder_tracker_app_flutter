@@ -42,6 +42,16 @@ class SavedRoutinesDB {
     for(int i = 0; i < savedRoutines.length; i++) {
       if(savedRoutines[i].id == routine.id) {
         savedRoutines.removeAt(i);
+        return;
+      }
+    }
+  }
+
+  static void overwrite(Routine current, Routine newRoutine) {
+    for(int i = 0; i < savedRoutines.length; i++) {
+      if(savedRoutines[i].id == current.id) {
+        savedRoutines[i] = newRoutine;
+        return;
       }
     }
   }

@@ -7,32 +7,40 @@ import "../helpers/rng_str_gen.dart";
 import "../workouts_db_handler.dart";
 import "../routines_db_handler.dart";
 
-class NewRoutinePage extends StatefulWidget {
-  const NewRoutinePage({super.key});
+class EditRoutinePage extends StatefulWidget {
+  final Routine data;
+  const EditRoutinePage({super.key, required this.data});
 
   @override
-  State<NewRoutinePage> createState() => _NewRoutinePageState();
+  State<EditRoutinePage> createState() => _EditRoutinePageState();
 }
 
-class _NewRoutinePageState extends State<NewRoutinePage> {
+class _EditRoutinePageState extends State<EditRoutinePage> {
   TextEditingController nameController = TextEditingController();
   TimeOfDay selectedTime = TimeOfDay.now();
   String alertMsg = "";
 
-  void saveRoutine() {
+  @override
+  void initState() {
+    super.initState();
+    nameController.text = widget.data.name;
+    selectedTime = widget.data.timeStart;
+  }
+
+  void saveChanges() {
     Routine routine = Routine(
-        id: RngStrGen.generator(12),
-        name: nameController.text,
-        timeStart: selectedTime,
-      );
-      SavedRoutinesDB.addToSavedRoutines(routine);
-      SavedRoutinesDB.updateSavedRoutines();
+      id: widget.data.id,
+      name: nameController.text,
+      timeStart: selectedTime,
+    );
+
+    SavedRoutinesDB.overwrite(widget.data, routine);
   }
 
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: "New routine",
+      appBarTitle: "Edit routine: ${widget.data.name}",
       scaffoldBody: Center(
         child: Container(
           width: 500,
@@ -85,25 +93,39 @@ class _NewRoutinePageState extends State<NewRoutinePage> {
 
               SizedBox(height: 50),
 
-              // create button
-              UIButton(label: "Create routine", onPressedAction: () {
-                if(nameController.text == "") {
-                  setState(() { 
-                    alertMsg = "Please enter a routine name!";
-                  });
-                  return;
-                }
+              Row(
+                spacing: 10.0,
+                children: [
+                  UIButton(label: "Save changes", onPressedAction: () {
+                    if(nameController.text == "") {
+                      setState(() { 
+                        alertMsg = "Please enter a routine name!";
+                      });
+                      return;
+                    }
 
-                saveRoutine();
+                    saveChanges();
 
-                Navigator.of(context).pop();
-              }),
+                    Navigator.of(context).pop();
+                  }),
+
+                  ElevatedButton(
+                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                    onPressed: () {
+                      // TODO DELETE ROUTINE
+                      SavedRoutinesDB.removeFromSavedRoutines(widget.data);
+                      Navigator.pop(context);
+                    },
+                    child: Text("Delete routine", style: TextStyle(color: Colors.white))
+                  ),
+                ],
+              ),
 
               Text(alertMsg)
             ],
           )
         ),
-      ) 
+      ),
     );;
   }
 }

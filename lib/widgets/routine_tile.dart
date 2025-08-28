@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import "../pages/workout_info.dart";
+import "../pages/edit_routine.dart";
 import "../models/workout.dart";
 import "../models/routine.dart";
-import "../saved_workouts_db.dart";
+import "../workouts_db_handler.dart";
 
 class RoutineTile extends StatefulWidget {
   Routine data;
@@ -27,6 +28,9 @@ class _RoutineTileState extends State<RoutineTile> {
       leading: Icon(Icons.alarm),
       trailing: IconButton(icon: Icon(Icons.edit), onPressed: () {
         // TODO: ADD DIALOG TO EDIT ROUTINE
+        Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+          return EditRoutinePage(data: widget.data);
+        }));
       }),
     );
   }

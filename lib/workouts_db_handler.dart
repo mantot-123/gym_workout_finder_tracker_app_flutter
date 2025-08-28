@@ -43,6 +43,7 @@ class SavedWorkoutsDB {
     for(int i = 0; i < savedWorkouts.length; i++) {
       if(savedWorkouts[i].id == workout.id) {
         savedWorkouts.removeAt(i);
+        return;
       }
     }
   }

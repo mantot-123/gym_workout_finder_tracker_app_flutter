@@ -8,8 +8,8 @@ import "pages/search_form.dart";
 import "pages/saved_workouts.dart";
 import "pages/api_key_empty_error.dart";
 import "widgets/ui/ui_scaffold.dart";
-import "saved_workouts_db.dart";
-import "saved_routines_db.dart";
+import "workouts_db_handler.dart";
+import "routines_db_handler.dart";
 
 void main() async {
   // initialises the database 

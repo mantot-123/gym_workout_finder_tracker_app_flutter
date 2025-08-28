@@ -3,7 +3,7 @@ import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../widgets/workout_tile.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../models/workout.dart";
-import "../saved_workouts_db.dart";
+import "../workouts_db_handler.dart";
 import "../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
