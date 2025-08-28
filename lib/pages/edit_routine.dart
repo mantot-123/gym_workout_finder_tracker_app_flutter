@@ -114,6 +114,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
                     onPressed: () {
                       // TODO DELETE ROUTINE
                       SavedRoutinesDB.removeFromSavedRoutines(widget.data);
+                      SavedRoutinesDB.updateSavedRoutines();
                       Navigator.pop(context);
                     },
                     child: Text("Delete routine", style: TextStyle(color: Colors.white))
