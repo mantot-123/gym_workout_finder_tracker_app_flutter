@@ -4,12 +4,12 @@ import "../widgets/ui/ui_input_box.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../models/routine.dart";
 import "../helpers/rng_str_gen.dart";
-import "../workouts_db_handler.dart";
 import "../routines_db_handler.dart";
 
 class EditRoutinePage extends StatefulWidget {
+  final int mode; // EDIT MODES: 0 = new routine, 1 = edit
   final Routine data;
-  const EditRoutinePage({super.key, required this.data});
+  const EditRoutinePage({super.key, required this.mode, required this.data});
 
   @override
   State<EditRoutinePage> createState() => _EditRoutinePageState();
@@ -23,24 +23,31 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   @override
   void initState() {
     super.initState();
+
     nameController.text = widget.data.name;
     selectedTime = widget.data.timeStart;
   }
 
-  void saveChanges() {
+  void save() {
     Routine routine = Routine(
-      id: widget.data.id,
+      id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
       name: nameController.text,
       timeStart: selectedTime,
     );
 
-    SavedRoutinesDB.overwrite(widget.data, routine);
+    if(widget.mode == 0) {
+      SavedRoutinesDB.addToSavedRoutines(routine);
+    } else {
+      SavedRoutinesDB.overwrite(widget.data, routine); // replace an existing routine with the edited one
+    }
+
+    SavedRoutinesDB.updateSavedRoutines();
   }
 
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: "Edit routine: ${widget.data.name}",
+      appBarTitle: widget.mode == 0 ? "Edit routine: ${widget.data.name}" : "New routine",
       scaffoldBody: Center(
         child: Container(
           width: 500,
@@ -104,12 +111,14 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
                       return;
                     }
 
-                    saveChanges();
+                    // TODO SAVE CHANGES
+                    save();
 
                     Navigator.of(context).pop();
                   }),
-
-                  ElevatedButton(
+                  
+                  widget.mode == 1
+                  ? ElevatedButton(
                     style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
                     onPressed: () {
                       // TODO DELETE ROUTINE
@@ -118,7 +127,8 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
                       Navigator.pop(context);
                     },
                     child: Text("Delete routine", style: TextStyle(color: Colors.white))
-                  ),
+                  )
+                  : SizedBox()
                 ],
               ),
 

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
+import "package:gym_workout_finder_tracker_app_flutter/models/routine.dart";
 import "package:gym_workout_finder_tracker_app_flutter/routines_db_handler.dart";
 import "../widgets/ui/ui_button.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/routine_tile.dart";
 import "../pages/edit_routine.dart";
-import "../pages/new_routine.dart";
 import "dart:io";
 
 class RoutinesPage extends StatefulWidget {
@@ -38,7 +38,7 @@ class _RoutinesPageState extends State<RoutinesPage> {
               return RoutineTile(data: SavedRoutinesDB.getSavedRoutines()[index], onEdit: () async {
                 // TODO: ADD DIALOG TO EDIT ROUTINE
                 await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return EditRoutinePage(data: SavedRoutinesDB.getSavedRoutines()[index]);
+                  return EditRoutinePage(mode: 1, data: SavedRoutinesDB.getSavedRoutines()[index]);
                 }));
 
                 setState(() {});
@@ -53,7 +53,7 @@ class _RoutinesPageState extends State<RoutinesPage> {
 
         IconButton(icon: Icon(Icons.add, color: Colors.black), onPressed: () async {
           await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return NewRoutinePage();
+            return EditRoutinePage(mode: 0, data: Routine(id: "", name: "", timeStart: TimeOfDay.now()));
           }));
 
           setState(() { });
