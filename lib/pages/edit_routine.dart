@@ -47,7 +47,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: widget.mode == 0 ? "Edit routine: ${widget.data.name}" : "New routine",
+      appBarTitle: widget.mode == 1 ? "Edit routine: ${widget.data.name}" : "New routine",
       scaffoldBody: Center(
         child: Container(
           width: 500,
