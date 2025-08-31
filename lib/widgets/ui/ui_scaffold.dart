@@ -4,7 +4,9 @@ class UIScaffold extends StatelessWidget {
   String appBarTitle;
   Widget scaffoldBody;
   List<Widget>? actionBtns;
-  UIScaffold({ super.key, required this.appBarTitle, required this.scaffoldBody, this.actionBtns });
+  Widget? bottomActionBtn;
+
+  UIScaffold({ super.key, required this.appBarTitle, required this.scaffoldBody, this.actionBtns, this.bottomActionBtn });
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,8 @@ class UIScaffold extends StatelessWidget {
         )),
         actions: actionBtns ?? []
       ),
-      body: scaffoldBody
+      body: scaffoldBody,
+      floatingActionButton: bottomActionBtn,
     );
   }
 }

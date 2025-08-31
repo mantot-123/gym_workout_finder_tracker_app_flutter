@@ -8,7 +8,13 @@ class Task {
     String name;
 
     @HiveField(1)
-    int durationSeconds;
+    int restTimeSeconds;
 
-    Task({ required this.name, required this.durationSeconds });
+    @HiveField(2)
+    int reps;
+
+    @HiveField(3)
+    int sets;
+
+    Task({ required this.name, required this.restTimeSeconds, required this.reps, required this.sets });
 }

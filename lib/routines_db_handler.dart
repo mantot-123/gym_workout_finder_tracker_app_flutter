@@ -22,7 +22,7 @@ class SavedRoutinesDB {
     } else {
       box = Hive.box<List<dynamic>>("saved_routines");
     }
-    
+
     loadSavedRoutines();
   }
   

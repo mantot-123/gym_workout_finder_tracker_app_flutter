@@ -28,8 +28,12 @@ flutter:
     - family: "Overused Grotesk Medium"
       fonts:
         - asset: fonts/OverusedGrotesk-Medium.ttf
+    - family: "Overused Grotesk Bold"
+      fonts:
+        - asset: fonts/OverusedGrotesk-Bold.ttf
   assets:
     - assets/logo.png
     - fonts/Anton-Regular.ttf
     - fonts/OverusedGrotesk-Medium.ttf
+    - fonts/OverusedGrotesk-Bold.ttf
   uses-material-design: true

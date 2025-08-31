@@ -4,6 +4,7 @@ import "package:gym_workout_finder_tracker_app_flutter/routines_db_handler.dart"
 import "../widgets/ui/ui_button.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/routine_tile.dart";
+import "../pages/routine_details.dart";
 import "../pages/edit_routine.dart";
 import "dart:io";
 
@@ -35,14 +36,23 @@ class _RoutinesPageState extends State<RoutinesPage> {
         : ListView.builder(
             itemCount: SavedRoutinesDB.getSavedRoutines().length,
             itemBuilder: (context, index) {
-              return RoutineTile(data: SavedRoutinesDB.getSavedRoutines()[index], onEdit: () async {
-                // TODO: ADD DIALOG TO EDIT ROUTINE
-                await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return EditRoutinePage(mode: 1, data: SavedRoutinesDB.getSavedRoutines()[index]);
-                }));
+              return RoutineTile(
+                data: SavedRoutinesDB.getSavedRoutines()[index], 
+                onOpen: () async {
+                  // TODO OPEN ROUTINE DETAILS PAGE
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return RoutineDetailsPage(data: SavedRoutinesDB.getSavedRoutines()[index]);
+                  }));
+                },
+                onEdit: () async {
+                  // TODO EDIT ROUTINE
+                  await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+                    return EditRoutinePage(mode: 1, data: SavedRoutinesDB.getSavedRoutines()[index]);
+                  }));
 
-                setState(() {});
-              });
+                  setState(() {});
+                }
+              );
             }
         ),
 

@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import "../pages/workout_info.dart";
-import "../pages/edit_routine.dart";
-import "../models/workout.dart";
 import "../models/routine.dart";
-import "../workouts_db_handler.dart";
 
 class RoutineTile extends StatefulWidget {
   Routine data;
   VoidCallback onEdit;
-  RoutineTile({ super.key, required this.data, required this.onEdit });
+  VoidCallback onOpen;
+  RoutineTile({ super.key, required this.data, required this.onOpen, required this.onEdit });
 
   @override
   State<RoutineTile> createState() => _RoutineTileState();
@@ -19,11 +16,7 @@ class _RoutineTileState extends State<RoutineTile> {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      onTap: () { 
-        // TODO: OPEN ROUTINE PAGE
-        
-      },
-
+      onTap: widget.onOpen,
       title: Text(widget.data.name), 
       subtitle: Text("Start: ${widget.data.timeStart.format(context)}"),
       leading: Icon(Icons.alarm),
