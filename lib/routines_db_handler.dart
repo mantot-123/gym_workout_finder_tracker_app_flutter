@@ -15,6 +15,7 @@ class SavedRoutinesDB {
 
   static Future<void> initDb() async {
     Hive.registerAdapter(RoutineAdapter());
+    Hive.registerAdapter(TaskAdapter());
     Hive.registerAdapter(TimeOfDayAdapter());
 
     if(!Hive.isBoxOpen("saved_routines")) {
@@ -47,6 +48,8 @@ class SavedRoutinesDB {
     }
   }
 
+  // overwrite routine data in saved routines list
+  // note: as long as both "current" and "newRoutine" have the same id, the overwriting will work
   static void overwrite(Routine current, Routine newRoutine) {
     for(int i = 0; i < savedRoutines.length; i++) {
       if(savedRoutines[i].id == current.id) {

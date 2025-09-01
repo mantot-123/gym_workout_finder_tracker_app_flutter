@@ -15,8 +15,8 @@ class Routine {
     @HiveField(2)
     TimeOfDay timeStart;
 
-    // @HiveField(3)
-    // List<Task> tasks = [];
+    @HiveField(3)
+    List<Task> tasks;
 
-    Routine({ required this.id, required this.name, required this.timeStart, });
+    Routine({ required this.id, required this.name, required this.timeStart, required this.tasks });
 }

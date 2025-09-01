@@ -62,8 +62,9 @@ class _RoutinesPageState extends State<RoutinesPage> {
         }),
 
         IconButton(icon: Icon(Icons.add, color: Colors.black), onPressed: () async {
+          // NEW ROUTINE PAGE
           await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-            return EditRoutinePage(mode: 0, data: Routine(id: "", name: "", timeStart: TimeOfDay.now()));
+            return EditRoutinePage(mode: 0, data: Routine(id: "", name: "", timeStart: TimeOfDay.now(), tasks: []));
           }));
 
           setState(() { });
