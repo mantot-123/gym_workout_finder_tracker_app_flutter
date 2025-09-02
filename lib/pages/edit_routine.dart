@@ -33,7 +33,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
       id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
       name: nameController.text,
       timeStart: selectedTime,
-      tasks: []
+      tasks: widget.data.tasks
     );
 
     if(widget.mode == 0) {
