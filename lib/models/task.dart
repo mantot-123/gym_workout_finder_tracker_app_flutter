@@ -16,5 +16,8 @@ class Task {
     @HiveField(3)
     int sets;
 
-    Task({ required this.name, required this.restTimeSeconds, required this.reps, required this.sets });
+    @HiveField(4)
+    String id;
+
+    Task({ required this.id, required this.name, required this.restTimeSeconds, required this.reps, required this.sets });
 }

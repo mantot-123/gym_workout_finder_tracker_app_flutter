@@ -38,6 +38,9 @@ flutter build <platform> --dart-define=API_KEY=<YOUR_API_KEY_HERE>
     - Which days to do the routine
     - Add workouts to the routine and mark each one of them as completed 
     - Sends push notifications/alarms when the user should start doing the routine
+* Login and signup system + cloud saving
+    - Allows users to login/sign up an account and save their workout routines and saved exercises to the cloud instead of just locally
 * Leveling system for completed routines
     - Has multiple tiers: Beginner, Intermediate, Advanced, Elite, Master, Legend
     - Experience points (XP) gained when a user completes the routine for all the selected days
+* AI features to suggest routines - might use a chatbot API to do this

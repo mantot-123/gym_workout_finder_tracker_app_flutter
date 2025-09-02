@@ -31,6 +31,15 @@ class SavedRoutinesDB {
     return savedRoutines;
   }
 
+  static Routine? getRoutineById(String id) {
+    for(var routine in savedRoutines) {
+      if(id == routine.id) {
+        return routine;
+      }
+    }
+    return null;
+  }
+
   static void loadSavedRoutines() {
     savedRoutines = box.get("routines", defaultValue: [])!.cast<Routine>();
   }

@@ -3,6 +3,7 @@ import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.d
 import 'package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_scaffold.dart';
 import "../models/task.dart";
 import "../models/routine.dart";
+import "../helpers/rng_str_gen.dart";
 import "../routines_db_handler.dart";
 
 class TaskEditDialog {
@@ -20,7 +21,13 @@ class TaskEditDialog {
   String setsHelperMsg = "";
   String repsHelperMsg = "";
 
-  TaskEditDialog({ required this.routine, required this.task, required this.mode });
+  TaskEditDialog({ required this.routine, required this.task, required this.mode }) {
+    // prefill form fields with existing task data
+    nameController.text = task.name;
+    restTimeController.text = task.restTimeSeconds.toString();
+    setsController.text = task.sets.toString();
+    repsController.text = task.reps.toString();
+  }
   
     // clear form fields + helper messages
   void clearForm() {
@@ -87,22 +94,25 @@ class TaskEditDialog {
 
   void save() {
     // TODO ADD NEW TASK TO ROUTINE
-    Task newTask = Task(
-      name: nameController.text, 
-      restTimeSeconds: int.parse(restTimeController.text), 
-      sets: int.parse(setsController.text), 
-      reps: int.parse(repsController.text)
-    );
     
     if(mode == 0) {
+      Task newTask = Task(
+        id: RngStrGen.generator(12),
+        name: nameController.text, 
+        restTimeSeconds: int.parse(restTimeController.text), 
+        sets: int.parse(setsController.text), 
+        reps: int.parse(repsController.text)
+      );
+
       routine.tasks.add(newTask);
+      SavedRoutinesDB.updateSavedRoutines();
       SavedRoutinesDB.overwrite(routine, routine); // overwrite the routine with the new task added
-      SavedRoutinesDB.updateSavedRoutines(); // update the saved routines in the database
+  
     } else if(mode == 1) {
       // TODO EDIT EXISTING TASK IN ROUTINE
     }
-    
-    clearForm();
+
+    SavedRoutinesDB.updateSavedRoutines(); // update the saved routines in the database
   }
 
   // Show edit dialog form
@@ -166,10 +176,10 @@ class TaskEditDialog {
                                 children: [
                                   Text("There are errors in the form. Please fix them before saving."),
                                   SizedBox(height: 20),
-                                  Text(nameHelperMsg, style: TextStyle(color: Colors.red)),
-                                  Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)),
-                                  Text(setsHelperMsg, style: TextStyle(color: Colors.red)),
-                                  Text(repsHelperMsg, style: TextStyle(color: Colors.red)),
+                                  nameHelperMsg != "" ? Text(nameHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                                  restTimeHelperMsg != "" ? Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                                  setsHelperMsg != "" ? Text(setsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                                  repsHelperMsg != "" ? Text(repsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
                                 ],
                               ),
                             ),
@@ -187,6 +197,7 @@ class TaskEditDialog {
                 
                 else { // saves + exits
                   save();
+                  clearForm();
                   Navigator.of(context).pop(); // close edit dialog
                 }
 
