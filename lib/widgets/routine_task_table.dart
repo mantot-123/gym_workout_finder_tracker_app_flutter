@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import "../widgets/task_edit_dialog.dart";
 import 'package:gym_workout_finder_tracker_app_flutter/models/routine.dart';
 import "../models/task.dart";
 
@@ -73,7 +74,15 @@ class _RoutineTaskTableState extends State<RoutineTaskTable> {
               padding: const EdgeInsets.all(8.0),
               child: Text("${task.reps}", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
             ),
-            IconButton(icon: Icon(Icons.edit), onPressed: () {})
+            IconButton(icon: Icon(Icons.edit), onPressed: () async {
+              TaskEditDialog dialog = TaskEditDialog(
+                routine: widget.data, 
+                task: task, 
+                mode: 1
+              );
+              await dialog.show(context);
+              setState(() {});
+            })
           ] 
         )
       );

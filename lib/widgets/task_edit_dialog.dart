@@ -94,24 +94,22 @@ class TaskEditDialog {
 
   void save() {
     // TODO ADD NEW TASK TO ROUTINE
-    
-    if(mode == 0) {
-      Task newTask = Task(
-        id: RngStrGen.generator(12),
-        name: nameController.text, 
-        restTimeSeconds: int.parse(restTimeController.text), 
-        sets: int.parse(setsController.text), 
-        reps: int.parse(repsController.text)
-      );
+    Task newTask = Task(
+      id: mode == 0 ? RngStrGen.generator(12) : task.id,
+      name: nameController.text, 
+      restTimeSeconds: int.parse(restTimeController.text), 
+      sets: int.parse(setsController.text), 
+      reps: int.parse(repsController.text)
+    );
 
+    if(mode == 0) {
       routine.tasks.add(newTask);
-      SavedRoutinesDB.updateSavedRoutines();
-      SavedRoutinesDB.overwrite(routine, routine); // overwrite the routine with the new task added
-  
     } else if(mode == 1) {
-      // TODO EDIT EXISTING TASK IN ROUTINE
+      routine.taskListReplaceItem(newTask);
     }
 
+    // overwrite the routine with the new task changed
+    SavedRoutinesDB.overwrite(routine, routine);
     SavedRoutinesDB.updateSavedRoutines(); // update the saved routines in the database
   }
 
@@ -202,6 +200,10 @@ class TaskEditDialog {
                 }
 
               }),
+
+              mode == 1 ? TextButton(child: Text("Delete"), onPressed: () {
+                // TODO DELETE FUNCTION
+              }) : SizedBox(),
 
               TextButton(child: Text("Cancel"), onPressed: () { 
                 clearForm();

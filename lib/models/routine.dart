@@ -19,4 +19,15 @@ class Routine {
     List<Task> tasks;
 
     Routine({ required this.id, required this.name, required this.timeStart, required this.tasks });
+
+    // replace a task in task list if the given ID exists
+    void taskListReplaceItem(Task task) {
+      for(int i = 0; i < tasks.length; i++) {
+        if(tasks[i].id == task.id) {
+          tasks[i] = task;
+          return;
+        }
+      }
+    }
+
 }
