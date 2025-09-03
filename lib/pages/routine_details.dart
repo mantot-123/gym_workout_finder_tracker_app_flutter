@@ -21,7 +21,7 @@ class _RoutineDetailsPageState extends State<RoutineDetailsPage> {
     // print(widget.data.tasks);
     return UIScaffold(
       appBarTitle: widget.data.name, 
-      scaffoldBody: Column(
+      body: Column(
         children: [
           Container(
             height: 80,
@@ -35,7 +35,7 @@ class _RoutineDetailsPageState extends State<RoutineDetailsPage> {
           )
         ],
       ),
-      bottomActionBtn: FloatingActionButton(
+      floatingActionButton: FloatingActionButton(
         backgroundColor: Colors.lightGreen.shade400,
         child: Icon(Icons.add_task, color: Colors.black),
         onPressed: () async { // edit task dialog method

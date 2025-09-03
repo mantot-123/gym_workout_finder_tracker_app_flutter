@@ -52,7 +52,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Search results for: ${widget.query}",
-      scaffoldBody: FutureBuilder<dynamic>(
+      body: FutureBuilder<dynamic>(
         future: results,
         builder: (context, snapshot) {
           try {

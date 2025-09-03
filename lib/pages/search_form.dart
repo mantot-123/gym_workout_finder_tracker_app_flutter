@@ -19,7 +19,7 @@ class _SearchFormState extends State<SearchForm> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Search",
-      scaffoldBody: Center(
+      body: Center(
         child: Container(
           width: 500,
           height: 300,
@@ -28,9 +28,9 @@ class _SearchFormState extends State<SearchForm> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              UIInputBox(label: "Enter the name of the workout...", inputController: nameController),
+              UIInputBox(label: "Enter the name of the workout...", controller: nameController),
 
-              UIButton(label: "Search", onPressedAction: () {
+              UIButton(label: "Search", onPressed: () {
                 if(nameController.text == "") {
                   setState(() { 
                     alertMsg = "Please enter the name of the workout you want to search!";

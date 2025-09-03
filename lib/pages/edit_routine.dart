@@ -49,7 +49,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: widget.mode == 1 ? "Edit routine: ${widget.data.name}" : "New routine",
-      scaffoldBody: Center(
+      body: Center(
         child: Container(
           width: 500,
           height: 300,
@@ -58,14 +58,14 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              UIInputBox(label: "Routine name...", inputController: nameController),
+              UIInputBox(label: "Routine name...", controller: nameController),
 
               SizedBox(height: 15),
               Row(
                 spacing: 10.0,
                 children: [
                 Text("Start time: ${selectedTime.format(context)}"),
-                UIButton(label: "Change time", onPressedAction: () async {
+                UIButton(label: "Change time", onPressed: () async {
                   TimeOfDay? newTime = await showTimePicker(
                     context: context, 
                     initialTime: selectedTime,
@@ -104,7 +104,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
               Row(
                 spacing: 10.0,
                 children: [
-                  UIButton(label: "Save changes", onPressedAction: () {
+                  UIButton(label: "Save changes", onPressed: () {
                     if(nameController.text == "") {
                       setState(() { 
                         alertMsg = "Please enter a routine name!";

@@ -133,16 +133,16 @@ class TaskEditDialog {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  UIInputBox(label: "Exercise name...", inputController: nameController),
+                  UIInputBox(label: "Exercise name...", controller: nameController),
                   SizedBox(height: 10),
               
-                  UIInputBox(label: "Rest time (seconds)...", inputController: restTimeController, inputType: 1),
+                  UIInputBox(label: "Rest time (seconds)...", controller: restTimeController, inputType: 1),
                   SizedBox(height: 10),
               
-                  UIInputBox(label: "Sets...", inputController: setsController, inputType: 1),
+                  UIInputBox(label: "Sets...", controller: setsController, inputType: 1),
                   SizedBox(height: 10),
               
-                  UIInputBox(label: "Reps...", inputController: repsController, inputType: 1),
+                  UIInputBox(label: "Reps...", controller: repsController, inputType: 1),
                   SizedBox(height: 20),
                 ],
               ),

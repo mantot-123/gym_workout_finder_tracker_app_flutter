@@ -31,7 +31,7 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Saved workouts",
-      scaffoldBody: 
+      body: 
         SavedWorkoutsDB.getSavedWorkouts().isEmpty
         ? Center(
             child: Column(

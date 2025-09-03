@@ -30,7 +30,7 @@ class _WorkoutInfoPageState extends State<WorkoutInfoPage> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Exercise details",
-      scaffoldBody: Column(
+      body: Column(
         children: [
           FutureBuilder(
             future: image, 

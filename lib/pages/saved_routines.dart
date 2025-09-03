@@ -20,7 +20,7 @@ class _RoutinesPageState extends State<RoutinesPage> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Saved routines",
-      scaffoldBody: 
+      body: 
         SavedRoutinesDB.getSavedRoutines().isEmpty
         ? Center(
             child: Column(
@@ -56,7 +56,7 @@ class _RoutinesPageState extends State<RoutinesPage> {
             }
         ),
 
-      actionBtns: [
+      actions: [
         IconButton(icon: Icon(Icons.refresh, color: Colors.black), onPressed: () {
           setState(() { });
         }),
