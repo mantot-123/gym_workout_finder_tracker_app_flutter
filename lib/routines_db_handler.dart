@@ -58,7 +58,7 @@ class SavedRoutinesDB {
   }
 
   // overwrite routine data in saved routines list if the given ID exists
-  static void overwriteByID(Routine newRoutine) {
+  static void overwriteRoutineByID(Routine newRoutine) {
     for(int i = 0; i < savedRoutines.length; i++) {
       if(savedRoutines[i].id == newRoutine.id) {
         savedRoutines[i] = newRoutine;

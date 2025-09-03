@@ -39,7 +39,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     if(widget.mode == 0) {
       SavedRoutinesDB.addToSavedRoutines(routine);
     } else {
-      SavedRoutinesDB.overwriteByID(routine); // replace an existing routine with the edited one
+      SavedRoutinesDB.overwriteRoutineByID(routine); // replace an existing routine with the edited one
     }
 
     SavedRoutinesDB.updateSavedRoutines();
