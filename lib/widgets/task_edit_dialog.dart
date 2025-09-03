@@ -207,6 +207,7 @@ class TaskEditDialog {
                   onPressed : () {
                     // TODO DELETE FUNCTION
                     routine.deleteTaskByID(task);
+                    SavedRoutinesDB.updateSavedRoutines();
                     clearForm();
                     Navigator.of(context).pop();
                   }
