@@ -30,4 +30,13 @@ class Routine {
       }
     }
 
+    void deleteTaskByID(Task task) {
+      for(int i = 0; i < tasks.length; i++) {
+        if(tasks[i].id == task.id) {
+          tasks.removeAt(i);
+          return;
+        }        
+      }
+    }
+
 }

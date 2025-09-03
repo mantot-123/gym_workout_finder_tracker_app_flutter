@@ -201,9 +201,17 @@ class TaskEditDialog {
 
               }),
 
-              mode == 1 ? TextButton(child: Text("Delete"), onPressed: () {
-                // TODO DELETE FUNCTION
-              }) : SizedBox(),
+              mode == 1 
+              ? TextButton(
+                  child: Text("Delete", style: TextStyle(color: Colors.red)), 
+                  onPressed : () {
+                    // TODO DELETE FUNCTION
+                    routine.deleteTaskByID(task);
+                    clearForm();
+                    Navigator.of(context).pop();
+                  }
+                ) 
+              : SizedBox(),
 
               TextButton(child: Text("Cancel"), onPressed: () { 
                 clearForm();
