@@ -108,8 +108,6 @@ class TaskEditDialog {
       routine.taskListReplaceItem(newTask);
     }
 
-    // overwrite the routine with the new task changed
-    SavedRoutinesDB.overwrite(routine, routine);
     SavedRoutinesDB.updateSavedRoutines(); // update the saved routines in the database
   }
 
