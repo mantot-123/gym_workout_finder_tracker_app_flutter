@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class UIButton extends StatelessWidget {
-  UIButton({super.key, required this.label, required this.onPressedAction});
   String label;
-  VoidCallback onPressedAction;
+  VoidCallback onPressed;
+  UIButton({super.key, required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.lightGreen.shade700)),
-      onPressed: onPressedAction,
+      onPressed: onPressed,
       child: Text(label, style: TextStyle(color: Colors.white))
     );
   }

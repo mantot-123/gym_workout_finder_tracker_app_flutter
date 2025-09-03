@@ -3,7 +3,7 @@ import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../widgets/workout_tile.dart";
 import "../widgets/ui/ui_scaffold.dart";
 import "../models/workout.dart";
-import "../saved_workouts_db.dart";
+import "../workouts_db_handler.dart";
 import "../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
@@ -52,7 +52,7 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Search results for: ${widget.query}",
-      scaffoldBody: FutureBuilder<dynamic>(
+      body: FutureBuilder<dynamic>(
         future: results,
         builder: (context, snapshot) {
           try {

@@ -8,7 +8,7 @@ class APIKeyEmptyErrorPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Error",
-      scaffoldBody: Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [

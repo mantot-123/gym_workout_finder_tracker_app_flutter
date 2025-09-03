@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
 class UIInputBox extends StatelessWidget {
-  TextEditingController inputController;
+  TextEditingController controller;
   String label;
-  UIInputBox({super.key, required this.label, required this.inputController});
+  String value;
+  int inputType; // 0 = text, 1 = integer
+  UIInputBox({super.key, required this.label, required this.controller, this.value = "", this.inputType = 0});
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +18,8 @@ class UIInputBox extends StatelessWidget {
       ),
       cursorColor: Colors.lightGreen.shade900,
       // cursorColor: Colors.lightGreen.shade900,
-      controller: inputController
+      controller: controller,
+      keyboardType: inputType == 1 ? TextInputType.number : TextInputType.text,
     );
   }
 }
