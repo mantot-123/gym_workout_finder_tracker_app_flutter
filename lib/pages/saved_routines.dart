@@ -56,7 +56,7 @@ class _RoutinesPageState extends State<RoutinesPage> {
             }
         ),
 
-      actions: [
+      appBarActions: [
         IconButton(icon: Icon(Icons.refresh, color: Colors.black), onPressed: () {
           setState(() { });
         }),

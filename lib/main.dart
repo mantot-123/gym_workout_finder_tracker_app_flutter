@@ -4,7 +4,6 @@ import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "pages/home.dart";
 import "pages/saved_routines.dart";
-import "pages/search_form.dart";
 import "pages/saved_workouts.dart";
 import "pages/api_key_empty_error.dart";
 import "widgets/ui/ui_scaffold.dart";
@@ -34,7 +33,6 @@ class _MainAppState extends State<MainApp> {
   List<Widget> pages = [
     HomePage(),
     RoutinesPage(),
-    SearchForm(),
     SavedWorkoutsPage()
   ];
 
@@ -89,8 +87,7 @@ class _MainAppState extends State<MainApp> {
             destinations: [
               NavigationDestination(icon: Icon(Icons.home, size: 30), label: ""),
               NavigationDestination(icon: Icon(Icons.alarm, size: 30), label: ""),
-              NavigationDestination(icon: Icon(Icons.search, size: 30), label: ""),
-              NavigationDestination(icon: Icon(Icons.bookmark, size: 30), label: "")
+              NavigationDestination(icon: Icon(Icons.fitness_center, size: 30), label: "")
             ]
           ))
         : APIKeyEmptyErrorPage()

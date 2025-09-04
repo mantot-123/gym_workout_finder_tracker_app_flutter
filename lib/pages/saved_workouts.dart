@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/workout_tile.dart";
+import "../pages/search_form.dart";
 import "../models/workout.dart";
 import "../workouts_db_handler.dart";
 
@@ -30,17 +31,17 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: "Saved workouts",
+      appBarTitle: "Saved exercises",
       body: 
         SavedWorkoutsDB.getSavedWorkouts().isEmpty
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text("Saved workouts", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Text("Saved exercises", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
                 Icon(Icons.save, size: 60),
                 SizedBox(height: 10),
-                Text("All of your saved workouts will show here.", textAlign: TextAlign.center)
+                Text("All of your saved exercises will show here.\nTo find a new exercise, click the search button on the top-right.", textAlign: TextAlign.center)
               ],
             )
           ) 
@@ -61,8 +62,18 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
                     }
                   ),
                 )
-              ]
-          )
+              ],
+          ),
+      appBarActions: [
+        IconButton(icon: Icon(Icons.search, color: Colors.black), onPressed: () async {
+          // SEARCH FORM
+          await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+            return SearchForm();
+          }));
+
+          setState(() { });
+        })
+      ]
     );;
   }
 }
