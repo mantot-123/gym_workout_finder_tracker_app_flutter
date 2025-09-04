@@ -8,9 +8,13 @@ class UIButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.lightGreen.shade700)),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all(Colors.lightGreen.shade200),
+        elevation: WidgetStatePropertyAll(0.0),
+        shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(15.0)))
+      ),
       onPressed: onPressed,
-      child: Text(label, style: TextStyle(color: Colors.white))
+      child: Text(label, style: TextStyle(color: Colors.black87)),
     );
   }
 }

@@ -11,9 +11,9 @@ class UIScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
+      backgroundColor: Colors.grey.shade50,
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen.shade400, 
+        backgroundColor: Colors.grey.shade50, 
         title: Text(appBarTitle, style: TextStyle(
           fontFamily: "Overused Grotesk Medium"
         )),

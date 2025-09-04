@@ -64,24 +64,33 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: "Overused Grotesk Medium"
+        fontFamily: "Overused Grotesk Medium",
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.lightGreen.shade200))
+        )
+        // elevatedButtonTheme: ElevatedButtonThemeData(
+        //   style: ElevatedButton.styleFrom(
+        //     backgroundColor: Colors.lightGreen.shade700,
+        //     foregroundColor: Colors.white
+        //   )
+        // )
       ),
       debugShowCheckedModeBanner: false,
       home: 
         apiKeySet 
         ? Scaffold(
           body: pages[selectedPage],
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.lightGreen[200],
-            selectedItemColor: Colors.lightGreen[900],
-            currentIndex: selectedPage,
-            onTap: changePage,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-              BottomNavigationBarItem(icon: Icon(Icons.alarm), label: "Routines"),
-              BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-              BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Saved")
+          bottomNavigationBar: NavigationBar(
+            backgroundColor: Colors.grey.shade50,
+            indicatorColor: Colors.lightGreen.shade100,
+            selectedIndex: selectedPage,
+            onDestinationSelected: changePage,
+            height: 30,
+            destinations: [
+              NavigationDestination(icon: Icon(Icons.home, size: 30), label: ""),
+              NavigationDestination(icon: Icon(Icons.alarm, size: 30), label: ""),
+              NavigationDestination(icon: Icon(Icons.search, size: 30), label: ""),
+              NavigationDestination(icon: Icon(Icons.bookmark, size: 30), label: "")
             ]
           ))
         : APIKeyEmptyErrorPage()

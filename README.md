@@ -21,7 +21,7 @@ flutter build <platform> --dart-define=API_KEY=<YOUR_API_KEY_HERE>
 
 ### Features (planned)
 
-* Personalised workout plan generator 
+* AI personalised workout plan generator 
     - Automatically suggests a set of exercises based on: 
         - Workout frequency
         - Current build 
@@ -43,4 +43,3 @@ flutter build <platform> --dart-define=API_KEY=<YOUR_API_KEY_HERE>
 * Leveling system for completed routines
     - Has multiple tiers: Beginner, Intermediate, Advanced, Elite, Master, Legend
     - Experience points (XP) gained when a user completes the routine for all the selected days
-* AI features to suggest routines - might use a chatbot API to do this
