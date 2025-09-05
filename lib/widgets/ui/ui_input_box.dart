@@ -10,14 +10,9 @@ class UIInputBox extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextField(
-      // decoration: InputDecoration(hintText: "Type your name here..."),
       decoration: InputDecoration(
-        floatingLabelStyle: TextStyle(color: Colors.lightGreen.shade700),
-        focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightGreen.shade900)),
-        label: Text(this.label)
+        label: Text(label)
       ),
-      cursorColor: Colors.lightGreen.shade900,
-      // cursorColor: Colors.lightGreen.shade900,
       controller: controller,
       keyboardType: inputType == 1 ? TextInputType.number : TextInputType.text,
     );

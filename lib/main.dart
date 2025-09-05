@@ -62,17 +62,36 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey.shade50,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey.shade50
+        ),
+    
         fontFamily: "Overused Grotesk Medium",
         iconButtonTheme: IconButtonThemeData(
-          style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.lightGreen.shade200))
+          style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.lightGreen.shade200))
+        ),
+        
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.lightGreen.shade700,
+          selectionHandleColor: Colors.lightGreen.shade700
+        ),
+
+        inputDecorationTheme: InputDecorationTheme(
+          floatingLabelStyle: TextStyle(color: Colors.lightGreen.shade700),
+          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightGreen.shade900)),
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            elevation: WidgetStatePropertyAll(0.0),
+            backgroundColor: WidgetStatePropertyAll(Colors.lightGreen.shade300),
+            foregroundColor: WidgetStatePropertyAll(Colors.black87),
+            textStyle: WidgetStatePropertyAll(TextStyle(fontFamily: "Overused Grotesk Medium"))
+          )
         )
-        // elevatedButtonTheme: ElevatedButtonThemeData(
-        //   style: ElevatedButton.styleFrom(
-        //     backgroundColor: Colors.lightGreen.shade700,
-        //     foregroundColor: Colors.white
-        //   )
-        // )
       ),
+      
       debugShowCheckedModeBanner: false,
       home: 
         apiKeySet 
