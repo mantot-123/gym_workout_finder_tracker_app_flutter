@@ -1,29 +1,29 @@
 import 'package:flutter/material.dart';
 import "../widgets/ui/ui_scaffold.dart";
-import "../widgets/workout_tile.dart";
+import "../widgets/exercise_tile.dart";
 import "../pages/search_form.dart";
-import "../models/workout.dart";
-import "../workouts_db_handler.dart";
+import "../models/exercise.dart";
+import "../exercises_db_handler.dart";
 
-class SavedWorkoutsPage extends StatefulWidget {
-  const SavedWorkoutsPage({super.key});
+class SavedExercisesPage extends StatefulWidget {
+  const SavedExercisesPage({super.key});
 
   @override
-  State<SavedWorkoutsPage> createState() => _SavedWorkoutsPageState();
+  State<SavedExercisesPage> createState() => _SavedExercisesPageState();
 }
 
-class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
+class _SavedExercisesPageState extends State<SavedExercisesPage> {
   @override
   void initState() {
     super.initState();
   }
 
   // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedWorkout(BuildContext context, Workout data) {
+  void removeSavedExercise(BuildContext context, Exercise data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
-      SavedWorkoutsDB.removeFromSavedWorkouts(data); // remove
-      SavedWorkoutsDB.updateSavedWorkouts();
+      SavedExercisesDB.removeFromSavedExercises(data); // remove
+      SavedExercisesDB.updateSavedExercises();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
@@ -33,7 +33,7 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
     return UIScaffold(
       appBarTitle: "Saved exercises",
       body: 
-        SavedWorkoutsDB.getSavedWorkouts().isEmpty
+        SavedExercisesDB.getSavedExercises().isEmpty
         ? Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -50,13 +50,13 @@ class _SavedWorkoutsPageState extends State<SavedWorkoutsPage> {
               [
                 Expanded(
                   child: ListView.builder(
-                    itemCount: SavedWorkoutsDB.getSavedWorkouts().length,
+                    itemCount: SavedExercisesDB.getSavedExercises().length,
                     itemBuilder: (context, index) {
-                      return WorkoutTile(
-                        data: SavedWorkoutsDB.getSavedWorkouts()[index], 
+                      return ExerciseTile(
+                        data: SavedExercisesDB.getSavedExercises()[index], 
                         actionBtnType: 1,
                         actionBtnOnPressed: () {
-                          removeSavedWorkout(context, SavedWorkoutsDB.getSavedWorkouts()[index]);
+                          removeSavedExercise(context, SavedExercisesDB.getSavedExercises()[index]);
                         },
                       );
                     }

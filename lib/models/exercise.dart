@@ -1,9 +1,9 @@
 import "package:hive/hive.dart";
 
-part "workout.g.dart"; // <== Generated model adapter file
+part "exercise.g.dart"; // <== Generated model adapter file
 
 @HiveType(typeId: 0)
-class Workout {
+class Exercise {
   @HiveField(0) 
   late String bodyPart;
 
@@ -31,7 +31,7 @@ class Workout {
   @HiveField(8) 
   late String difficulty;
 
-  Workout(
+  Exercise(
     {
       this.bodyPart = "",
       this.equipment = "",
@@ -45,7 +45,7 @@ class Workout {
     }
   );
 
-  Workout.fromMap(Map<dynamic, dynamic> data) {
+  Exercise.fromMap(Map<dynamic, dynamic> data) {
     bodyPart = data["bodyPart"];
     equipment = data["equipment"];
     id = data["id"];
@@ -71,10 +71,10 @@ class Workout {
     };
   }
 
-  static List<Workout> fromMapList(List<Map<dynamic, dynamic>> list) {
-    List<Workout> newList = [];
+  static List<Exercise> fromMapList(List<Map<dynamic, dynamic>> list) {
+    List<Exercise> newList = [];
     list.forEach((item) {
-      newList.add(Workout.fromMap(item));
+      newList.add(Exercise.fromMap(item));
     });
     return newList;
   }

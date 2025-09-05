@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
-import "package:gym_workout_finder_tracker_app_flutter/models/workout.dart";
+import "package:gym_workout_finder_tracker_app_flutter/models/exercise.dart";
 import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "pages/home.dart";
 import "pages/saved_routines.dart";
 import "pages/saved_workouts.dart";
 import "pages/api_key_empty_error.dart";
-import "widgets/ui/ui_scaffold.dart";
-import "workouts_db_handler.dart";
+import "exercises_db_handler.dart";
 import "routines_db_handler.dart";
 
 void main() async {
   // initialises the database 
   await Hive.initFlutter();
   
-  await SavedWorkoutsDB.initDb();
+  await SavedExercisesDB.initDb();
   await SavedRoutinesDB.initDb();
   runApp(MainApp());
 }
@@ -33,12 +32,12 @@ class _MainAppState extends State<MainApp> {
   List<Widget> pages = [
     HomePage(),
     RoutinesPage(),
-    SavedWorkoutsPage()
+    SavedExercisesPage()
   ];
 
   @override
   void dispose() {
-    SavedWorkoutsDB.closeConn();
+    SavedExercisesDB.closeConn();
     SavedRoutinesDB.closeConn();
     super.dispose();
   }
@@ -91,7 +90,7 @@ class _MainAppState extends State<MainApp> {
           )
         )
       ),
-      
+
       debugShowCheckedModeBanner: false,
       home: 
         apiKeySet 
