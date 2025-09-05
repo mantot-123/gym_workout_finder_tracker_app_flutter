@@ -1,28 +1,28 @@
 import "dart:typed_data";
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
-import "../models/workout.dart";
+import "../models/exercise.dart";
 import "../widgets/ui/ui_scaffold.dart";
-import "../widgets/workout_info_pane.dart";
+import "../widgets/exercise_info_pane.dart";
 import "../helpers/list_to_string.dart";
 import "../api.dart";
 
-class WorkoutInfoPage extends StatefulWidget {
-  Workout data;
-  WorkoutInfoPage({super.key, required this.data});
+class ExerciseInfoPage extends StatefulWidget {
+  Exercise data;
+  ExerciseInfoPage({super.key, required this.data});
 
   @override
-  State<WorkoutInfoPage> createState() => _WorkoutInfoPageState();
+  State<ExerciseInfoPage> createState() => _ExerciseInfoPageState();
 }
 
 
-class _WorkoutInfoPageState extends State<WorkoutInfoPage> {
+class _ExerciseInfoPageState extends State<ExerciseInfoPage> {
   late Future<Uint8List?> image;
 
   @override
   void initState() {
     super.initState();
-    WorkoutSearch search = WorkoutSearch();
+    ExerciseSearch search = ExerciseSearch();
     image = search.getImage(widget.data.id); 
   }
 
@@ -52,7 +52,7 @@ class _WorkoutInfoPageState extends State<WorkoutInfoPage> {
               }
             }
           ),
-          Expanded(child: workoutInfoPane(widget.data))
+          Expanded(child: exerciseInfoPane(widget.data))
         ],
       ) 
     );;

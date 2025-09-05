@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
-import "../widgets/workout_tile.dart";
+import "../widgets/exercise_tile.dart";
 import "../widgets/ui/ui_scaffold.dart";
-import "../models/workout.dart";
-import "../workouts_db_handler.dart";
+import "../models/exercise.dart";
+import "../exercises_db_handler.dart";
 import "../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
@@ -21,28 +21,28 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   @override
   void initState() {
     super.initState();
-    WorkoutSearch search = WorkoutSearch();
+    ExerciseSearch search = ExerciseSearch();
     results = search.getData(widget.type, widget.query);
   }
 
 
   // ADD EXERCISE TO SAVED LIST
-  void saveWorkout(BuildContext context, Workout data) {
+  void saveExercise(BuildContext context, Exercise data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' successfully saved."));
-      SavedWorkoutsDB.addToSavedWorkouts(data); // add
-      SavedWorkoutsDB.updateSavedWorkouts();
+      SavedExercisesDB.addToSavedExercises(data); // add
+      SavedExercisesDB.updateSavedExercises();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
 
 
   // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedWorkout(BuildContext context, Workout data) {
+  void removeSavedExercise(BuildContext context, Exercise data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
-      SavedWorkoutsDB.removeFromSavedWorkouts(data); // remove
-      SavedWorkoutsDB.updateSavedWorkouts();
+      SavedExercisesDB.removeFromSavedExercises(data); // remove
+      SavedExercisesDB.updateSavedExercises();
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
@@ -79,22 +79,22 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             } 
             else {
               // print(snapshot.data);
-              List<Workout> dataConverted = Workout.fromMapList(snapshot.data.cast<Map<dynamic, dynamic>>()).cast<Workout>();
+              List<Exercise> dataConverted = Exercise.fromMapList(snapshot.data.cast<Map<dynamic, dynamic>>()).cast<Exercise>();
               return Column(
                 children: [
                   Expanded(
                     child: ListView.builder(
                       itemCount: dataConverted.length,
                       itemBuilder: (context, index) {
-                        // returns a workout list tile with either a delete or save button 
-                        if(SavedWorkoutsDB.isWorkoutSaved(dataConverted[index].id)) {
-                          return WorkoutTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
-                            removeSavedWorkout(context, dataConverted[index]);
+                        // returns a Exercise list tile with either a delete or save button 
+                        if(SavedExercisesDB.isExerciseSaved(dataConverted[index].id)) {
+                          return ExerciseTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
+                            removeSavedExercise(context, dataConverted[index]);
                           });
                         }
 
-                        return WorkoutTile(data: dataConverted[index], actionBtnOnPressed: () {
-                          saveWorkout(context, dataConverted[index]);
+                        return ExerciseTile(data: dataConverted[index], actionBtnOnPressed: () {
+                          saveExercise(context, dataConverted[index]);
                         });
                       }
                     ),

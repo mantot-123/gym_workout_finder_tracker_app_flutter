@@ -3,21 +3,17 @@ import 'package:flutter/material.dart';
 class UIScaffold extends StatelessWidget {
   String appBarTitle;
   Widget body;
-  List<Widget>? actions;
+  List<Widget>? appBarActions;
   Widget? floatingActionButton;
 
-  UIScaffold({ super.key, required this.appBarTitle, required this.body, this.actions, this.floatingActionButton });
+  UIScaffold({ super.key, required this.appBarTitle, required this.body, this.appBarActions, this.floatingActionButton });
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.lightGreen.shade100,
       appBar: AppBar(
-        backgroundColor: Colors.lightGreen.shade400, 
-        title: Text(appBarTitle, style: TextStyle(
-          fontFamily: "Overused Grotesk Medium"
-        )),
-        actions: actions ?? []
+        title: Text(appBarTitle),
+        actions: appBarActions ?? []
       ),
       body: body,
       floatingActionButton: floatingActionButton,

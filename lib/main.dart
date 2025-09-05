@@ -1,21 +1,19 @@
 import 'package:flutter/material.dart';
-import "package:gym_workout_finder_tracker_app_flutter/models/workout.dart";
+import "package:gym_workout_finder_tracker_app_flutter/models/exercise.dart";
 import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "pages/home.dart";
 import "pages/saved_routines.dart";
-import "pages/search_form.dart";
 import "pages/saved_workouts.dart";
 import "pages/api_key_empty_error.dart";
-import "widgets/ui/ui_scaffold.dart";
-import "workouts_db_handler.dart";
+import "exercises_db_handler.dart";
 import "routines_db_handler.dart";
 
 void main() async {
   // initialises the database 
   await Hive.initFlutter();
   
-  await SavedWorkoutsDB.initDb();
+  await SavedExercisesDB.initDb();
   await SavedRoutinesDB.initDb();
   runApp(MainApp());
 }
@@ -34,13 +32,12 @@ class _MainAppState extends State<MainApp> {
   List<Widget> pages = [
     HomePage(),
     RoutinesPage(),
-    SearchForm(),
-    SavedWorkoutsPage()
+    SavedExercisesPage()
   ];
 
   @override
   void dispose() {
-    SavedWorkoutsDB.closeConn();
+    SavedExercisesDB.closeConn();
     SavedRoutinesDB.closeConn();
     super.dispose();
   }
@@ -64,24 +61,51 @@ class _MainAppState extends State<MainApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        fontFamily: "Overused Grotesk Medium"
+        scaffoldBackgroundColor: Colors.grey.shade50,
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.grey.shade50
+        ),
+    
+        fontFamily: "Overused Grotesk Medium",
+        iconButtonTheme: IconButtonThemeData(
+          style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.lightGreen.shade200))
+        ),
+        
+        textSelectionTheme: TextSelectionThemeData(
+          cursorColor: Colors.lightGreen.shade700,
+          selectionHandleColor: Colors.lightGreen.shade700
+        ),
+
+        inputDecorationTheme: InputDecorationTheme(
+          floatingLabelStyle: TextStyle(color: Colors.lightGreen.shade700),
+          focusedBorder: OutlineInputBorder(borderSide: BorderSide(color: Colors.lightGreen.shade900)),
+        ),
+
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ButtonStyle(
+            elevation: WidgetStatePropertyAll(0.0),
+            backgroundColor: WidgetStatePropertyAll(Colors.lightGreen.shade300),
+            foregroundColor: WidgetStatePropertyAll(Colors.black87),
+            textStyle: WidgetStatePropertyAll(TextStyle(fontFamily: "Overused Grotesk Medium"))
+          )
+        )
       ),
+
       debugShowCheckedModeBanner: false,
       home: 
         apiKeySet 
         ? Scaffold(
           body: pages[selectedPage],
-          bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            backgroundColor: Colors.lightGreen[200],
-            selectedItemColor: Colors.lightGreen[900],
-            currentIndex: selectedPage,
-            onTap: changePage,
-            items: [
-              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-              BottomNavigationBarItem(icon: Icon(Icons.alarm), label: "Routines"),
-              BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-              BottomNavigationBarItem(icon: Icon(Icons.bookmark), label: "Saved")
+          bottomNavigationBar: NavigationBar(
+            backgroundColor: Colors.grey.shade50,
+            indicatorColor: Colors.lightGreen.shade100,
+            selectedIndex: selectedPage,
+            onDestinationSelected: changePage,
+            height: 30,
+            destinations: [
+              NavigationDestination(icon: Icon(Icons.home, size: 30), label: ""),
+              NavigationDestination(icon: Icon(Icons.alarm, size: 30), label: ""),
+              NavigationDestination(icon: Icon(Icons.fitness_center, size: 30), label: "")
             ]
           ))
         : APIKeyEmptyErrorPage()

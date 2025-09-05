@@ -2,12 +2,12 @@ import "dart:io";
 import "dart:typed_data";
 import "package:http/http.dart" as http;
 import "dart:convert" as convert;
-import "models/workout.dart";
+import "models/exercise.dart";
 
-class WorkoutSearch {
+class ExerciseSearch {
   final String API_KEY = const String.fromEnvironment("API_KEY");
 
-    // Gets the URI object based on the workout attribute selected and data passed to it
+    // Gets the URI object based on the exericse attribute selected and data passed to it
   Uri getUri([String attribute = "", String value = ""]) {
     Uri? url;
 

@@ -120,14 +120,17 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
                   
                   widget.mode == 1
                   ? ElevatedButton(
-                    style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.red)),
+                    style: ButtonStyle(
+                      backgroundColor: WidgetStatePropertyAll(Colors.red.shade200),
+                      elevation: WidgetStatePropertyAll(0.0)
+                    ),
                     onPressed: () {
                       // TODO DELETE ROUTINE
                       SavedRoutinesDB.removeFromSavedRoutines(widget.data);
                       SavedRoutinesDB.updateSavedRoutines();
                       Navigator.pop(context);
                     },
-                    child: Text("Delete routine", style: TextStyle(color: Colors.white))
+                    child: Text("Delete routine", style: TextStyle(color: Colors.black87))
                   )
                   : SizedBox()
                 ],

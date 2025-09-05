@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import "../pages/workout_info.dart";
-import "../models/workout.dart";
-import "../workouts_db_handler.dart";
+import "../pages/exercise_info.dart";
+import "../models/exercise.dart";
+import "../exercises_db_handler.dart";
 
-class WorkoutTile extends StatefulWidget {
-  Workout data;
-  int actionBtnType; // ACTION BUTTON: 0 = SAVE WORKOUT, 1 = DELETE WORKOUT, 2 = NO BUTTON
+class ExerciseTile extends StatefulWidget {
+  Exercise data;
+  int actionBtnType; // ACTION BUTTON: 0 = SAVE Exercise, 1 = DELETE Exercise, 2 = NO BUTTON
   VoidCallback actionBtnOnPressed;
-  WorkoutTile({ super.key, required this.data, this.actionBtnType = 0, required this.actionBtnOnPressed });
+  ExerciseTile({ super.key, required this.data, this.actionBtnType = 0, required this.actionBtnOnPressed });
 
   @override
-  State<WorkoutTile> createState() => _WorkoutTileState();
+  State<ExerciseTile> createState() => _ExerciseTileState();
 }
 
 
-class _WorkoutTileState extends State<WorkoutTile> {
+class _ExerciseTileState extends State<ExerciseTile> {
   // ACTION BUTTON SELECTOR METHOD
   Widget getActionBtn(BuildContext context) {
     List<Widget> actionBtnList = [
@@ -31,7 +31,7 @@ class _WorkoutTileState extends State<WorkoutTile> {
     return ListTile(
       onTap: () { 
         Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-          return WorkoutInfoPage(data: this.widget.data);
+          return ExerciseInfoPage(data: this.widget.data);
         })); 
       },
       title: Text(widget.data.name), 

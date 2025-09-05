@@ -2,7 +2,6 @@ import "package:hive/hive.dart";
 import "package:hive_flutter/adapters.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "models/routine.dart";
-import "models/workout.dart";
 import "models/task.dart";
 
 class SavedRoutinesDB {

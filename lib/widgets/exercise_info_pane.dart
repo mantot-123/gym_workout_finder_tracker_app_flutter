@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import "../models/workout.dart";
+import "../models/exercise.dart";
 import "../helpers/list_to_string.dart";
 
-// DISPLAY WORKOUT INFORMATION IN THIS WIDGET
-Container workoutInfoPane(Workout data) {
+// DISPLAY EXERCISE INFORMATION IN THIS WIDGET
+Container exerciseInfoPane(Exercise data) {
   return Container(
     padding: EdgeInsets.symmetric(horizontal: 15),
     child: ListView(

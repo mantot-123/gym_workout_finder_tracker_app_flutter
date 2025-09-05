@@ -8,9 +8,8 @@ class UIButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      style: ButtonStyle(backgroundColor: MaterialStateProperty.all(Colors.lightGreen.shade700)),
       onPressed: onPressed,
-      child: Text(label, style: TextStyle(color: Colors.white))
+      child: Text(label),
     );
   }
 }
