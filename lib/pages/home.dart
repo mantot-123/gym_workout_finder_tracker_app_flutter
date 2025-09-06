@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../widgets/ui/ui_button.dart";
 import "../widgets/ui/ui_scaffold.dart";
+import "../widgets/stats_summary_tile.dart";
 import "dart:io";
 
 class HomePage extends StatelessWidget {
@@ -10,17 +11,27 @@ class HomePage extends StatelessWidget {
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Home",
-      body: Center(
+      body: Container(
+        padding: EdgeInsets.all(20.0),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("assets/logo.png", height: 228, width: 228),
-            Text("Welcome!", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            Icon(Icons.fitness_center, size: 60),
+            Text("Welcome back, Emman Ruiz!", style: TextStyle(fontSize: 30.0)),
+            Text("Here is your workout summary:", style: TextStyle(fontSize: 20.0)),
             SizedBox(height: 10),
-            Text("Click on 'Search' below to start finding the\nbest workout for you!", textAlign: TextAlign.center)
+            Expanded(
+              child: GridView(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 2),
+                children: [
+                  StatsSummaryTile(count: 5, caption: "exercises completed today", floatingIcon: Icons.fitness_center),
+                  StatsSummaryTile(count: 120, caption: "minutes worked out today", floatingIcon: Icons.access_time),
+                  StatsSummaryTile(count: 4, caption: "workout routines completed this week", floatingIcon: Icons.alarm_on_rounded),
+                  StatsSummaryTile(count: 2.5, caption: "kg of weight gain from last week's weight", floatingIcon: Icons.scale),
+                ]
+              )
+            )
           ],
-        )
+        ),
       ) 
     );
   }
