@@ -31,7 +31,7 @@ class _SavedExercisesPageState extends State<SavedExercisesPage> {
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: "Saved exercises",
+      appBarTitle: "Exercises",
       body: 
         SavedExercisesDB.getSavedExercises().isEmpty
         ? Center(
