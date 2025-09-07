@@ -28,6 +28,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     selectedTime = widget.data.timeStart;
   }
 
+
   void save() {
     Routine routine = Routine(
       id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
@@ -45,6 +46,98 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     SavedRoutinesDB.updateSavedRoutines();
   }
 
+  Future<TimeOfDay?> _buildTimePicker(BuildContext context) {
+    return showTimePicker(
+      context: context, 
+      initialTime: selectedTime,
+      builder: (context, child) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              // border color
+              primary: Colors.lightGreen.shade700,
+              secondary: Colors.lightGreen.shade400,
+            ),
+            textTheme: TextTheme(
+              bodyLarge: TextStyle(fontSize: 18, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
+              bodyMedium: TextStyle(fontSize: 16, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
+              bodySmall: TextStyle(fontSize: 14, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
+              displayLarge: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
+              displayMedium: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
+            ),
+            fontFamily: "Overused Grotesk Medium"
+          ),
+          child: child!,
+        );
+      },
+      initialEntryMode: TimePickerEntryMode.dial
+    );
+  }
+
+  Widget _buildForm(BuildContext context) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        UIInputBox(label: "Routine name...", controller: nameController),
+
+        SizedBox(height: 15),
+
+        Row(
+          spacing: 10.0,
+          children: [
+          Text("Start time: ${selectedTime.format(context)}"),
+          UIButton(label: "Change time", onPressed: () async {
+            TimeOfDay? newTime = await _buildTimePicker(context);
+            if(newTime != null) {
+              setState(() {
+                selectedTime = newTime;
+              });
+            }
+          }),
+        ]),
+
+        SizedBox(height: 50),
+
+        Row(
+          spacing: 10.0,
+          children: [
+            UIButton(label: "Save changes", onPressed: () {
+              if(nameController.text == "") {
+                setState(() { 
+                  alertMsg = "Please enter a routine name!";
+                });
+                return;
+              }
+
+              // TODO SAVE CHANGES
+              save();
+              Navigator.of(context).pop();
+            }),
+            
+            widget.mode == 1
+            ? ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.red.shade200),
+                elevation: WidgetStatePropertyAll(0.0)
+              ),
+              onPressed: () {
+                // TODO DELETE ROUTINE
+                SavedRoutinesDB.removeFromSavedRoutines(widget.data);
+                SavedRoutinesDB.updateSavedRoutines();
+                Navigator.pop(context);
+              },
+              child: Text("Delete routine", style: TextStyle(color: Colors.black87))
+            )
+            : SizedBox()
+          ],
+        ),
+
+        Text(alertMsg)
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
@@ -54,91 +147,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
           width: 500,
           height: 300,
           padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UIInputBox(label: "Routine name...", controller: nameController),
-
-              SizedBox(height: 15),
-              Row(
-                spacing: 10.0,
-                children: [
-                Text("Start time: ${selectedTime.format(context)}"),
-                UIButton(label: "Change time", onPressed: () async {
-                  TimeOfDay? newTime = await showTimePicker(
-                    context: context, 
-                    initialTime: selectedTime,
-                    builder: (context, child) {
-                      return Theme(
-                        data: ThemeData(
-                          colorScheme: ColorScheme.light(
-                            // border color
-                            primary: Colors.lightGreen.shade700,
-                            secondary: Colors.lightGreen.shade400,
-                          ),
-                          textTheme: TextTheme(
-                            bodyLarge: TextStyle(fontSize: 18, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
-                            bodyMedium: TextStyle(fontSize: 16, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
-                            bodySmall: TextStyle(fontSize: 14, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
-                            displayLarge: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
-                            displayMedium: TextStyle(fontSize: 50, color: Colors.black, fontFamily: "Overused Grotesk Medium"),
-                          ),
-                          fontFamily: "Overused Grotesk Medium"
-                        ),
-                        child: child!,
-                      );
-                    },
-                    initialEntryMode: TimePickerEntryMode.dial
-                  );
-                  if(newTime != null) {
-                    setState(() {
-                      selectedTime = newTime;
-                    });
-                  }
-                }),
-              ]),
-
-              SizedBox(height: 50),
-
-              Row(
-                spacing: 10.0,
-                children: [
-                  UIButton(label: "Save changes", onPressed: () {
-                    if(nameController.text == "") {
-                      setState(() { 
-                        alertMsg = "Please enter a routine name!";
-                      });
-                      return;
-                    }
-
-                    // TODO SAVE CHANGES
-                    save();
-
-                    Navigator.of(context).pop();
-                  }),
-                  
-                  widget.mode == 1
-                  ? ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: WidgetStatePropertyAll(Colors.red.shade200),
-                      elevation: WidgetStatePropertyAll(0.0)
-                    ),
-                    onPressed: () {
-                      // TODO DELETE ROUTINE
-                      SavedRoutinesDB.removeFromSavedRoutines(widget.data);
-                      SavedRoutinesDB.updateSavedRoutines();
-                      Navigator.pop(context);
-                    },
-                    child: Text("Delete routine", style: TextStyle(color: Colors.black87))
-                  )
-                  : SizedBox()
-                ],
-              ),
-
-              Text(alertMsg)
-            ],
-          )
+          child: _buildForm(context)
         ),
       ),
     );;

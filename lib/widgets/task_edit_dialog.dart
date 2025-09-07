@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.dart";
-import 'package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_scaffold.dart';
 import "../models/task.dart";
 import "../models/routine.dart";
 import "../helpers/rng_str_gen.dart";
@@ -111,6 +110,109 @@ class TaskEditDialog {
     SavedRoutinesDB.updateSavedRoutines(); // update the saved routines in the database
   }
 
+
+  // ERROR MESSAGE DIALOG
+  void _showErrorMsgDialog(BuildContext context) {
+    showDialog( 
+      context: context, 
+      builder: (context) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              // border color
+              primary: Colors.lightGreen.shade700,
+              secondary: Colors.lightGreen.shade400,
+            ),
+            fontFamily: "Overused Grotesk Medium",
+          ),
+          child: AlertDialog(
+            title: Text("Errors"),
+            content: Container(
+              height: 150,
+              child: Center(
+                child: Column(
+                  children: [
+                    Text("There are errors in the form. Please fix them before saving."),
+                    SizedBox(height: 20),
+                    nameHelperMsg != "" ? Text(nameHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                    restTimeHelperMsg != "" ? Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                    setsHelperMsg != "" ? Text(setsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                    repsHelperMsg != "" ? Text(repsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                  ],
+                ),
+              ),
+            ),
+            actions: [
+              TextButton(child: Text("OK"), onPressed: () {
+                Navigator.of(context).pop(); // close error dialog
+              })
+            ],
+          )
+        );
+      },
+    );
+  }
+
+  // INPUT BOXES
+  Widget _buildInputBoxes() {
+    return Container(
+      height: 300,
+      width: 400,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          UIInputBox(label: "Exercise name...", controller: nameController),
+          SizedBox(height: 10),
+      
+          UIInputBox(label: "Rest time (seconds)...", controller: restTimeController, inputType: 1),
+          SizedBox(height: 10),
+      
+          UIInputBox(label: "Sets...", controller: setsController, inputType: 1),
+          SizedBox(height: 10),
+      
+          UIInputBox(label: "Reps...", controller: repsController, inputType: 1),
+          SizedBox(height: 20),
+        ],
+      ),
+    );
+  }
+
+  // SAVE, CANCEL AND DELETE ACTION BUTTONS
+  List<Widget> _buildActionBtns(BuildContext context) {
+    return [
+      TextButton(child: Text("Save"), onPressed: () {
+        // if there are errors in the form, show error dialog
+        if(!validateForm()) {
+          _showErrorMsgDialog(context);
+        } 
+        
+        else { // saves + exits
+          save();
+          clearForm();
+          Navigator.of(context).pop(); // close edit dialog
+        }
+      }),
+
+      mode == 1 
+      ? TextButton(
+          child: Text("Delete", style: TextStyle(color: Colors.red)), 
+          onPressed : () {
+            // TODO DELETE FUNCTION
+            routine.deleteTaskByID(task);
+            SavedRoutinesDB.updateSavedRoutines();
+            clearForm();
+            Navigator.of(context).pop();
+          }
+        ) 
+      : SizedBox(),
+
+      TextButton(child: Text("Cancel"), onPressed: () { 
+        clearForm();
+        Navigator.of(context).pop(); 
+      })
+    ];
+  }
+
   // Show edit dialog form
   Future show(BuildContext context) {
     return showDialog(// EDIT TASK DIALOG
@@ -127,96 +229,8 @@ class TaskEditDialog {
           ),
           child: AlertDialog(
             title: Text(mode == 0 ? "New exercise" : "Edit exercise"),
-            content: Container(
-              height: 300,
-              width: 400,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  UIInputBox(label: "Exercise name...", controller: nameController),
-                  SizedBox(height: 10),
-              
-                  UIInputBox(label: "Rest time (seconds)...", controller: restTimeController, inputType: 1),
-                  SizedBox(height: 10),
-              
-                  UIInputBox(label: "Sets...", controller: setsController, inputType: 1),
-                  SizedBox(height: 10),
-              
-                  UIInputBox(label: "Reps...", controller: repsController, inputType: 1),
-                  SizedBox(height: 20),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(child: Text("Save"), onPressed: () {
-                // if there are errors in the form, show error dialog
-                if(!validateForm()) {
-                  showDialog( // ERROR DIALOG
-                    context: context, 
-                    builder: (context) {
-                      return Theme(
-                        data: ThemeData(
-                          colorScheme: ColorScheme.light(
-                            // border color
-                            primary: Colors.lightGreen.shade700,
-                            secondary: Colors.lightGreen.shade400,
-                          ),
-                          fontFamily: "Overused Grotesk Medium",
-                        ),
-                        child: AlertDialog(
-                          title: Text("Errors"),
-                          content: Container(
-                            height: 150,
-                            child: Center(
-                              child: Column(
-                                children: [
-                                  Text("There are errors in the form. Please fix them before saving."),
-                                  SizedBox(height: 20),
-                                  nameHelperMsg != "" ? Text(nameHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                                  restTimeHelperMsg != "" ? Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                                  setsHelperMsg != "" ? Text(setsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                                  repsHelperMsg != "" ? Text(repsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                                ],
-                              ),
-                            ),
-                          ),
-                          actions: [
-                            TextButton(child: Text("OK"), onPressed: () {
-                              Navigator.of(context).pop(); // close error dialog
-                            })
-                          ],
-                        )
-                      );
-                    },
-                  );
-                } 
-                
-                else { // saves + exits
-                  save();
-                  clearForm();
-                  Navigator.of(context).pop(); // close edit dialog
-                }
-
-              }),
-
-              mode == 1 
-              ? TextButton(
-                  child: Text("Delete", style: TextStyle(color: Colors.red)), 
-                  onPressed : () {
-                    // TODO DELETE FUNCTION
-                    routine.deleteTaskByID(task);
-                    SavedRoutinesDB.updateSavedRoutines();
-                    clearForm();
-                    Navigator.of(context).pop();
-                  }
-                ) 
-              : SizedBox(),
-
-              TextButton(child: Text("Cancel"), onPressed: () { 
-                clearForm();
-                Navigator.of(context).pop(); 
-              })
-            ],
+            content: _buildInputBoxes(),
+            actions: _buildActionBtns(context),
           )
         );
       }

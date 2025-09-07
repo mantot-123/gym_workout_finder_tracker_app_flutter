@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import "../pages/exercise_info.dart";
 import "../models/exercise.dart";
-import "../exercises_db_handler.dart";
 
 class ExerciseTile extends StatefulWidget {
   Exercise data;
