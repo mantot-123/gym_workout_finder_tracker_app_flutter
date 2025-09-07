@@ -28,42 +28,43 @@ class _SavedExercisesPageState extends State<SavedExercisesPage> {
     });
   }
 
+  Widget _buildEmptyMsg(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Saved exercises", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Icon(Icons.save, size: 60),
+          SizedBox(height: 10),
+          Text("All of your saved exercises will show here.\nTo find a new exercise,\nclick the search button on the top-right.", textAlign: TextAlign.center)
+        ],
+      )
+    );
+  }
+
+  Widget _buildSavedList(BuildContext context) {
+    return ListView.builder(
+      itemCount: SavedExercisesDB.getSavedExercises().length,
+      itemBuilder: (context, index) {
+        return ExerciseTile(
+          data: SavedExercisesDB.getSavedExercises()[index], 
+          actionBtnType: 1,
+          actionBtnOnPressed: () {
+            removeSavedExercise(context, SavedExercisesDB.getSavedExercises()[index]);
+          },
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
-      appBarTitle: "Saved exercises",
+      appBarTitle: "Exercises",
       body: 
         SavedExercisesDB.getSavedExercises().isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Saved exercises", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Icon(Icons.save, size: 60),
-                SizedBox(height: 10),
-                Text("All of your saved exercises will show here.\nTo find a new exercise, click the search button on the top-right.", textAlign: TextAlign.center)
-              ],
-            )
-          ) 
-        : Column(
-            children:
-              [
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: SavedExercisesDB.getSavedExercises().length,
-                    itemBuilder: (context, index) {
-                      return ExerciseTile(
-                        data: SavedExercisesDB.getSavedExercises()[index], 
-                        actionBtnType: 1,
-                        actionBtnOnPressed: () {
-                          removeSavedExercise(context, SavedExercisesDB.getSavedExercises()[index]);
-                        },
-                      );
-                    }
-                  ),
-                )
-              ],
-          ),
+        ? _buildEmptyMsg(context) 
+        : _buildSavedList(context),
       appBarActions: [
         IconButton(icon: Icon(Icons.search, color: Colors.black), onPressed: () async {
           // SEARCH FORM

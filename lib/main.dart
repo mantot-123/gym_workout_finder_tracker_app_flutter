@@ -4,7 +4,7 @@ import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
 import "pages/home.dart";
 import "pages/saved_routines.dart";
-import "pages/saved_workouts.dart";
+import "pages/saved_exercises.dart";
 import "pages/api_key_empty_error.dart";
 import "exercises_db_handler.dart";
 import "routines_db_handler.dart";

@@ -25,7 +25,6 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
     results = search.getData(widget.type, widget.query);
   }
 
-
   // ADD EXERCISE TO SAVED LIST
   void saveExercise(BuildContext context, Exercise data) {
     setState(() {
@@ -48,6 +47,63 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   }
 
 
+  // LOADING ANIMATION WIDGET
+  Widget _buildLoadingAnim() {
+    return Center(
+      child: LoadingAnimationWidget.fourRotatingDots(
+        color: Colors.lightGreen.shade900, size: 100
+      )
+    );
+  }
+
+  // CONNECTION ERROR WIDGET
+  Widget _buildConnErrMsg() {
+    return Center(
+      child: Text("An error occurred while getting data. Check your internet connection and try again.", textAlign: TextAlign.center),
+    );
+  }
+
+  // "NO SEARCH RESULTS" WIDGET
+  Widget _buildNotFoundMsg() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("No results", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Icon(Icons.search, size: 60),
+          SizedBox(height: 10),
+          Text("Sorry, we can't find any exercises based on your criteria", textAlign: TextAlign.center)
+        ],
+      )
+    );
+  }
+
+  // SEARCH RESULT LIST WIDGET
+  Widget _buildResultsList(BuildContext context, dynamic data) {
+    List<Exercise> dataConverted = Exercise.fromMapList(data.cast<Map<dynamic, dynamic>>()).cast<Exercise>();
+    return Column(
+      children: [
+        Expanded(
+          child: ListView.builder(
+            itemCount: dataConverted.length,
+            itemBuilder: (context, index) {
+              // returns a Exercise list tile with either a delete or save button 
+              if(SavedExercisesDB.isExerciseSaved(dataConverted[index].id)) {
+                return ExerciseTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
+                  removeSavedExercise(context, dataConverted[index]);
+                });
+              }
+
+              return ExerciseTile(data: dataConverted[index], actionBtnOnPressed: () {
+                saveExercise(context, dataConverted[index]);
+              });
+            }
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
@@ -57,56 +113,19 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
         builder: (context, snapshot) {
           try {
             if(snapshot.connectionState == ConnectionState.waiting) {
-              return Center(
-                child: LoadingAnimationWidget.fourRotatingDots(
-                  color: Colors.lightGreen.shade900, size: 100
-                )
-              );
+              return _buildLoadingAnim();
             } 
             else if(!snapshot!.hasData || snapshot.data!.isEmpty) {
               // print(snapshot.data);
-              return Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text("No results", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                    Icon(Icons.search, size: 60),
-                    SizedBox(height: 10),
-                    Text("Sorry, we can't find any exercises based on your criteria", textAlign: TextAlign.center)
-                  ],
-                )
-              );
+              return _buildNotFoundMsg();
             } 
             else {
               // print(snapshot.data);
-              List<Exercise> dataConverted = Exercise.fromMapList(snapshot.data.cast<Map<dynamic, dynamic>>()).cast<Exercise>();
-              return Column(
-                children: [
-                  Expanded(
-                    child: ListView.builder(
-                      itemCount: dataConverted.length,
-                      itemBuilder: (context, index) {
-                        // returns a Exercise list tile with either a delete or save button 
-                        if(SavedExercisesDB.isExerciseSaved(dataConverted[index].id)) {
-                          return ExerciseTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
-                            removeSavedExercise(context, dataConverted[index]);
-                          });
-                        }
-
-                        return ExerciseTile(data: dataConverted[index], actionBtnOnPressed: () {
-                          saveExercise(context, dataConverted[index]);
-                        });
-                      }
-                    ),
-                  ),
-                ],
-              );
+              return _buildResultsList(context, snapshot.data);
             }
 
           } catch(ex) {
-            return Center(
-              child: Text("An error occurred while getting data. Check your internet connection and try again.", textAlign: TextAlign.center),
-            );
+            return _buildConnErrMsg();
           }
         }
       ),
