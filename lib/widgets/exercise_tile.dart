@@ -4,7 +4,7 @@ import "../models/exercise.dart";
 
 class ExerciseTile extends StatefulWidget {
   Exercise data;
-  int actionBtnType; // ACTION BUTTON: 0 = SAVE Exercise, 1 = DELETE Exercise, 2 = NO BUTTON
+  int actionBtnType; // ACTION BUTTON: 0 = SAVE Exercise, 1 = DELETE Exercise, 2 = ADD exercise
   VoidCallback actionBtnOnPressed;
   ExerciseTile({ super.key, required this.data, this.actionBtnType = 0, required this.actionBtnOnPressed });
 
@@ -19,6 +19,7 @@ class _ExerciseTileState extends State<ExerciseTile> {
     List<Widget> actionBtnList = [
       IconButton(icon: Icon(Icons.save), onPressed: widget.actionBtnOnPressed), // save button
       IconButton(icon: Icon(Icons.delete), onPressed: widget.actionBtnOnPressed), // delete button
+      IconButton(icon: Icon(Icons.add), onPressed: widget.actionBtnOnPressed), // delete button
       SizedBox() // no button
     ];
     return actionBtnList[widget.actionBtnType];
