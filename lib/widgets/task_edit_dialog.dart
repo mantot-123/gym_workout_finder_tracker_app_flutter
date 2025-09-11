@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.dart";
+import "../widgets/ui/ui_scaffold.dart";
+import "../widgets/saved_exercises_list.dart";
 import "../models/task.dart";
 import "../models/routine.dart";
 import "../helpers/rng_str_gen.dart";
 import "../routines_db_handler.dart";
+import "../exercises_db_handler.dart";
 
 class TaskEditDialog {
   int mode; // MODES: 0 = create new, 1 = edit
@@ -129,17 +132,15 @@ class TaskEditDialog {
             title: Text("Errors"),
             content: Container(
               height: 150,
-              child: Center(
-                child: Column(
-                  children: [
-                    Text("There are errors in the form. Please fix them before saving."),
-                    SizedBox(height: 20),
-                    nameHelperMsg != "" ? Text(nameHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                    restTimeHelperMsg != "" ? Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                    setsHelperMsg != "" ? Text(setsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                    repsHelperMsg != "" ? Text(repsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                  ],
-                ),
+              child: Column(
+                children: [
+                  Text("There are errors in the form. Please fix them before saving."),
+                  SizedBox(height: 20),
+                  nameHelperMsg != "" ? Text(nameHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                  restTimeHelperMsg != "" ? Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                  setsHelperMsg != "" ? Text(setsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                  repsHelperMsg != "" ? Text(repsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
+                ],
               ),
             ),
             actions: [
@@ -153,17 +154,56 @@ class TaskEditDialog {
     );
   }
 
+  Widget _buildSavedExercisesImportWindow(BuildContext context, Function setState) {
+    return UIScaffold(
+      appBarTitle: "Import existing exercise",
+      body: 
+        SavedExercisesDB.getSavedExercises().isEmpty
+        ? Center(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Saved exercises", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                Icon(Icons.save, size: 60),
+                SizedBox(height: 10),
+                Text("All of your saved exercises will show here.\nTo find a new exercise,\nclick the search button on the top-right.", textAlign: TextAlign.center)
+              ],
+            )
+          )
+        : SavedExercisesList(
+            actionBtnType: 2,
+            actionBtnOnPressed: (task) {
+              Navigator.of(context).pop(task.name);
+            }
+        ),
+    );;
+  }
+
   // INPUT BOXES
-  Widget _buildInputBoxes() {
+  Widget _buildInputBoxes(BuildContext context, Function setState) {
     return Container(
-      height: 300,
+      height: 400,
       width: 400,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
         children: [
           UIInputBox(label: "Exercise name...", controller: nameController),
           SizedBox(height: 10),
-      
+
+          ElevatedButton(
+            child: Text("Choose saved exercise.."),
+            onPressed: () async {
+              nameController.text = await Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return _buildSavedExercisesImportWindow(context, setState);
+                  }
+                )
+              );
+            }
+          ),
+          SizedBox(height: 10),
+
           UIInputBox(label: "Rest time (seconds)...", controller: restTimeController, inputType: 1),
           SizedBox(height: 10),
       
@@ -218,20 +258,24 @@ class TaskEditDialog {
     return showDialog(// EDIT TASK DIALOG
       context: context, 
       builder: (context) {
-        return Theme(
-          data: ThemeData(
-            colorScheme: ColorScheme.light(
-              // border color
-              primary: Colors.lightGreen.shade700,
-              secondary: Colors.lightGreen.shade400,
-            ),
-            fontFamily: "Overused Grotesk Medium",
-          ),
-          child: AlertDialog(
-            title: Text(mode == 0 ? "New exercise" : "Edit exercise"),
-            content: _buildInputBoxes(),
-            actions: _buildActionBtns(context),
-          )
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Theme(
+              data: ThemeData(
+                colorScheme: ColorScheme.light(
+                  // border color
+                  primary: Colors.lightGreen.shade700,
+                  secondary: Colors.lightGreen.shade400,
+                ),
+                fontFamily: "Overused Grotesk Medium",
+              ),
+              child: AlertDialog(
+                title: Text(mode == 0 ? "New exercise" : "Edit exercise"),
+                content: _buildInputBoxes(context, setState),
+                actions: _buildActionBtns(context),
+              )
+            );
+          }
         );
       }
     );

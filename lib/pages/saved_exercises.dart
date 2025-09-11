@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/exercise_tile.dart";
+import "../widgets/saved_exercises_list.dart";
 import "../pages/search_form.dart";
 import "../models/exercise.dart";
 import "../exercises_db_handler.dart";
@@ -43,16 +44,10 @@ class _SavedExercisesPageState extends State<SavedExercisesPage> {
   }
 
   Widget _buildSavedList(BuildContext context) {
-    return ListView.builder(
-      itemCount: SavedExercisesDB.getSavedExercises().length,
-      itemBuilder: (context, index) {
-        return ExerciseTile(
-          data: SavedExercisesDB.getSavedExercises()[index], 
-          actionBtnType: 1,
-          actionBtnOnPressed: () {
-            removeSavedExercise(context, SavedExercisesDB.getSavedExercises()[index]);
-          },
-        );
+    return SavedExercisesList(
+      actionBtnType: 1,
+      actionBtnOnPressed: (exercise) {
+        removeSavedExercise(context, exercise);
       }
     );
   }

@@ -6,7 +6,6 @@ import "../widgets/ui/ui_scaffold.dart";
 import "../widgets/routine_tile.dart";
 import "../pages/routine_details.dart";
 import "../pages/edit_routine.dart";
-import "dart:io";
 
 class RoutinesPage extends StatefulWidget {
   const RoutinesPage({super.key});
