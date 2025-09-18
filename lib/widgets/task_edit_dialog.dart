@@ -9,6 +9,8 @@ import "../routines_db_handler.dart";
 import "../exercises_db_handler.dart";
 
 class TaskEditDialog {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   int mode; // MODES: 0 = create new, 1 = edit
   Routine routine;
   Task task;
@@ -44,56 +46,6 @@ class TaskEditDialog {
     repsHelperMsg = "";
   }
 
-  // form validation
-  bool validateForm() {
-    bool isValid = true;
-
-    nameHelperMsg = "";
-    restTimeHelperMsg = "";
-    setsHelperMsg = "";
-    repsHelperMsg = "";
-
-    if(nameController.text == "") {
-      nameHelperMsg = "Task name cannot be empty";
-      isValid = false;
-    }
-
-    if(restTimeController.text == "") {
-      restTimeHelperMsg = "Rest time cannot be empty";
-      isValid = false;
-    } else if(int.tryParse(restTimeController.text) == null) {
-      restTimeHelperMsg = "Rest time must be an integer";
-      isValid = false;
-    } else if(int.parse(restTimeController.text) < 0) {
-      restTimeHelperMsg = "Rest time cannot be negative";
-      isValid = false;
-    }
-
-    if(setsController.text == "") {
-      setsHelperMsg = "Sets cannot be empty";
-      isValid = false;
-    } else if(int.tryParse(setsController.text) == null) {
-      setsHelperMsg = "Sets must be an integer";
-      isValid = false;
-    } else if(int.parse(setsController.text) <= 0) {
-      setsHelperMsg = "Sets must be greater than 0";
-      isValid = false;
-    }
-
-    if(repsController.text == "") {
-      repsHelperMsg = "Reps cannot be empty";
-      isValid = false;
-    } else if(int.tryParse(repsController.text) == null) {
-      repsHelperMsg = "Reps must be an integer";
-      isValid = false;
-    } else if(int.parse(repsController.text) <= 0) {
-      repsHelperMsg = "Reps must be greater than 0";
-      isValid = false;
-    }      
-
-    return isValid;
-  }
-
   void save() {
     // TODO ADD NEW TASK TO ROUTINE
     Task newTask = Task(
@@ -114,68 +66,15 @@ class TaskEditDialog {
   }
 
 
-  // ERROR MESSAGE DIALOG
-  void _showErrorMsgDialog(BuildContext context) {
-    showDialog( 
-      context: context, 
-      builder: (context) {
-        return Theme(
-          data: ThemeData(
-            colorScheme: ColorScheme.light(
-              // border color
-              primary: Colors.lightGreen.shade700,
-              secondary: Colors.lightGreen.shade400,
-            ),
-            fontFamily: "Overused Grotesk Medium",
-          ),
-          child: AlertDialog(
-            title: Text("Errors"),
-            content: Container(
-              height: 150,
-              child: Column(
-                children: [
-                  Text("There are errors in the form. Please fix them before saving."),
-                  SizedBox(height: 20),
-                  nameHelperMsg != "" ? Text(nameHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                  restTimeHelperMsg != "" ? Text(restTimeHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                  setsHelperMsg != "" ? Text(setsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                  repsHelperMsg != "" ? Text(repsHelperMsg, style: TextStyle(color: Colors.red)) : SizedBox(),
-                ],
-              ),
-            ),
-            actions: [
-              TextButton(child: Text("OK"), onPressed: () {
-                Navigator.of(context).pop(); // close error dialog
-              })
-            ],
-          )
-        );
-      },
-    );
-  }
-
   Widget _buildSavedExercisesImportWindow(BuildContext context, Function setState) {
     return UIScaffold(
       appBarTitle: "Import existing exercise",
-      body: 
-        SavedExercisesDB.getSavedExercises().isEmpty
-        ? Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text("Saved exercises", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-                Icon(Icons.save, size: 60),
-                SizedBox(height: 10),
-                Text("All of your saved exercises will show here.\nTo find a new exercise,\nclick the search button on the top-right.", textAlign: TextAlign.center)
-              ],
-            )
-          )
-        : SavedExercisesList(
-            actionBtnType: 2,
-            actionBtnOnPressed: (task) {
-              Navigator.of(context).pop(task.name);
-            }
-        ),
+      body: SavedExercisesList(
+        actionBtnType: 2,
+        actionBtnOnPressed: (task) {
+          Navigator.of(context).pop(task.name);
+        }
+      ),
     );;
   }
 
@@ -184,35 +83,69 @@ class TaskEditDialog {
     return Container(
       height: 400,
       width: 400,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          UIInputBox(label: "Exercise name...", controller: nameController),
-          SizedBox(height: 10),
-
-          ElevatedButton(
-            child: Text("Choose saved exercise.."),
-            onPressed: () async {
-              nameController.text = await Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (context) {
-                    return _buildSavedExercisesImportWindow(context, setState);
-                  }
-                )
-              );
-            }
-          ),
-          SizedBox(height: 10),
-
-          UIInputBox(label: "Rest time (seconds)...", controller: restTimeController, inputType: 1),
-          SizedBox(height: 10),
-      
-          UIInputBox(label: "Sets...", controller: setsController, inputType: 1),
-          SizedBox(height: 10),
-      
-          UIInputBox(label: "Reps...", controller: repsController, inputType: 1),
-          SizedBox(height: 20),
-        ],
+      child: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            TextFormField(
+              decoration: InputDecoration(label: Text("Exercise name...")), 
+              controller: nameController,
+              validator: (value) => value == "" ? "Exercise name must not be empty" : null
+            ),
+            SizedBox(height: 10),
+        
+            ElevatedButton(
+              child: Text("Choose saved exercise.."),
+              onPressed: () async {
+                nameController.text = await Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return _buildSavedExercisesImportWindow(context, setState);
+                    }
+                  )
+                );
+              }
+            ),
+            SizedBox(height: 10),
+        
+            TextFormField(
+              decoration: InputDecoration(label: Text("Rest time (seconds)...")), 
+              controller: restTimeController,
+              validator: (value) {
+                return value == "" ? "Rest time cannot be empty" 
+                  : int.tryParse(value!) == null ? "Rest time must be a whole number"
+                  : int.parse(value) < 0 ? "Rest time must be positive"
+                  : null;
+              }
+            ),
+            SizedBox(height: 10),
+        
+            TextFormField(
+              decoration: InputDecoration(label: Text("Sets...")), 
+              controller: setsController,
+              validator: (value) {
+                return value == "" ? "Number of sets cannot be empty" 
+                  : int.tryParse(value!) == null ? "Number of sets must be a whole number"
+                  : int.parse(value) <= 0 ? "Number of sets must be bigger than 0"
+                  : null;
+              }
+            ),
+            SizedBox(height: 10),
+        
+            TextFormField(
+              decoration: InputDecoration(label: Text("Reps...")), 
+              controller: repsController,
+              validator: (value) {
+                return value == "" ? "Number of reps cannot be empty" 
+                  : int.tryParse(value!) == null ? "Number of reps must be a whole number"
+                  : int.parse(value) <= 0 ? "Number of reps must be bigger than 0"
+                  : null;
+              }
+            ),
+            SizedBox(height: 20),
+          ],
+        ),
       ),
     );
   }
@@ -222,11 +155,9 @@ class TaskEditDialog {
     return [
       TextButton(child: Text("Save"), onPressed: () {
         // if there are errors in the form, show error dialog
-        if(!validateForm()) {
-          _showErrorMsgDialog(context);
-        } 
-        
-        else { // saves + exits
+        bool isValid = _formKey.currentState!.validate();
+
+        if(isValid) { // saves + exits
           save();
           clearForm();
           Navigator.of(context).pop(); // close edit dialog

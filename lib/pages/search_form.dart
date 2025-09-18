@@ -12,39 +12,55 @@ class SearchForm extends StatefulWidget {
 }
 
 class _SearchFormState extends State<SearchForm> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController nameController = TextEditingController();
   String alertMsg = "";
+
+  String? checkName(String? value) {
+    if(value == "") {
+      return "Please enter the name of the exercise to search";
+    }
+    return null;
+  }
+
+  void onSearchBtnPressed() {
+    final isValid = _formKey.currentState!.validate();
+
+    if(isValid) {
+      Navigator.of(context).push(MaterialPageRoute(builder: (context) {
+        return SearchResultsPage(type: "name", query: nameController.text);
+      }));
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Search",
-      body: Center(
-        child: Container(
-          width: 500,
-          height: 300,
-          padding: EdgeInsets.all(20),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              UIInputBox(label: "Enter the name of the workout...", controller: nameController),
-
-              UIButton(label: "Search", onPressed: () {
-                if(nameController.text == "") {
-                  setState(() { 
-                    alertMsg = "Please enter the name of the workout you want to search!";
-                  });
-                  return;
-                }
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-                  return SearchResultsPage(type: "name", query: nameController.text);
-                }));
-              }),
-
-              Text(alertMsg)
-            ],
-          )
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: Container(
+            width: 500,
+            height: 300,
+            padding: EdgeInsets.all(20),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                TextFormField(
+                  decoration: InputDecoration(label: Text("Enter the name of the exercise...")), 
+                  controller: nameController,
+                  validator: checkName
+                ),
+        
+                UIButton(label: "Search", onPressed: onSearchBtnPressed),
+        
+                Text(alertMsg)
+              ],
+            )
+          ),
         ),
       ) 
     );
