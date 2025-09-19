@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/routines_db_handler.dart";
 import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.dart";
 import 'package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_scaffold.dart';
-import "../models/routine.dart";
-import "../models/task.dart";
-import "../widgets/routine_task_table.dart";
-import "../widgets/task_edit_dialog.dart";
+import "../../models/routine.dart";
+import "../../models/task.dart";
+import "../../widgets/routines/routine_task_table.dart";
+import "../../widgets/routines/task_edit_dialog.dart";
 
 class RoutineDetailsPage extends StatefulWidget {
   Routine data;

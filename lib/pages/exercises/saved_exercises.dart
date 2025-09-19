@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import "../widgets/ui/ui_scaffold.dart";
-import "../widgets/exercise_tile.dart";
-import "../widgets/saved_exercises_list.dart";
-import "../pages/search_form.dart";
-import "../models/exercise.dart";
-import "../exercises_db_handler.dart";
+import "../../widgets/ui/ui_scaffold.dart";
+import "../../widgets/exercises/exercise_tile.dart";
+import "../../widgets/exercises/saved_exercises_list.dart";
+import "../search/search_form.dart";
+import "../../models/exercise.dart";
+import "../../exercises_db_handler.dart";
 
 class SavedExercisesPage extends StatefulWidget {
   const SavedExercisesPage({super.key});

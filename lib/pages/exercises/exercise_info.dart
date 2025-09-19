@@ -1,11 +1,11 @@
 import "dart:typed_data";
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
-import "../models/exercise.dart";
-import "../widgets/ui/ui_scaffold.dart";
-import "../widgets/exercise_info_pane.dart";
-import "../helpers/list_to_string.dart";
-import "../api.dart";
+import "../../models/exercise.dart";
+import "../../widgets/ui/ui_scaffold.dart";
+import "../../widgets/exercises/exercise_info_pane.dart";
+import "../../helpers/list_to_string.dart";
+import "../../api.dart";
 
 class ExerciseInfoPage extends StatefulWidget {
   Exercise data;

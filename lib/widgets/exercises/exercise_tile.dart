@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "../pages/exercise_info.dart";
-import "../models/exercise.dart";
+import "../../pages/exercises/exercise_info.dart";
+import "../../models/exercise.dart";
 
 class ExerciseTile extends StatefulWidget {
   Exercise data;

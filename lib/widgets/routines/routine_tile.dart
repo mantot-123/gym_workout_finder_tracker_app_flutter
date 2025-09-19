@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "../models/routine.dart";
+import "../../models/routine.dart";
 
 class RoutineTile extends StatefulWidget {
   Routine data;

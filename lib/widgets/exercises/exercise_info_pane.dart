@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import "../models/exercise.dart";
-import "../helpers/list_to_string.dart";
+import "../../models/exercise.dart";
+import "../../helpers/list_to_string.dart";
 
 // DISPLAY EXERCISE INFORMATION IN THIS WIDGET
 Container exerciseInfoPane(Exercise data) {

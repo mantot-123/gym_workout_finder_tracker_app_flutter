@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.dart";
-import "../widgets/ui/ui_scaffold.dart";
-import "../widgets/saved_exercises_list.dart";
-import "../models/task.dart";
-import "../models/routine.dart";
-import "../helpers/rng_str_gen.dart";
-import "../routines_db_handler.dart";
-import "../exercises_db_handler.dart";
+import "../ui/ui_scaffold.dart";
+import "../exercises/saved_exercises_list.dart";
+import "../../models/task.dart";
+import "../../models/routine.dart";
+import "../../helpers/rng_str_gen.dart";
+import "../../routines_db_handler.dart";
+import "../../exercises_db_handler.dart";
 
 class TaskEditDialog {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();

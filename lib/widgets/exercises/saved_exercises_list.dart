@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import "exercise_tile.dart";
-import "../exercises_db_handler.dart";
+import "../../exercises_db_handler.dart";
 
 class SavedExercisesList extends StatefulWidget {
   final int actionBtnType;

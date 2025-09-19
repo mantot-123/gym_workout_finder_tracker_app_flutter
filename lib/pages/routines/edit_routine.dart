@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import "package:http/http.dart";
-import "../widgets/ui/ui_button.dart";
-import "../widgets/ui/ui_input_box.dart";
-import "../widgets/ui/ui_scaffold.dart";
-import "../models/routine.dart";
-import "../helpers/rng_str_gen.dart";
-import "../routines_db_handler.dart";
+import "../../widgets/ui/ui_button.dart";
+import "../../widgets/ui/ui_input_box.dart";
+import "../../widgets/ui/ui_scaffold.dart";
+import "../../models/routine.dart";
+import "../../helpers/rng_str_gen.dart";
+import "../../routines_db_handler.dart";
 
 class EditRoutinePage extends StatefulWidget {
   final int mode; // EDIT MODES: 0 = new routine, 1 = edit

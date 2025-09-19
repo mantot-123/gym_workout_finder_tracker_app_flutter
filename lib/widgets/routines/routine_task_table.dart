@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import "../widgets/task_edit_dialog.dart";
+import "task_edit_dialog.dart";
 import 'package:gym_workout_finder_tracker_app_flutter/models/routine.dart';
-import "../models/task.dart";
+import "../../models/task.dart";
 
 class RoutineTaskTable extends StatefulWidget {
   final Routine data;
@@ -13,11 +13,6 @@ class RoutineTaskTable extends StatefulWidget {
 
 class _RoutineTaskTableState extends State<RoutineTaskTable> {
   List<TableRow> rows = [];
-
-  @override
-  void initState() {
-    super.initState();
-  }
 
   void buildRows() {
     if(rows.isNotEmpty) {
