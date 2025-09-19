@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import "../widgets/ui/ui_button.dart";
-import "../widgets/ui/ui_input_box.dart";
-import "../widgets/ui/ui_scaffold.dart";
-import "../models/routine.dart";
-import "../helpers/rng_str_gen.dart";
-import "../routines_db_handler.dart";
+import "package:http/http.dart";
+import "../../widgets/ui/ui_button.dart";
+import "../../widgets/ui/ui_input_box.dart";
+import "../../widgets/ui/ui_scaffold.dart";
+import "../../models/routine.dart";
+import "../../helpers/rng_str_gen.dart";
+import "../../routines_db_handler.dart";
 
 class EditRoutinePage extends StatefulWidget {
   final int mode; // EDIT MODES: 0 = new routine, 1 = edit
@@ -16,6 +17,8 @@ class EditRoutinePage extends StatefulWidget {
 }
 
 class _EditRoutinePageState extends State<EditRoutinePage> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   TextEditingController nameController = TextEditingController();
   TimeOfDay selectedTime = TimeOfDay.now();
   String alertMsg = "";
@@ -29,7 +32,14 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   }
 
 
-  void save() {
+  String? checkName(String? value) {
+    if(value == "") {
+      return "Please enter a name for your routine";
+    }
+    return null;
+  }
+
+  void saveChanges() {
     Routine routine = Routine(
       id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
       name: nameController.text,
@@ -45,6 +55,30 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
 
     SavedRoutinesDB.updateSavedRoutines();
   }
+
+
+  void deleteRoutine() {
+    // TODO DELETE ROUTINE
+    SavedRoutinesDB.removeFromSavedRoutines(widget.data);
+    SavedRoutinesDB.updateSavedRoutines();
+  }
+
+
+  void onSaveBtnPressed() {
+    bool isValid = _formKey.currentState!.validate();
+    // TODO SAVE CHANGES
+    if(isValid) {
+      saveChanges();
+      Navigator.of(context).pop();
+    }
+  }
+
+
+  void onDeleteBtnPressed() {
+    deleteRoutine();
+    Navigator.pop(context);
+  }
+
 
   Future<TimeOfDay?> _buildTimePicker(BuildContext context) {
     return showTimePicker(
@@ -75,66 +109,57 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   }
 
   Widget _buildForm(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        UIInputBox(label: "Routine name...", controller: nameController),
-
-        SizedBox(height: 15),
-
-        Row(
-          spacing: 10.0,
-          children: [
-          Text("Start time: ${selectedTime.format(context)}"),
-          UIButton(label: "Change time", onPressed: () async {
-            TimeOfDay? newTime = await _buildTimePicker(context);
-            if(newTime != null) {
-              setState(() {
-                selectedTime = newTime;
-              });
-            }
-          }),
-        ]),
-
-        SizedBox(height: 50),
-
-        Row(
-          spacing: 10.0,
-          children: [
-            UIButton(label: "Save changes", onPressed: () {
-              if(nameController.text == "") {
-                setState(() { 
-                  alertMsg = "Please enter a routine name!";
+    return Form(
+      key: _formKey,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          TextFormField(
+            decoration: InputDecoration(label: Text("Routine name...")), 
+            controller: nameController,
+            validator: checkName
+          ),
+      
+          SizedBox(height: 15),
+      
+          Row(
+            spacing: 10.0,
+            children: [
+            Text("Start time: ${selectedTime.format(context)}"),
+            UIButton(label: "Change time", onPressed: () async {
+              TimeOfDay? newTime = await _buildTimePicker(context);
+              if(newTime != null) {
+                setState(() {
+                  selectedTime = newTime;
                 });
-                return;
               }
-
-              // TODO SAVE CHANGES
-              save();
-              Navigator.of(context).pop();
             }),
-            
-            widget.mode == 1
-            ? ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: WidgetStatePropertyAll(Colors.red.shade200),
-                elevation: WidgetStatePropertyAll(0.0)
-              ),
-              onPressed: () {
-                // TODO DELETE ROUTINE
-                SavedRoutinesDB.removeFromSavedRoutines(widget.data);
-                SavedRoutinesDB.updateSavedRoutines();
-                Navigator.pop(context);
-              },
-              child: Text("Delete routine", style: TextStyle(color: Colors.black87))
-            )
-            : SizedBox()
-          ],
-        ),
-
-        Text(alertMsg)
-      ],
+          ]),
+      
+          SizedBox(height: 50),
+      
+          Row(
+            spacing: 10.0,
+            children: [
+              UIButton(label: "Save changes", onPressed: onSaveBtnPressed),
+              
+              widget.mode == 1
+              ? ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: WidgetStatePropertyAll(Colors.red.shade200),
+                  elevation: WidgetStatePropertyAll(0.0)
+                ),
+                onPressed: onDeleteBtnPressed,
+                child: Text("Delete routine", style: TextStyle(color: Colors.black87))
+              )
+              : SizedBox()
+            ],
+          ),
+      
+          Text(alertMsg)
+        ],
+      ),
     );
   }
 

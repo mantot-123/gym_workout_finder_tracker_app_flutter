@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import "package:loading_animation_widget/loading_animation_widget.dart";
-import "../widgets/exercise_tile.dart";
-import "../widgets/ui/ui_scaffold.dart";
-import "../models/exercise.dart";
-import "../exercises_db_handler.dart";
-import "../api.dart";
+import "../../widgets/exercises/exercise_tile.dart";
+import "../../widgets/ui/ui_scaffold.dart";
+import "../../models/exercise.dart";
+import "../../exercises_db_handler.dart";
+import "../../api.dart";
 
 class SearchResultsPage extends StatefulWidget {
   String type;

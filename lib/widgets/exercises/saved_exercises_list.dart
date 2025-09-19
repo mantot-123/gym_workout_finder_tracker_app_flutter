@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import "exercise_tile.dart";
-import "../exercises_db_handler.dart";
+import "../../exercises_db_handler.dart";
 
 class SavedExercisesList extends StatefulWidget {
   final int actionBtnType;
@@ -14,7 +14,8 @@ class SavedExercisesList extends StatefulWidget {
 class _SavedExercisesListState extends State<SavedExercisesList> {
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return SavedExercisesDB.getSavedExercises().isNotEmpty
+    ? ListView.builder(
       itemCount: SavedExercisesDB.getSavedExercises().length,
       itemBuilder: (context, index) {
         return ExerciseTile(
@@ -25,6 +26,17 @@ class _SavedExercisesListState extends State<SavedExercisesList> {
           }
         );
       }
+    )
+    : Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text("Saved exercises", textAlign: TextAlign.center, style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+          Icon(Icons.save, size: 60),
+          SizedBox(height: 10),
+          Text("You have not saved any exercises yet.\nTry searching some exercises to get started.", textAlign: TextAlign.center)
+        ],
+      )
     );
   }
 }

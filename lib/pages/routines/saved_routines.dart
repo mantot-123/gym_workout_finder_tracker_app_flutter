@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/models/routine.dart";
 import "package:gym_workout_finder_tracker_app_flutter/routines_db_handler.dart";
-import "../widgets/ui/ui_button.dart";
-import "../widgets/ui/ui_scaffold.dart";
-import "../widgets/routine_tile.dart";
-import "../pages/routine_details.dart";
-import "../pages/edit_routine.dart";
+import "../../widgets/ui/ui_button.dart";
+import "../../widgets/ui/ui_scaffold.dart";
+import "../../widgets/routines/routine_tile.dart";
+import "routine_info.dart";
+import "edit_routine.dart";
 
 class RoutinesPage extends StatefulWidget {
   const RoutinesPage({super.key});

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "727207966559",
+    "project_id": "fitdex-d7ad0",
+    "storage_bucket": "fitdex-d7ad0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:727207966559:android:0c98b8c1ce7bdbe9e868ea",
+        "android_client_info": {
+          "package_name": "com.example.gym_workout_finder_tracker_app_flutter"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfauMJsCmKRQKfs6WQwCvzODSTKAkJ_R4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

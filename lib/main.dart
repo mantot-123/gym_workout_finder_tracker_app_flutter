@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/models/exercise.dart";
 import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
-import "pages/home.dart";
-import "pages/saved_routines.dart";
-import "pages/saved_exercises.dart";
-import "pages/api_key_empty_error.dart";
+import "pages/home/home.dart";
+import "pages/routines/saved_routines.dart";
+import "pages/exercises/saved_exercises.dart";
+import "pages/home/api_key_empty_error.dart";
 import "exercises_db_handler.dart";
 import "routines_db_handler.dart";
 
