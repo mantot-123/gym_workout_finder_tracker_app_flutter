@@ -85,4 +85,5 @@ class DefaultFirebaseOptions {
     storageBucket: 'fitdex-d7ad0.firebasestorage.app',
     measurementId: 'G-FEL256FD9W',
   );
+
 }

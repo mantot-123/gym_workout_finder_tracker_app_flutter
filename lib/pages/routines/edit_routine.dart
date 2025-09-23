@@ -5,7 +5,9 @@ import "../../widgets/ui/ui_input_box.dart";
 import "../../widgets/ui/ui_scaffold.dart";
 import "../../models/routine.dart";
 import "../../helpers/rng_str_gen.dart";
-import "../../routines_db_handler.dart";
+import "../../database/interfaces/routines_db_handler.dart";
+import "../../database/routines_local_db_handler.dart";
+import "../../services/routines_db_service.dart";
 
 class EditRoutinePage extends StatefulWidget {
   final int mode; // EDIT MODES: 0 = new routine, 1 = edit
@@ -18,6 +20,8 @@ class EditRoutinePage extends StatefulWidget {
 
 class _EditRoutinePageState extends State<EditRoutinePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  RoutinesDBHandler routinesDB = RoutinesDBService.dbHandler;
 
   TextEditingController nameController = TextEditingController();
   TimeOfDay selectedTime = TimeOfDay.now();
@@ -39,7 +43,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     return null;
   }
 
-  void saveChanges() {
+  Future<void> saveChanges() async {
     Routine routine = Routine(
       id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
       name: nameController.text,
@@ -48,35 +52,32 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     );
 
     if(widget.mode == 0) {
-      SavedRoutinesDB.addToSavedRoutines(routine);
+      await routinesDB.addRoutine(routine);
     } else {
-      SavedRoutinesDB.overwriteRoutineByID(routine); // replace an existing routine with the edited one
+      await routinesDB.updateRoutine(routine); // replace an existing routine with the edited one
     }
-
-    SavedRoutinesDB.updateSavedRoutines();
   }
 
 
-  void deleteRoutine() {
+  Future<void> deleteRoutine() async {
     // TODO DELETE ROUTINE
-    SavedRoutinesDB.removeFromSavedRoutines(widget.data);
-    SavedRoutinesDB.updateSavedRoutines();
+    await routinesDB.deleteRoutine(widget.data);
   }
 
 
-  void onSaveBtnPressed() {
+  Future<void> onSaveBtnPressed() async {
     bool isValid = _formKey.currentState!.validate();
     // TODO SAVE CHANGES
     if(isValid) {
-      saveChanges();
+      await saveChanges();
       Navigator.of(context).pop();
     }
   }
 
 
-  void onDeleteBtnPressed() {
-    deleteRoutine();
-    Navigator.pop(context);
+  Future<void> onDeleteBtnPressed() async {
+    await deleteRoutine();
+    Navigator.of(context).pop();
   }
 
 

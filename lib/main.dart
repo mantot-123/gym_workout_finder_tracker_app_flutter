@@ -2,19 +2,35 @@ import 'package:flutter/material.dart';
 import "package:gym_workout_finder_tracker_app_flutter/models/exercise.dart";
 import "package:hive/hive.dart";
 import "package:hive_flutter/hive_flutter.dart";
+import "package:firebase_core/firebase_core.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "pages/home/home.dart";
 import "pages/routines/saved_routines.dart";
 import "pages/exercises/saved_exercises.dart";
 import "pages/home/api_key_empty_error.dart";
-import "exercises_db_handler.dart";
-import "routines_db_handler.dart";
+import "database/interfaces/exercises_db_handler.dart";
+import "database/interfaces/routines_db_handler.dart";
+import "database/exercises_local_db_handler.dart";
+import "database/routines_local_db_handler.dart";
+import "services/exercises_db_service.dart";
+import "services/routines_db_service.dart";
+import "firebase_options.dart";
 
 void main() async {
-  // initialises the database 
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform
+  );
+
+  // initialises the Hive database 
   await Hive.initFlutter();
+
+  ExercisesDBHandler exercisesDB = SavedExercisesLocalDB();
+  RoutinesDBHandler routinesDB = SavedRoutinesLocalDB();
   
-  await SavedExercisesDB.initDb();
-  await SavedRoutinesDB.initDb();
+  await exercisesDB.init();
+  await routinesDB.init();
   runApp(MainApp());
 }
 
@@ -37,8 +53,7 @@ class _MainAppState extends State<MainApp> {
 
   @override
   void dispose() {
-    SavedExercisesDB.closeConn();
-    SavedRoutinesDB.closeConn();
+    Hive.close();
     super.dispose();
   }
 
@@ -95,7 +110,17 @@ class _MainAppState extends State<MainApp> {
       home: 
         apiKeySet 
         ? Scaffold(
-          body: pages[selectedPage],
+          body: StreamBuilder(
+            stream: FirebaseAuth.instance.authStateChanges(),
+            builder: (context, snapshot) {
+              if(snapshot.hasData) {
+                ExercisesDBService.switchDBHandlerByLoginState();
+                RoutinesDBService.switchDBHandlerByLoginState();
+              }
+
+              return pages[selectedPage];
+            }
+          ),
           bottomNavigationBar: NavigationBar(
             backgroundColor: Colors.grey.shade50,
             indicatorColor: Colors.lightGreen.shade100,
