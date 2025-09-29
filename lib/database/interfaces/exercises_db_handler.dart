@@ -2,6 +2,7 @@ import "../../models/exercise.dart";
 
 abstract class ExercisesDBHandler {
   Future<void> init();
+  Future<void> close();
   Future<void> loadExercises();
   Future<List<Exercise>> getAllExercises();
   Future<void> addExercise(Exercise exercise);

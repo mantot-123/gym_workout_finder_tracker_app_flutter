@@ -18,7 +18,14 @@ class RoutinesDBService {
     }
   }
 
-  static void synchronise() {
+  static Future<void> synchronise() async {
+    RoutinesDBHandler localDBHandler = SavedRoutinesLocalDB();
+    RoutinesDBHandler cloudDBHandler = SavedRoutinesCloudDB();
 
+    cloudDBHandler.init();
+    
+    for(var e in await localDBHandler.getAllRoutines()) {
+      await cloudDBHandler.addRoutine(e);
+    }
   }
 }

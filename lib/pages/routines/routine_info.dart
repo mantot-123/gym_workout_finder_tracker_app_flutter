@@ -26,7 +26,7 @@ class _RoutineDetailsPageState extends State<RoutineDetailsPage> {
           Container(
             height: 80,
             padding: EdgeInsets.all(20),
-            child: Text("Start time: ${widget.data.timeStart.format(context)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text("Start time: ${widget.data.timeStart}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           Expanded(
             child: SingleChildScrollView(

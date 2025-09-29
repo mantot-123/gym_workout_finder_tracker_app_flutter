@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import "package:firebase_core/firebase_core.dart";
 import "package:firebase_auth/firebase_auth.dart";
+import "package:gym_workout_finder_tracker_app_flutter/database/interfaces/exercises_db_handler.dart";
+import "package:gym_workout_finder_tracker_app_flutter/models/exercise.dart";
+import "package:gym_workout_finder_tracker_app_flutter/services/exercises_db_service.dart";
+import "package:gym_workout_finder_tracker_app_flutter/services/routines_db_service.dart";
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "register.dart";
 
-class LoginForm extends StatefulWidget {
-  const LoginForm({super.key});
+class LoginFormPage extends StatefulWidget {
+  const LoginFormPage({super.key});
 
   @override
-  State<LoginForm> createState() => _LoginFormState();
+  State<LoginFormPage> createState() => _LoginFormPageState();
 }
 
-class _LoginFormState extends State<LoginForm> {
+class _LoginFormPageState extends State<LoginFormPage> {
   bool isFormLoading = false;
   final _loginKey = GlobalKey<FormState>();
 
@@ -32,15 +36,12 @@ class _LoginFormState extends State<LoginForm> {
     if(isValid) {
       setState(() { isFormLoading = true; });
       final credential = await login();
+
       setState(() { isFormLoading = false; });
 
-      // REDUNDANT CODE. THIS CAN BE IGNORED/REMOVED
-      // if(credential != null) {
-      //   Navigator.of(context).pop();
-      //   Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-      //     return DashboardPage();
-      //   }));
-      // }
+      if(credential != null) {
+        Navigator.of(context).pop();
+      }
     }
   }
 
@@ -50,6 +51,13 @@ class _LoginFormState extends State<LoginForm> {
         email: emailController.text.trim(), 
         password: passwordController.text.trim()
       );
+
+      ExercisesDBService.switchDBHandlerByLoginState();
+      RoutinesDBService.switchDBHandlerByLoginState();
+      
+      await ExercisesDBService.synchronise();
+      await RoutinesDBService.synchronise();
+
       return credential;
     } on FirebaseAuthException catch(ex) {
       _showErrorMsgDialog(ex);

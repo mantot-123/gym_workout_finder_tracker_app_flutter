@@ -9,10 +9,13 @@ import "pages/home/home.dart";
 import "pages/routines/saved_routines.dart";
 import "pages/exercises/saved_exercises.dart";
 import "pages/home/api_key_empty_error.dart";
+import "pages/account/account_profile.dart";
 import "database/interfaces/exercises_db_handler.dart";
 import "database/interfaces/routines_db_handler.dart";
 import "database/exercises_local_db_handler.dart";
 import "database/routines_local_db_handler.dart";
+import "database/exercises_cloud_db_handler.dart";
+import "database/routines_cloud_db_handler.dart";
 import "services/exercises_db_service.dart";
 import "services/routines_db_service.dart";
 import "firebase_options.dart";
@@ -26,11 +29,11 @@ void main() async {
   // initialises the Hive database 
   await Hive.initFlutter();
 
-  ExercisesDBHandler exercisesDB = SavedExercisesLocalDB();
-  RoutinesDBHandler routinesDB = SavedRoutinesLocalDB();
-  
-  await exercisesDB.init();
-  await routinesDB.init();
+  ExercisesDBHandler exercisesLocalDB = SavedExercisesLocalDB();
+  RoutinesDBHandler routinesLocalDB = SavedRoutinesLocalDB();
+  await exercisesLocalDB.init();
+  await routinesLocalDB.init();
+
   runApp(MainApp());
 }
 
@@ -43,27 +46,22 @@ class MainApp extends StatefulWidget {
 
 class _MainAppState extends State<MainApp> {
   int selectedPage = 0;
-  bool apiKeySet = false;
+  bool apiKeySet = const String.fromEnvironment("API_KEY") != "";
 
   List<Widget> pages = [
     HomePage(),
     RoutinesPage(),
-    SavedExercisesPage()
+    SavedExercisesPage(),
+    AccountProfilePage()
   ];
 
   @override
   void dispose() {
-    Hive.close();
+    ExercisesDBHandler exercisesLocalDB = SavedExercisesLocalDB();
+    RoutinesDBHandler routinesLocalDB = SavedRoutinesLocalDB();
+    exercisesLocalDB.close();
+    routinesLocalDB.close();
     super.dispose();
-  }
-
-  @override
-  void initState() {
-    // check if an API key is set before running
-    final String API_KEY = const String.fromEnvironment("API_KEY");
-    if(API_KEY != "") {
-      apiKeySet = true;
-    }
   }
 
   void changePage(int newPage) {
@@ -103,6 +101,12 @@ class _MainAppState extends State<MainApp> {
             foregroundColor: WidgetStatePropertyAll(Colors.black87),
             textStyle: WidgetStatePropertyAll(TextStyle(fontFamily: "Overused Grotesk Medium"))
           )
+        ),
+
+        textButtonTheme: TextButtonThemeData(
+          style: ButtonStyle(
+            foregroundColor: WidgetStatePropertyAll(Colors.lightGreen.shade800)
+          )
         )
       ),
 
@@ -130,7 +134,8 @@ class _MainAppState extends State<MainApp> {
             destinations: [
               NavigationDestination(icon: Icon(Icons.home, size: 30), label: ""),
               NavigationDestination(icon: Icon(Icons.alarm, size: 30), label: ""),
-              NavigationDestination(icon: Icon(Icons.fitness_center, size: 30), label: "")
+              NavigationDestination(icon: Icon(Icons.fitness_center, size: 30), label: ""),
+              NavigationDestination(icon: Icon(Icons.account_circle, size: 30), label: "")
             ]
           ))
         : APIKeyEmptyErrorPage()

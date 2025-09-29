@@ -44,4 +44,6 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Miscellaneous files
+.VSCodeCounter
 api_key.txt

@@ -34,6 +34,11 @@ class SavedRoutinesLocalDB implements RoutinesDBHandler {
   }
 
   @override
+  Future<void> close() async {
+    await box.close();
+  }
+
+  @override
   Future<void> loadRoutines() async {
     savedRoutines = box.get("routines", defaultValue: [])!.cast<Routine>();
   }
@@ -93,7 +98,7 @@ class SavedRoutinesLocalDB implements RoutinesDBHandler {
     box.put("routines", savedRoutines);
   }
 
-
+  @override
   bool isRoutineSaved(String id) {
     for(var r in savedRoutines) {
       if(r.id == id) {

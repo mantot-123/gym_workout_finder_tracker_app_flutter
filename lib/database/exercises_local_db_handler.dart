@@ -25,11 +25,15 @@ class SavedExercisesLocalDB implements ExercisesDBHandler {
     } else {
       box = Hive.box<List<dynamic>>("saved_exercises");
     }
-    
+
     savedExercises = box.get("exercises", defaultValue: [])!.cast<Exercise>();
     // box.clear();
   }
 
+  @override
+  Future<void> close() async {
+    await box.close();
+  }
 
   @override
   Future<void> loadExercises() async {

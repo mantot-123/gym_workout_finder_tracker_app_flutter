@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import "package:http/http.dart";
 import "../../widgets/ui/ui_button.dart";
 import "../../widgets/ui/ui_input_box.dart";
@@ -30,9 +31,9 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   @override
   void initState() {
     super.initState();
-
+    
     nameController.text = widget.data.name;
-    selectedTime = widget.data.timeStart;
+    selectedTime = TimeOfDay.fromDateTime(DateFormat("hh:mm a").parse(widget.data.timeStart));
   }
 
 
@@ -43,11 +44,11 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     return null;
   }
 
-  Future<void> saveChanges() async {
+  Future<void> saveChanges(BuildContext context) async {
     Routine routine = Routine(
       id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
       name: nameController.text,
-      timeStart: selectedTime,
+      timeStart: selectedTime.format(context),
       tasks: widget.data.tasks
     );
 
@@ -65,11 +66,11 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   }
 
 
-  Future<void> onSaveBtnPressed() async {
+  Future<void> onSaveBtnPressed(BuildContext context) async {
     bool isValid = _formKey.currentState!.validate();
     // TODO SAVE CHANGES
     if(isValid) {
-      await saveChanges();
+      await saveChanges(context);
       Navigator.of(context).pop();
     }
   }
@@ -143,7 +144,7 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
           Row(
             spacing: 10.0,
             children: [
-              UIButton(label: "Save changes", onPressed: onSaveBtnPressed),
+              UIButton(label: "Save changes", onPressed: () async { onSaveBtnPressed(context); }),
               
               widget.mode == 1
               ? ElevatedButton(

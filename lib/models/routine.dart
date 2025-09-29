@@ -6,37 +6,73 @@ part "routine.g.dart";
 
 @HiveType(typeId: 1)
 class Routine {
-    @HiveField(0)
-    String id;
+  @HiveField(0)
+  late String id;
 
-    @HiveField(1)
-    String name;
+  @HiveField(1)
+  late String name;
 
-    @HiveField(2)
-    TimeOfDay timeStart;
+  @HiveField(2)
+  late String timeStart;
 
-    @HiveField(3)
-    List<Task> tasks;
+  @HiveField(3)
+  late List<Task> tasks;
 
-    Routine({ required this.id, required this.name, required this.timeStart, required this.tasks });
+  @HiveField(4)
+  late String? user;
+  
+  Routine({ required this.id, required this.name, required this.timeStart, required this.tasks, this.user });
 
-    // replace a task in task list if the given ID exists
-    void taskListReplaceItem(Task task) {
-      for(int i = 0; i < tasks.length; i++) {
-        if(tasks[i].id == task.id) {
-          tasks[i] = task;
-          return;
-        }
-      }
+  Routine.fromMap(Map<dynamic, dynamic> data) {
+    this.id = data["id"];
+    this.name = data["name"];
+    this.timeStart = data["timeStart"];
+
+    for(var t in data["tasks"]) {
+      this.tasks.add(Task(
+        id: t["id"],
+        name: t["name"],
+        restTimeSeconds: t["restTimeSeconds"],
+        reps: t["reps"],
+        sets: t["sets"]
+      ));
     }
 
-    void deleteTaskByID(Task task) {
-      for(int i = 0; i < tasks.length; i++) {
-        if(tasks[i].id == task.id) {
-          tasks.removeAt(i);
-          return;
-        }        
+    this.user = data["user"];
+  }
+
+  Map<dynamic, dynamic> toMap() {
+    List<Map<dynamic, dynamic>> tasksMap = [];
+    for(var t in tasks) {
+      tasksMap.add(t.toMap());
+    }
+
+    return {
+      "id": id,
+      "name": name,
+      "timeStart": timeStart.toString(),
+      "tasks": tasksMap,
+      "user": user,
+    };
+  }
+
+  // replace a task in task list if the given ID exists
+  void taskListReplaceItem(Task task) {
+    for(int i = 0; i < tasks.length; i++) {
+      if(tasks[i].id == task.id) {
+        tasks[i] = task;
+        return;
       }
     }
+  }
+
+  void deleteTaskByID(Task task) {
+    for(int i = 0; i < tasks.length; i++) {
+      if(tasks[i].id == task.id) {
+        tasks.removeAt(i);
+        return;
+      }        
+    }
+  }
 
 }

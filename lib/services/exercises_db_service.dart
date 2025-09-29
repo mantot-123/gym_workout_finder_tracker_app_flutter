@@ -19,7 +19,16 @@ class ExercisesDBService {
     }
   }
 
-  static void synchronise() {
+  static Future<void> synchronise() async {
+    ExercisesDBHandler localDBHandler = SavedExercisesLocalDB();
+    ExercisesDBHandler cloudDBHandler = SavedExercisesCloudDB();
 
+    await cloudDBHandler.init();
+    
+    // move all exercises to cloud firestore
+    for(var e in await localDBHandler.getAllExercises()) {
+      await cloudDBHandler.addExercise(e);
+      await localDBHandler.deleteExercise(e);
+    }
   }
 }
