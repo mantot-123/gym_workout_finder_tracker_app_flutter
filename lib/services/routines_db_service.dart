@@ -7,9 +7,9 @@ import "../firebase_options.dart";
 // Routines database service
 // Detects user session, syncs and changes database handler
 class RoutinesDBService {
-  static RoutinesDBHandler dbHandler = SavedRoutinesLocalDB();
+  static RoutinesDBHandler dbHandler = SavedRoutinesLocalDB(); // by default, the service should use the local database
 
-  static void switchDBHandlerByLoginState() {
+  static void switchDBHandlerByLoginState() async {
     if(FirebaseAuth.instance.currentUser != null) {
       // todo switch to cloud database handler
       dbHandler = SavedRoutinesCloudDB();
@@ -24,8 +24,9 @@ class RoutinesDBService {
 
     cloudDBHandler.init();
     
-    for(var e in await localDBHandler.getAllRoutines()) {
-      await cloudDBHandler.addRoutine(e);
+    for(var r in await localDBHandler.getAllRoutines()) {
+      await cloudDBHandler.addRoutine(r);
+      await localDBHandler.deleteRoutine(r);
     }
   }
 }

@@ -26,13 +26,19 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform
   );
 
-  // initialises the Hive database 
+  // initialises the Hive database + local database handlers
   await Hive.initFlutter();
+  await ExercisesDBService.dbHandler.init();
+  await RoutinesDBService.dbHandler.init();
 
-  ExercisesDBHandler exercisesLocalDB = SavedExercisesLocalDB();
-  RoutinesDBHandler routinesLocalDB = SavedRoutinesLocalDB();
-  await exercisesLocalDB.init();
-  await routinesLocalDB.init();
+  // detect current user session, then switches database handler if it finds a logged in user
+  if(FirebaseAuth.instance.currentUser != null) {
+    ExercisesDBService.switchDBHandlerByLoginState();
+    await ExercisesDBService.synchronise();
+
+    RoutinesDBService.switchDBHandlerByLoginState();
+    await RoutinesDBService.synchronise();
+  }
 
   runApp(MainApp());
 }
@@ -55,14 +61,14 @@ class _MainAppState extends State<MainApp> {
     AccountProfilePage()
   ];
 
+
   @override
   void dispose() {
-    ExercisesDBHandler exercisesLocalDB = SavedExercisesLocalDB();
-    RoutinesDBHandler routinesLocalDB = SavedRoutinesLocalDB();
-    exercisesLocalDB.close();
-    routinesLocalDB.close();
+    ExercisesDBService.dbHandler.close();
+    RoutinesDBService.dbHandler.close();
     super.dispose();
   }
+
 
   void changePage(int newPage) {
     setState(() {

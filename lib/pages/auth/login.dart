@@ -36,7 +36,6 @@ class _LoginFormPageState extends State<LoginFormPage> {
     if(isValid) {
       setState(() { isFormLoading = true; });
       final credential = await login();
-
       setState(() { isFormLoading = false; });
 
       if(credential != null) {
@@ -59,6 +58,7 @@ class _LoginFormPageState extends State<LoginFormPage> {
       await RoutinesDBService.synchronise();
 
       return credential;
+
     } on FirebaseAuthException catch(ex) {
       _showErrorMsgDialog(ex);
       print(ex);

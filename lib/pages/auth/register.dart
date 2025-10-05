@@ -46,10 +46,6 @@ class _RegisterFormState extends State<RegisterForm> {
   }
 
   Future<void> registerBtnPressed() async {
-    // if(checkEmail() && checkPassword()) {
-    //   await createUser();
-    //   Navigator.of(context).pop();
-    // }
     bool isValid = _registerKey.currentState!.validate(); // call the validator methods inside the form widgets
 
     if(isValid) {
@@ -72,12 +68,15 @@ class _RegisterFormState extends State<RegisterForm> {
       final credentials = await FirebaseAuth.instance.createUserWithEmailAndPassword(
         email: emailController.text.trim(),
         password: passwordController.text.trim()
-      );
+      ).then((credential) {
+        debugPrint("Account successfully registered");
+        debugPrint(credential.toString());
+        debugPrint("User ID: ${credential.user!.uid}");
+        debugPrint("E-mail address: ${credential.user!.email}");
 
-      debugPrint("Account successfully registered");
-      debugPrint(credentials.toString());
-      debugPrint("User ID: ${credentials.user!.uid}");
-      debugPrint("E-mail address: ${credentials.user!.email}");
+        FirebaseAuth.instance.signOut();
+      });
+
       return 0;
 
     } on FirebaseAuthException catch(ex) {

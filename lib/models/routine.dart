@@ -24,21 +24,24 @@ class Routine {
   Routine({ required this.id, required this.name, required this.timeStart, required this.tasks, this.user });
 
   Routine.fromMap(Map<dynamic, dynamic> data) {
-    this.id = data["id"];
-    this.name = data["name"];
-    this.timeStart = data["timeStart"];
-
-    for(var t in data["tasks"]) {
-      this.tasks.add(Task(
-        id: t["id"],
-        name: t["name"],
-        restTimeSeconds: t["restTimeSeconds"],
-        reps: t["reps"],
-        sets: t["sets"]
-      ));
+    id = data["id"];
+    name = data["name"];
+    timeStart = data["timeStart"];
+    tasks = [];
+    
+    if((data["tasks"] as List).isNotEmpty) {
+      for(var t in data["tasks"]) {
+        tasks.add(Task(
+          id: t["id"],
+          name: t["name"],
+          restTimeSeconds: t["restTimeSeconds"],
+          reps: t["reps"],
+          sets: t["sets"]
+        ));
+      }
     }
 
-    this.user = data["user"];
+    user = data["user"];
   }
 
   Map<dynamic, dynamic> toMap() {

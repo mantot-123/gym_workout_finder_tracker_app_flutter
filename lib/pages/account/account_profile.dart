@@ -39,13 +39,59 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
     );
   }
 
+  Future<bool> showConfirmLogoutDialog(BuildContext context) async {
+    bool logOut = false;
+    await showDialog( 
+      context: context, 
+      builder: (context) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              // border color
+              primary: Colors.lightGreen.shade700,
+              secondary: Colors.lightGreen.shade400,
+            ),
+            fontFamily: "Overused Grotesk Medium",
+          ),
+          child: AlertDialog(
+            title: Text("Log out"),
+            content: Container(
+              height: 60,
+              child: Column(
+                children: [
+                  Container(
+                    alignment: Alignment.center, 
+                    child: Text("Are you sure you want to log out? You won't be able to access your previously saved exercises and routines until you log back in")
+                  ),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(child: Text("YES"), onPressed: () {
+                logOut = true;
+                Navigator.of(context).pop(); // close error dialog
+              }),
+
+              TextButton(child: Text("NO", style: TextStyle(color: Colors.red)), onPressed: () {
+                Navigator.of(context).pop(); // close error dialog
+              })
+            ],
+          )
+        );
+      },
+    );
+    return logOut;
+  }
+
   Widget _buildAccountPage(BuildContext context) {
     return Center(
       child: ElevatedButton(
-        onPressed: () {
-          FirebaseAuth.instance.signOut();
+        onPressed: () async {
+          if(await showConfirmLogoutDialog(context)) {
+            FirebaseAuth.instance.signOut();
+          }
         },
-        child: Text("Sign out")
+        child: Text("Log out")
       )
     );
   }

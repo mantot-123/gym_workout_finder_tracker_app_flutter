@@ -99,13 +99,17 @@ class TaskEditDialog {
             ElevatedButton(
               child: Text("Choose saved exercise.."),
               onPressed: () async {
-                nameController.text = await Navigator.of(context).push(
+                String? exerciseName = await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
                       return _buildSavedExercisesImportWindow(context);
                     }
                   )
                 );
+
+                if(exerciseName != null) {
+                  nameController.text = exerciseName;
+                }
               }
             ),
             SizedBox(height: 10),

@@ -62,12 +62,12 @@ class SavedRoutinesCloudDB implements RoutinesDBHandler {
   Future<void> addRoutine(Routine routine) async {
     Map<String, dynamic> dataMap = routine.toMap().cast<String, dynamic>();
     dataMap["user"] = FirebaseAuth.instance.currentUser!.uid; // add the current logged in user id
+    dataMap["creationDate"] = FieldValue.serverTimestamp();
 
     if(dataMap["id"] == "") {
       DocumentReference doc = await collection.add(dataMap);
       doc.update({
-        "id" : doc.id,
-        "creationDate" : FieldValue.serverTimestamp()
+        "id" : doc.id
       });
 
     } else {
@@ -79,6 +79,7 @@ class SavedRoutinesCloudDB implements RoutinesDBHandler {
   Future<void> updateRoutine(Routine routine) async {
     Map<String, dynamic> dataMap = routine.toMap().cast<String, dynamic>();
     dataMap["user"] = FirebaseAuth.instance.currentUser!.uid; // add the current logged in user id
+    dataMap["creationDate"] = FieldValue.serverTimestamp();
     await collection.doc(dataMap["id"]).set(dataMap);
   }
 

@@ -27,6 +27,7 @@ class SavedExercisesCloudDB implements ExercisesDBHandler {
       .where("user", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
       .orderBy("creationDate")
       .snapshots().listen((snapshot) {
+        exercises.clear();
         for(var document in snapshot.docs) {
           Map<dynamic, dynamic> map = document.data() as Map<dynamic, dynamic>;
           Exercise e = Exercise.fromMap(map);
@@ -50,6 +51,7 @@ class SavedExercisesCloudDB implements ExercisesDBHandler {
   Future<void> addExercise(Exercise exercise) async {
     Map<String, dynamic> dataMap = exercise.toMap().cast<String, dynamic>();
     dataMap["user"] = FirebaseAuth.instance.currentUser!.uid; // add the current logged in user id
+    dataMap["creationDate"] = FieldValue.serverTimestamp();
 
     if(dataMap["docId"] == "") {
       DocumentReference doc = await collection.add(dataMap);
@@ -68,6 +70,7 @@ class SavedExercisesCloudDB implements ExercisesDBHandler {
   Future<void> updateExercise(Exercise exercise) async {
     Map<String, dynamic> dataMap = exercise.toMap().cast<String, dynamic>();
     dataMap["user"] = FirebaseAuth.instance.currentUser!.uid;
+    dataMap["creationDate"] = FieldValue.serverTimestamp();
     await collection.doc(dataMap["docId"]).set(dataMap);
   } // finds an exercise with a matching ID then overwrites that
 

@@ -144,7 +144,9 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
           Row(
             spacing: 10.0,
             children: [
-              UIButton(label: "Save changes", onPressed: () async { onSaveBtnPressed(context); }),
+              UIButton(label: "Save changes", onPressed: () async { 
+                await onSaveBtnPressed(context);
+              }),
               
               widget.mode == 1
               ? ElevatedButton(
