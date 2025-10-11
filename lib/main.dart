@@ -31,7 +31,8 @@ void main() async {
   await ExercisesDBService.dbHandler.init();
   await RoutinesDBService.dbHandler.init();
 
-  // detect current user session, then switches database handler if it finds a logged in user
+  // detect current user session, then switches database handler 
+  // + syncs local data to the cloud if it finds a logged in user
   if(FirebaseAuth.instance.currentUser != null) {
     ExercisesDBService.switchDBHandlerByLoginState();
     await ExercisesDBService.synchronise();
@@ -136,7 +137,6 @@ class _MainAppState extends State<MainApp> {
             indicatorColor: Colors.lightGreen.shade100,
             selectedIndex: selectedPage,
             onDestinationSelected: changePage,
-            height: 30,
             destinations: [
               NavigationDestination(icon: Icon(Icons.home, size: 30), label: ""),
               NavigationDestination(icon: Icon(Icons.alarm, size: 30), label: ""),

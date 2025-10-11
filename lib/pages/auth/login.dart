@@ -140,6 +140,26 @@ class _LoginFormPageState extends State<LoginFormPage> {
                 ]
               )
             ),
+
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 20.0),
+              child: Container(
+                padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  // border: BoxBorder.all(color: Colors.black87),
+                  color: Colors.lightGreen.shade100,
+                ),
+                
+                child: Row(
+                  spacing: 20.0,
+                  children: [
+                    Icon(Icons.cloud, size: 40.0),
+                    Flexible(child: Text("All of your workout routines + exercises will automatically be saved\nto the cloud once you log in", style: TextStyle(fontSize: 15.5)))
+                  ]
+                ),
+              )
+            ),
       
             Container(
               padding: EdgeInsets.all(25.0),
