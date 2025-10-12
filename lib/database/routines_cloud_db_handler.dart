@@ -64,7 +64,7 @@ class SavedRoutinesCloudDB implements RoutinesDBHandler {
     dataMap["user"] = FirebaseAuth.instance.currentUser!.uid; // add the current logged in user id
     dataMap["creationDate"] = FieldValue.serverTimestamp();
 
-    if(dataMap["id"] == "") {
+    if(dataMap["id"] == "" || dataMap["id"] == null) {
       DocumentReference doc = await collection.add(dataMap);
       doc.update({
         "id" : doc.id

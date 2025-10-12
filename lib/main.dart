@@ -87,6 +87,12 @@ class _MainAppState extends State<MainApp> {
         ),
     
         fontFamily: "Overused Grotesk Medium",
+
+        dialogTheme: DialogThemeData(
+          titleTextStyle: TextStyle(fontFamily: "Overused Grotesk Medium"),
+          contentTextStyle: TextStyle(fontFamily: "Overused Grotesk Medium"),
+        ),
+
         iconButtonTheme: IconButtonThemeData(
           style: ButtonStyle(backgroundColor: WidgetStatePropertyAll(Colors.lightGreen.shade200))
         ),

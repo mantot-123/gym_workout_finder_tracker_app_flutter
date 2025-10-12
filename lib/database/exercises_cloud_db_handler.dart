@@ -53,7 +53,7 @@ class SavedExercisesCloudDB implements ExercisesDBHandler {
     dataMap["user"] = FirebaseAuth.instance.currentUser!.uid; // add the current logged in user id
     dataMap["creationDate"] = FieldValue.serverTimestamp();
 
-    if(dataMap["docId"] == "") {
+    if(dataMap["docId"] == "" || dataMap["docId"] == null) {
       DocumentReference doc = await collection.add(dataMap);
       doc.update({
         "docId" : doc.id,

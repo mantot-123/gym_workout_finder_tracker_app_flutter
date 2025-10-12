@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:gym_workout_finder_tracker_app_flutter/pages/auth/login.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class AccountTile extends StatefulWidget {
   const AccountTile({super.key});
@@ -103,9 +104,17 @@ class _AccountTileState extends State<AccountTile> {
         child: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(), 
           builder: (context, snapshot) {
-            if(snapshot.hasData) {
+            if(snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                  color: Colors.lightGreen.shade900, size: 50
+                ),
+              );
+            }
+            else if(snapshot.hasData) {
               return _buildNotSignedInTile(context);
             }
+
             return _buildAccountTile(context);
           }
         ),
