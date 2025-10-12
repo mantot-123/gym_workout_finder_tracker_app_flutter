@@ -12,6 +12,41 @@ class AccountMenu extends StatefulWidget {
 }
 
 class _AccountMenuState extends State<AccountMenu> {
+  // "Feature unavailable" message = this is only temporary
+  void _showUnavailableMsgBox(BuildContext context) {
+    showDialog( 
+      context: context, 
+      builder: (context) {
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              // border color
+              primary: Colors.lightGreen.shade700,
+              secondary: Colors.lightGreen.shade400,
+            ),
+            fontFamily: "Overused Grotesk Medium",
+          ),
+          child: AlertDialog(
+            title: Text("Feature not available"),
+            content: Container(
+              height: 40,
+              child: Column(
+                children: [
+                  Container(alignment: Alignment.center, child: Text("This feature is currently unavailable. Check back later.")),
+                ],
+              ),
+            ),
+            actions: [
+              TextButton(child: Text("OK"), onPressed: () {
+                Navigator.of(context).pop(); // close confirmation dialog
+              })
+            ],
+          )
+        );
+      },
+    );
+  }
+
   void _showClearProgressMsgBox(BuildContext context) {
     showDialog( 
       context: context, 
@@ -152,6 +187,7 @@ class _AccountMenuState extends State<AccountMenu> {
                 return ListTile(
                   onTap: () {
                     // todo
+                    _showUnavailableMsgBox(context);
                   },
                   title: Text("E-mail address settings"),
                   leading: Icon(Icons.alternate_email)
@@ -168,6 +204,7 @@ class _AccountMenuState extends State<AccountMenu> {
                 return ListTile(
                   onTap: () {
                     // todo
+                    _showUnavailableMsgBox(context);
                   },
                   title: Text("Password settings"),
                   leading: Icon(Icons.password)
@@ -191,13 +228,6 @@ class _AccountMenuState extends State<AccountMenu> {
             },
             title: Text("Clear all saved exercises"),
             leading: Icon(Icons.delete)
-          ),
-          ListTile(
-            onTap: () {
-              // todo
-            },
-            title: Text("About"),
-            leading: Icon(Icons.info)
           ),
         ]
       ),
