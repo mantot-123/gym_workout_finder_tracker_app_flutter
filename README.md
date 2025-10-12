@@ -15,14 +15,15 @@ flutter build <platform> --dart-define=API_KEY=<YOUR_API_KEY_HERE>
 
 ### Features (current)
 * Search using the API
-* Workout viewer - it explains the exercise + adds GIF images fetched from the ExerciseDB API showing how to do it
-* Save and manage saved workouts
-
+* Workout viewer - it explains the exercise + adds GIF images fetched from the ExerciseDB API
+* Save and manage saved exercises
+* Set up and manage workout routines
+* Login and signup system for cloud-saving exercises and routines
 
 ### Features (planned)
 
-* AI personalised workout plan generator 
-    - Automatically suggests a set of exercises based on: 
+* AI personalised workout routine plan generator 
+    - Automatically suggests a set of exercises based on user-defined variables such as:
         - Workout frequency
         - Current build 
         - Goal
@@ -33,13 +34,7 @@ flutter build <platform> --dart-define=API_KEY=<YOUR_API_KEY_HERE>
         - Number of total exercises to do
         - Previous health conditions<br>
         etc.
-* Set up and manage workout routines
-    - Set a time for the routine to start
-    - Which days to do the routine
-    - Add workouts to the routine and mark each one of them as completed 
-    - Sends push notifications/alarms when the user should start doing the routine
-* Login and signup system + cloud saving exercises and routines
 * Real time notifications
 * Leveling system for completed routines
     - Has multiple tiers: Beginner, Intermediate, Advanced, Elite, Master, Legend
-    - Experience points (XP) gained when a user completes the routine for all the selected days
+    - Experience points (XP) gained when a user completes routines for all their selected days
