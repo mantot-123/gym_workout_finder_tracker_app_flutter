@@ -18,7 +18,7 @@ class _RoutineTileState extends State<RoutineTile> {
     return ListTile(
       onTap: widget.onOpen,
       title: Text(widget.data.name), 
-      subtitle: Text("Start: ${widget.data.timeStart.format(context)}"),
+      subtitle: Text("Start: ${widget.data.timeStart}"),
       leading: Icon(Icons.alarm),
       trailing: IconButton(icon: Icon(Icons.edit), onPressed: widget.onEdit),
     );

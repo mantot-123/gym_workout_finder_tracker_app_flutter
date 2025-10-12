@@ -5,7 +5,7 @@ import "../../models/exercise.dart";
 import "../../widgets/ui/ui_scaffold.dart";
 import "../../widgets/exercises/exercise_info_pane.dart";
 import "../../helpers/list_to_string.dart";
-import "../../api.dart";
+import "../../api/exercise_search_api.dart";
 
 class ExerciseInfoPage extends StatefulWidget {
   Exercise data;

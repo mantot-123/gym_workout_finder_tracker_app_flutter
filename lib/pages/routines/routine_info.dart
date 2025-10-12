@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import "package:gym_workout_finder_tracker_app_flutter/routines_db_handler.dart";
+import "package:gym_workout_finder_tracker_app_flutter/database/routines_local_db_handler.dart";
 import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.dart";
 import 'package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_scaffold.dart';
 import "../../models/routine.dart";
@@ -26,7 +26,7 @@ class _RoutineDetailsPageState extends State<RoutineDetailsPage> {
           Container(
             height: 80,
             padding: EdgeInsets.all(20),
-            child: Text("Start time: ${widget.data.timeStart.format(context)}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+            child: Text("Start time: ${widget.data.timeStart}", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ),
           Expanded(
             child: SingleChildScrollView(

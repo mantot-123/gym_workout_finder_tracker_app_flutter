@@ -2,7 +2,7 @@ import "dart:io";
 import "dart:typed_data";
 import "package:http/http.dart" as http;
 import "dart:convert" as convert;
-import "models/exercise.dart";
+import "../models/exercise.dart";
 
 class ExerciseSearch {
   final String API_KEY = const String.fromEnvironment("API_KEY");
@@ -15,7 +15,7 @@ class ExerciseSearch {
       case "image":
         url = Uri.https(
           "exercisedb.p.rapidapi.com", "/image", {
-            "resolution": "360",
+            "resolution": "180",
             "exerciseId": value
           }
         );

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import "package:gym_workout_finder_tracker_app_flutter/widgets/ui/ui_input_box.dart";
 import "../ui/ui_scaffold.dart";
 import "../exercises/saved_exercises_list.dart";
 import "../../models/task.dart";
 import "../../models/routine.dart";
 import "../../helpers/rng_str_gen.dart";
-import "../../routines_db_handler.dart";
-import "../../exercises_db_handler.dart";
+import "../../database/interfaces/routines_db_handler.dart";
+import "../../services/routines_db_service.dart";
 
 class TaskEditDialog {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  RoutinesDBHandler routinesDB = RoutinesDBService.dbHandler;
 
   int mode; // MODES: 0 = create new, 1 = edit
   Routine routine;
@@ -62,11 +63,11 @@ class TaskEditDialog {
       routine.taskListReplaceItem(newTask);
     }
 
-    SavedRoutinesDB.updateSavedRoutines(); // update the saved routines in the database
+    routinesDB.updateDB(); // update the saved routines in the database
   }
 
 
-  Widget _buildSavedExercisesImportWindow(BuildContext context, Function setState) {
+  Widget _buildSavedExercisesImportWindow(BuildContext context) {
     return UIScaffold(
       appBarTitle: "Import existing exercise",
       body: SavedExercisesList(
@@ -79,7 +80,7 @@ class TaskEditDialog {
   }
 
   // INPUT BOXES
-  Widget _buildInputBoxes(BuildContext context, Function setState) {
+  Widget _buildInputBoxes(BuildContext context) {
     return Container(
       height: 400,
       width: 400,
@@ -98,13 +99,17 @@ class TaskEditDialog {
             ElevatedButton(
               child: Text("Choose saved exercise.."),
               onPressed: () async {
-                nameController.text = await Navigator.of(context).push(
+                String? exerciseName = await Navigator.of(context).push(
                   MaterialPageRoute(
                     builder: (context) {
-                      return _buildSavedExercisesImportWindow(context, setState);
+                      return _buildSavedExercisesImportWindow(context);
                     }
                   )
                 );
+
+                if(exerciseName != null) {
+                  nameController.text = exerciseName;
+                }
               }
             ),
             SizedBox(height: 10),
@@ -170,7 +175,7 @@ class TaskEditDialog {
           onPressed : () {
             // TODO DELETE FUNCTION
             routine.deleteTaskByID(task);
-            SavedRoutinesDB.updateSavedRoutines();
+            routinesDB.updateDB();
             clearForm();
             Navigator.of(context).pop();
           }
@@ -189,24 +194,20 @@ class TaskEditDialog {
     return showDialog(// EDIT TASK DIALOG
       context: context, 
       builder: (context) {
-        return StatefulBuilder(
-          builder: (context, setState) {
-            return Theme(
-              data: ThemeData(
-                colorScheme: ColorScheme.light(
-                  // border color
-                  primary: Colors.lightGreen.shade700,
-                  secondary: Colors.lightGreen.shade400,
-                ),
-                fontFamily: "Overused Grotesk Medium",
-              ),
-              child: AlertDialog(
-                title: Text(mode == 0 ? "New exercise" : "Edit exercise"),
-                content: _buildInputBoxes(context, setState),
-                actions: _buildActionBtns(context),
-              )
-            );
-          }
+        return Theme(
+          data: ThemeData(
+            colorScheme: ColorScheme.light(
+              // border color
+              primary: Colors.lightGreen.shade700,
+              secondary: Colors.lightGreen.shade400,
+            ),
+            fontFamily: "Overused Grotesk Medium",
+          ),
+          child: AlertDialog(
+            title: Text(mode == 0 ? "New exercise" : "Edit exercise"),
+            content: _buildInputBoxes(context),
+            actions: _buildActionBtns(context),
+          )
         );
       }
     );

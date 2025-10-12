@@ -1,6 +1,10 @@
+import "package:firebase_auth/firebase_auth.dart";
+import "package:loading_animation_widget/loading_animation_widget.dart";
 import 'package:flutter/material.dart';
 import "exercise_tile.dart";
-import "../../exercises_db_handler.dart";
+import "../../database/interfaces/exercises_db_handler.dart";
+import "../../models/exercise.dart";
+import "../../services/exercises_db_service.dart";
 
 class SavedExercisesList extends StatefulWidget {
   final int actionBtnType;
@@ -12,22 +16,25 @@ class SavedExercisesList extends StatefulWidget {
 }
 
 class _SavedExercisesListState extends State<SavedExercisesList> {
-  @override
-  Widget build(BuildContext context) {
-    return SavedExercisesDB.getSavedExercises().isNotEmpty
-    ? ListView.builder(
-      itemCount: SavedExercisesDB.getSavedExercises().length,
+  ExercisesDBHandler exercisesDB = ExercisesDBService.dbHandler;
+
+  Widget _buildList(BuildContext context, List<Exercise> data) {
+    return ListView.builder(
+      itemCount: data.length,
       itemBuilder: (context, index) {
         return ExerciseTile(
-          data: SavedExercisesDB.getSavedExercises()[index], 
+          data: data[index], 
           actionBtnType: widget.actionBtnType,
           actionBtnOnPressed: () {
-            widget.actionBtnOnPressed(SavedExercisesDB.getSavedExercises()[index]);
+            widget.actionBtnOnPressed(data[index]);
           }
         );
       }
-    )
-    : Center(
+    );
+  }
+
+  Widget _buildExercisesEmptyMsg(BuildContext context) {
+    return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -38,5 +45,40 @@ class _SavedExercisesListState extends State<SavedExercisesList> {
         ],
       )
     );
+  }
+
+  Widget _buildContent(BuildContext context) {
+    return StreamBuilder(
+      stream: FirebaseAuth.instance.authStateChanges(),
+      builder: (context, snapshot) {
+        if(!snapshot.hasData) {
+          ExercisesDBService.switchDBHandlerByLoginState();
+        }
+
+        return FutureBuilder(
+          future: exercisesDB.getAllExercises(),
+          builder: (context, snapshot) {
+            if(snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: LoadingAnimationWidget.fourRotatingDots(
+                  color: Colors.lightGreen.shade900, size: 100
+                )
+              );
+            } else if(!snapshot.hasData) {
+              return _buildExercisesEmptyMsg(context);
+            }
+        
+            return snapshot.data!.isNotEmpty
+            ? _buildList(context, snapshot.data!)
+            : _buildExercisesEmptyMsg(context);
+          }
+        );
+      }
+    ); 
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _buildContent(context);
   }
 }

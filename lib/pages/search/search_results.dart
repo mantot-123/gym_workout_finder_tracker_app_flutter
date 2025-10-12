@@ -3,8 +3,10 @@ import "package:loading_animation_widget/loading_animation_widget.dart";
 import "../../widgets/exercises/exercise_tile.dart";
 import "../../widgets/ui/ui_scaffold.dart";
 import "../../models/exercise.dart";
-import "../../exercises_db_handler.dart";
-import "../../api.dart";
+import "../../database/interfaces/exercises_db_handler.dart";
+import "../../database/exercises_local_db_handler.dart";
+import "../../api/exercise_search_api.dart";
+import "../../services/exercises_db_service.dart";
 
 class SearchResultsPage extends StatefulWidget {
   String type;
@@ -16,6 +18,8 @@ class SearchResultsPage extends StatefulWidget {
 }
 
 class _SearchResultsPageState extends State<SearchResultsPage> {
+  ExercisesDBHandler exercisesDB = ExercisesDBService.dbHandler;
+
   late Future<dynamic> results;
 
   @override
@@ -26,22 +30,20 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
   }
 
   // ADD EXERCISE TO SAVED LIST
-  void saveExercise(BuildContext context, Exercise data) {
+  Future<void> addExercise(BuildContext context, Exercise data) async {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' successfully saved."));
-      SavedExercisesDB.addToSavedExercises(data); // add
-      SavedExercisesDB.updateSavedExercises();
+      exercisesDB.addExercise(data); // add
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
 
 
   // REMOVE EXERCISE FROM SAVED LIST
-  void removeSavedExercise(BuildContext context, Exercise data) {
+  Future<void> deleteExercise(BuildContext context, Exercise data) async {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
-      SavedExercisesDB.removeFromSavedExercises(data); // remove
-      SavedExercisesDB.updateSavedExercises();
+      exercisesDB.deleteExercise(data); // remove
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }
@@ -88,14 +90,14 @@ class _SearchResultsPageState extends State<SearchResultsPage> {
             itemCount: dataConverted.length,
             itemBuilder: (context, index) {
               // returns a Exercise list tile with either a delete or save button 
-              if(SavedExercisesDB.isExerciseSaved(dataConverted[index].id)) {
-                return ExerciseTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () {
-                  removeSavedExercise(context, dataConverted[index]);
+              if(exercisesDB.isExerciseSaved(dataConverted[index].id)) {
+                return ExerciseTile(data: dataConverted[index], actionBtnType: 1, actionBtnOnPressed: () async {
+                  await deleteExercise(context, dataConverted[index]);
                 });
               }
 
-              return ExerciseTile(data: dataConverted[index], actionBtnOnPressed: () {
-                saveExercise(context, dataConverted[index]);
+              return ExerciseTile(data: dataConverted[index], actionBtnOnPressed: () async {
+                await addExercise(context, dataConverted[index]);
               });
             }
           ),
