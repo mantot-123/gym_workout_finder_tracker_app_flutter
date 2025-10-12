@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import "../../widgets/ui/ui_scaffold.dart";
-import "../../widgets/exercises/exercise_tile.dart";
 import "../../widgets/exercises/saved_exercises_list.dart";
 import "../search/search_form.dart";
 import "../../models/exercise.dart";
-import "../../exercises_db_handler.dart";
+import "../../database/interfaces/exercises_db_handler.dart";
+import "../../services/exercises_db_service.dart";
 
 class SavedExercisesPage extends StatefulWidget {
   const SavedExercisesPage({super.key});
@@ -14,6 +14,8 @@ class SavedExercisesPage extends StatefulWidget {
 }
 
 class _SavedExercisesPageState extends State<SavedExercisesPage> {
+  ExercisesDBHandler exercisesDB = ExercisesDBService.dbHandler;
+
   @override
   void initState() {
     super.initState();
@@ -23,8 +25,7 @@ class _SavedExercisesPageState extends State<SavedExercisesPage> {
   void removeSavedExercise(BuildContext context, Exercise data) {
     setState(() {
       final msgBar = SnackBar(content: Text("Exercise '${data.name}' removed."));
-      SavedExercisesDB.removeFromSavedExercises(data); // remove
-      SavedExercisesDB.updateSavedExercises();
+      exercisesDB.deleteExercise(data); // remove
       ScaffoldMessenger.of(context).showSnackBar(msgBar);
     });
   }

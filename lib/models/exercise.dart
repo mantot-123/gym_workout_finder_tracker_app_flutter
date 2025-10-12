@@ -31,6 +31,13 @@ class Exercise {
   @HiveField(8) 
   late String difficulty;
 
+  @HiveField(9)
+  late String? user;
+
+  @HiveField(10)
+  late String? docId;
+
+
   Exercise(
     {
       this.bodyPart = "",
@@ -41,7 +48,9 @@ class Exercise {
       required this.secondaryMuscles,
       required this.instructions,
       this.description = "",
-      this.difficulty = ""
+      this.difficulty = "",
+      this.user,
+      this.docId // database document ID
     }
   );
 
@@ -55,6 +64,8 @@ class Exercise {
     instructions = data["instructions"].cast<String>();
     description = data["description"];
     difficulty = data["difficulty"];
+    user = data["user"];
+    docId = data["docId"]; // add a database document id - since the "id" property comes from the API
   }
 
   Map<dynamic, dynamic> toMap() {
@@ -68,6 +79,8 @@ class Exercise {
       "instructions": instructions,
       "description": description,
       "difficulty": difficulty,
+      "user": user,
+      "docId": docId
     };
   }
 

@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import "package:http/http.dart";
 import "../../widgets/ui/ui_button.dart";
 import "../../widgets/ui/ui_input_box.dart";
 import "../../widgets/ui/ui_scaffold.dart";
 import "../../models/routine.dart";
 import "../../helpers/rng_str_gen.dart";
-import "../../routines_db_handler.dart";
+import "../../database/interfaces/routines_db_handler.dart";
+import "../../database/routines_local_db_handler.dart";
+import "../../services/routines_db_service.dart";
 
 class EditRoutinePage extends StatefulWidget {
   final int mode; // EDIT MODES: 0 = new routine, 1 = edit
@@ -19,6 +22,8 @@ class EditRoutinePage extends StatefulWidget {
 class _EditRoutinePageState extends State<EditRoutinePage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  RoutinesDBHandler routinesDB = RoutinesDBService.dbHandler;
+
   TextEditingController nameController = TextEditingController();
   TimeOfDay selectedTime = TimeOfDay.now();
   String alertMsg = "";
@@ -26,9 +31,9 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
   @override
   void initState() {
     super.initState();
-
+    
     nameController.text = widget.data.name;
-    selectedTime = widget.data.timeStart;
+    selectedTime = TimeOfDay.fromDateTime(DateFormat("hh:mm a").parse(widget.data.timeStart));
   }
 
 
@@ -39,44 +44,41 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
     return null;
   }
 
-  void saveChanges() {
+  Future<void> saveChanges(BuildContext context) async {
     Routine routine = Routine(
       id: widget.mode == 1 ? widget.data.id : RngStrGen.generator(12), // generate a new id if creating a new routine
       name: nameController.text,
-      timeStart: selectedTime,
+      timeStart: selectedTime.format(context),
       tasks: widget.data.tasks
     );
 
     if(widget.mode == 0) {
-      SavedRoutinesDB.addToSavedRoutines(routine);
+      await routinesDB.addRoutine(routine);
     } else {
-      SavedRoutinesDB.overwriteRoutineByID(routine); // replace an existing routine with the edited one
+      await routinesDB.updateRoutine(routine); // replace an existing routine with the edited one
     }
-
-    SavedRoutinesDB.updateSavedRoutines();
   }
 
 
-  void deleteRoutine() {
+  Future<void> deleteRoutine() async {
     // TODO DELETE ROUTINE
-    SavedRoutinesDB.removeFromSavedRoutines(widget.data);
-    SavedRoutinesDB.updateSavedRoutines();
+    await routinesDB.deleteRoutine(widget.data);
   }
 
 
-  void onSaveBtnPressed() {
+  Future<void> onSaveBtnPressed(BuildContext context) async {
     bool isValid = _formKey.currentState!.validate();
     // TODO SAVE CHANGES
     if(isValid) {
-      saveChanges();
+      await saveChanges(context);
       Navigator.of(context).pop();
     }
   }
 
 
-  void onDeleteBtnPressed() {
-    deleteRoutine();
-    Navigator.pop(context);
+  Future<void> onDeleteBtnPressed() async {
+    await deleteRoutine();
+    Navigator.of(context).pop();
   }
 
 
@@ -142,7 +144,9 @@ class _EditRoutinePageState extends State<EditRoutinePage> {
           Row(
             spacing: 10.0,
             children: [
-              UIButton(label: "Save changes", onPressed: onSaveBtnPressed),
+              UIButton(label: "Save changes", onPressed: () async { 
+                await onSaveBtnPressed(context);
+              }),
               
               widget.mode == 1
               ? ElevatedButton(
