@@ -17,11 +17,11 @@ class RoutineAdapter extends TypeAdapter<Routine> {
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
     return Routine(
-      id: fields[0] as String,
-      name: fields[1] as String,
-      timeStart: fields[2] as String,
-      tasks: (fields[3] as List).cast<Task>(),
-      user: fields[4] as String?,
+      id: fields[11] as String,
+      name: fields[12] as String,
+      timeStart: fields[13] as String,
+      tasks: (fields[14] as List).cast<Task>(),
+      user: fields[15] as String?,
     );
   }
 
@@ -29,15 +29,15 @@ class RoutineAdapter extends TypeAdapter<Routine> {
   void write(BinaryWriter writer, Routine obj) {
     writer
       ..writeByte(5)
-      ..writeByte(0)
+      ..writeByte(11)
       ..write(obj.id)
-      ..writeByte(1)
+      ..writeByte(12)
       ..write(obj.name)
-      ..writeByte(2)
+      ..writeByte(13)
       ..write(obj.timeStart)
-      ..writeByte(3)
+      ..writeByte(14)
       ..write(obj.tasks)
-      ..writeByte(4)
+      ..writeByte(15)
       ..write(obj.user);
   }
 

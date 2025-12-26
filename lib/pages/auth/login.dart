@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import "package:firebase_core/firebase_core.dart";
 import "package:firebase_auth/firebase_auth.dart";
-import "package:gym_workout_finder_tracker_app_flutter/database/interfaces/exercises_db_handler.dart";
-import "package:gym_workout_finder_tracker_app_flutter/models/exercise.dart";
 import "package:gym_workout_finder_tracker_app_flutter/services/exercises_db_service.dart";
 import "package:gym_workout_finder_tracker_app_flutter/services/routines_db_service.dart";
 import "package:loading_animation_widget/loading_animation_widget.dart";
@@ -51,8 +48,8 @@ class _LoginFormPageState extends State<LoginFormPage> {
         password: passwordController.text.trim()
       );
 
-      ExercisesDBService.switchDBHandlerByLoginState();
-      RoutinesDBService.switchDBHandlerByLoginState();
+      await ExercisesDBService.switchDBHandlerByLoginState();
+      await RoutinesDBService.switchDBHandlerByLoginState();
       
       await ExercisesDBService.synchronise();
       await RoutinesDBService.synchronise();

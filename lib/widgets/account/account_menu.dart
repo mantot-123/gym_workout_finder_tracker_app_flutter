@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import "package:gym_workout_finder_tracker_app_flutter/services/exercises_db_service.dart";
@@ -178,58 +177,49 @@ class _AccountMenuState extends State<AccountMenu> {
   Widget build(BuildContext context) {
     return Expanded(
       flex: 2,
-      child: ListView(
-        children: [
-          StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if(snapshot.hasData) {
-                return ListTile(
+      child: StreamBuilder(
+        stream: FirebaseAuth.instance.authStateChanges(),
+        builder: (context, snapshot) {
+          final isLoggedIn = snapshot.hasData;
+          
+          return ListView(
+            children: [
+              // Only show these menu items when logged in
+              if (isLoggedIn) ...[
+                ListTile(
                   onTap: () {
-                    // todo
                     _showUnavailableMsgBox(context);
                   },
                   title: Text("E-mail address settings"),
                   leading: Icon(Icons.alternate_email)
-                );
-              }
-              return SizedBox();
-            }
-          ),
-
-          StreamBuilder(
-            stream: FirebaseAuth.instance.authStateChanges(),
-            builder: (context, snapshot) {
-              if(snapshot.hasData) {
-                return ListTile(
+                ),
+                ListTile(
                   onTap: () {
-                    // todo
                     _showUnavailableMsgBox(context);
                   },
                   title: Text("Password settings"),
                   leading: Icon(Icons.password)
-                );
-              }
-              return SizedBox();
-            }
-          ),
+                ),
+              ],
 
-          ListTile(
-            onTap: () async {
-              await _confirmClearRoutines(context);
-            },
-            title: Text("Clear all routines"),
-            leading: Icon(Icons.delete)
-          ),
+              ListTile(
+                onTap: () async {
+                  await _confirmClearRoutines(context);
+                },
+                title: Text("Clear all routines"),
+                leading: Icon(Icons.delete)
+              ),
 
-          ListTile(
-            onTap: () async {
-              await _confirmClearExercises(context);
-            },
-            title: Text("Clear all saved exercises"),
-            leading: Icon(Icons.delete)
-          ),
-        ]
+              ListTile(
+                onTap: () async {
+                  await _confirmClearExercises(context);
+                },
+                title: Text("Clear all saved exercises"),
+                leading: Icon(Icons.delete)
+              ),
+            ]
+          );
+        }
       ),
     );
   }

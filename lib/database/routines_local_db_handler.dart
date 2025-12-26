@@ -7,6 +7,7 @@ import "../models/task.dart";
 
 class SavedRoutinesLocalDB implements RoutinesDBHandler {
   static final SavedRoutinesLocalDB _handler = SavedRoutinesLocalDB._internal();
+  static bool _adaptersRegistered = false;
 
   late Box<List<dynamic>> box;
   List<Routine> savedRoutines = [];
@@ -20,9 +21,12 @@ class SavedRoutinesLocalDB implements RoutinesDBHandler {
 
   @override
   Future<void> init() async {
-    Hive.registerAdapter(RoutineAdapter());
-    Hive.registerAdapter(TaskAdapter());
-    Hive.registerAdapter(TimeOfDayAdapter());
+    if (!_adaptersRegistered) {
+      Hive.registerAdapter(RoutineAdapter());
+      Hive.registerAdapter(TaskAdapter());
+      Hive.registerAdapter(TimeOfDayAdapter());
+      _adaptersRegistered = true;
+    }
 
     if(!Hive.isBoxOpen("saved_routines")) {
       box = await Hive.openBox<List<dynamic>>("saved_routines");

@@ -4,19 +4,19 @@ part "task.g.dart";
 
 @HiveType(typeId: 2)
 class Task {
-  @HiveField(0)
+  @HiveField(16)
   late String id;
 
-  @HiveField(1)
+  @HiveField(17)
   late String name;
 
-  @HiveField(2)
+  @HiveField(18)
   late int restTimeSeconds;
 
-  @HiveField(3)
+  @HiveField(19)
   late int reps;
 
-  @HiveField(4)
+  @HiveField(20)
   late int sets;
 
   Task({ required this.id, required this.name, required this.restTimeSeconds, required this.reps, required this.sets });

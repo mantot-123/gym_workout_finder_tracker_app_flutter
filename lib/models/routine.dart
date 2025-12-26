@@ -6,19 +6,19 @@ part "routine.g.dart";
 
 @HiveType(typeId: 1)
 class Routine {
-  @HiveField(0)
+  @HiveField(11)
   late String id;
 
-  @HiveField(1)
+  @HiveField(12)
   late String name;
 
-  @HiveField(2)
+  @HiveField(13)
   late String timeStart;
 
-  @HiveField(3)
+  @HiveField(14)
   late List<Task> tasks;
 
-  @HiveField(4)
+  @HiveField(15)
   late String? user;
   
   Routine({ required this.id, required this.name, required this.timeStart, required this.tasks, this.user });

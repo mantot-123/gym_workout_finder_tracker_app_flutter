@@ -1,7 +1,7 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import "package:loading_animation_widget/loading_animation_widget.dart";
-import "package:gym_workout_finder_tracker_app_flutter/database/interfaces/routines_db_handler.dart";
 import "package:gym_workout_finder_tracker_app_flutter/models/routine.dart";
 import "package:gym_workout_finder_tracker_app_flutter/services/routines_db_service.dart";
 import "package:gym_workout_finder_tracker_app_flutter/services/exercises_db_service.dart";
@@ -17,7 +17,48 @@ class SavedRoutinesList extends StatefulWidget {
 }
 
 class _SavedRoutinesListState extends State<SavedRoutinesList> {
-  RoutinesDBHandler routinesDB = RoutinesDBService.dbHandler;
+  bool? _previousAuthState;
+  StreamSubscription<List<Routine>>? _dataSubscription;
+  final StreamController<List<Routine>> _dataController = StreamController<List<Routine>>.broadcast();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadRoutines();
+  }
+
+  @override
+  void dispose() {
+    _dataSubscription?.cancel();
+    _dataController.close();
+    super.dispose();
+  }
+
+  Future<void> _loadRoutines() async {
+    try {
+      // Always read from the current handler (not a cached reference)
+      final routines = await RoutinesDBService.dbHandler.getAllRoutines();
+      _dataController.add(routines);
+    } catch (e) {
+      print("Error loading routines: $e");
+      _dataController.addError(e);
+    }
+  }
+
+  Future<void> _handleAuthStateChange(bool isLoggedIn) async {
+    // Only switch if auth state actually changed
+    if (_previousAuthState != isLoggedIn) {
+      _previousAuthState = isLoggedIn;
+      try {
+        await ExercisesDBService.switchDBHandlerByLoginState();
+        await RoutinesDBService.switchDBHandlerByLoginState();
+        // Reload routines after handler switch
+        await _loadRoutines();
+      } catch (e) {
+        print("Error switching DB handlers: $e");
+      }
+    }
+  }
 
   // EMPTY MESSAGE METHOD
   Widget _buildEmptyRoutinesMsg() {
@@ -42,18 +83,18 @@ class _SavedRoutinesListState extends State<SavedRoutinesList> {
         return RoutineTile(
           data: data![index], 
           onOpen: () async {
-            // TODO OPEN ROUTINE DETAILS PAGE
             await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return RoutineDetailsPage(data: data[index]);
+              return RoutineDetailsPage(data: data![index]);
             }));
+            // Reload after viewing
+            _loadRoutines();
           },
           onEdit: () async {
-            // TODO EDIT ROUTINE
             await Navigator.of(context).push(MaterialPageRoute(builder: (context) {
-              return EditRoutinePage(mode: 1, data: data[index]);
+              return EditRoutinePage(mode: 1, data: data![index]);
             }));
-    
-            setState(() {});
+            // Reload after editing
+            _loadRoutines();
           }
         );
       }
@@ -64,29 +105,46 @@ class _SavedRoutinesListState extends State<SavedRoutinesList> {
   Widget _buildContent(BuildContext context) {
     return StreamBuilder(
       stream: FirebaseAuth.instance.authStateChanges(),
-      builder: (context, snapshot) {
-        if(!snapshot.hasData) {
-          ExercisesDBService.switchDBHandlerByLoginState();
-          RoutinesDBService.switchDBHandlerByLoginState();
+      builder: (context, authSnapshot) {
+        // Handle auth state changes without side effects in builder
+        if (authSnapshot.connectionState == ConnectionState.active) {
+          final isLoggedIn = authSnapshot.hasData;
+          _handleAuthStateChange(isLoggedIn);
         }
 
-        return FutureBuilder(
-          future: routinesDB.getAllRoutines(),
-          builder: (context, snapshot) {
-            if(snapshot.connectionState == ConnectionState.waiting) {
+        // Stream routines data
+        return StreamBuilder<List<Routine>>(
+          stream: _dataController.stream,
+          builder: (context, dataSnapshot) {
+            if (dataSnapshot.connectionState == ConnectionState.waiting && !dataSnapshot.hasData) {
               return Center(
                 child: LoadingAnimationWidget.fourRotatingDots(
                   color: Colors.lightGreen.shade900, size: 100
                 )
               );
-            } 
-            else if(!snapshot.hasData) {
-              return _buildEmptyRoutinesMsg();
             }
-        
-            return snapshot.data!.isNotEmpty
-            ? _buildRoutinesList(context, snapshot.data!)
-            : _buildEmptyRoutinesMsg();
+            
+            if (dataSnapshot.hasError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 60, color: Colors.red),
+                    SizedBox(height: 10),
+                    Text("Error loading routines", textAlign: TextAlign.center),
+                    TextButton(
+                      onPressed: _loadRoutines,
+                      child: Text("Retry")
+                    )
+                  ],
+                )
+              );
+            }
+
+            final routines = dataSnapshot.data ?? [];
+            return routines.isNotEmpty
+                ? _buildRoutinesList(context, routines)
+                : _buildEmptyRoutinesMsg();
           }
         );
       }

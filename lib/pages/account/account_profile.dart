@@ -4,11 +4,7 @@ import "package:gym_workout_finder_tracker_app_flutter/widgets/account/account_t
 import "package:gym_workout_finder_tracker_app_flutter/widgets/account/account_menu.dart";
 import "package:loading_animation_widget/loading_animation_widget.dart";
 import "package:firebase_auth/firebase_auth.dart";
-import "package:firebase_core/firebase_core.dart";
-import "package:cloud_firestore/cloud_firestore.dart";
 import 'package:flutter/material.dart';
-import "../auth/login.dart";
-import "../../widgets/ui/ui_scaffold.dart";
 
 class AccountProfilePage extends StatefulWidget {
   const AccountProfilePage({super.key});
@@ -18,6 +14,27 @@ class AccountProfilePage extends StatefulWidget {
 }
 
 class _AccountProfilePageState extends State<AccountProfilePage> {
+  bool? _previousAuthState;
+
+  @override
+  void initState() {
+    super.initState();
+    _previousAuthState = FirebaseAuth.instance.currentUser != null;
+  }
+
+  Future<void> _handleAuthStateChange(bool isLoggedIn) async {
+    // Only switch if auth state actually changed
+    if (_previousAuthState != isLoggedIn) {
+      _previousAuthState = isLoggedIn;
+      try {
+        await ExercisesDBService.switchDBHandlerByLoginState();
+        await RoutinesDBService.switchDBHandlerByLoginState();
+      } catch (e) {
+        print("Error switching DB handlers: $e");
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,9 +48,12 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
                 color: Colors.lightGreen.shade900, size: 100
               ),
             );
-          } else if(!snapshot.hasData) {
-            ExercisesDBService.switchDBHandlerByLoginState();
-            RoutinesDBService.switchDBHandlerByLoginState();
+          }
+          
+          // Handle auth state changes without side effects in builder
+          if (snapshot.connectionState == ConnectionState.active) {
+            final isLoggedIn = snapshot.hasData;
+            _handleAuthStateChange(isLoggedIn);
           }
 
           return Column(
@@ -42,7 +62,8 @@ class _AccountProfilePageState extends State<AccountProfilePage> {
               AccountMenu()
             ],
           );
-        },)
+        },
+      )
     );
   }
 }

@@ -16,11 +16,6 @@ class SavedExercisesPage extends StatefulWidget {
 class _SavedExercisesPageState extends State<SavedExercisesPage> {
   ExercisesDBHandler exercisesDB = ExercisesDBService.dbHandler;
 
-  @override
-  void initState() {
-    super.initState();
-  }
-
   // REMOVE EXERCISE FROM SAVED LIST
   void removeSavedExercise(BuildContext context, Exercise data) {
     setState(() {
@@ -54,6 +49,6 @@ class _SavedExercisesPageState extends State<SavedExercisesPage> {
           setState(() { });
         })
       ]
-    );;
+    );
   }
 }

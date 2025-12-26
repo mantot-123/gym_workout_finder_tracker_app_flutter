@@ -7,6 +7,7 @@ import "../models/exercise.dart";
 // singleton class to manage saved exercises
 class SavedExercisesLocalDB implements ExercisesDBHandler {
   static final SavedExercisesLocalDB _handler = SavedExercisesLocalDB._internal();
+  static bool _adaptersRegistered = false;
 
   late Box<List<dynamic>> box;
   List<Exercise> savedExercises = [];
@@ -19,7 +20,10 @@ class SavedExercisesLocalDB implements ExercisesDBHandler {
 
   @override
   Future<void> init() async {
-    Hive.registerAdapter(ExerciseAdapter());
+    if (!_adaptersRegistered) {
+      Hive.registerAdapter(ExerciseAdapter());
+      _adaptersRegistered = true;
+    }
     if(!Hive.isBoxOpen("saved_exercises")) {
       box = await Hive.openBox<List<dynamic>>("saved_exercises");
     } else {

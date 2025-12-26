@@ -7,9 +7,10 @@ import "../../models/routine.dart";
 // TODO
 class SavedRoutinesCloudDB implements RoutinesDBHandler {
   static final SavedRoutinesCloudDB _handler = SavedRoutinesCloudDB._internal();
-  late StreamSubscription<QuerySnapshot<Object?>> subscription;
+  StreamSubscription<QuerySnapshot<Object?>>? _subscription;
   CollectionReference collection = FirebaseFirestore.instance.collection("routines");
   List<Routine> routines = [];
+  bool _isSubscribed = false;
 
   SavedRoutinesCloudDB._internal();
 
@@ -23,24 +24,57 @@ class SavedRoutinesCloudDB implements RoutinesDBHandler {
 
   @override
   Future<void> loadRoutines() async {
-    subscription = collection
-      .where("user", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-      .orderBy("creationDate")
-      .snapshots().listen((snapshot) {
-        routines.clear();
-        for(var document in snapshot.docs) {
-          Map<dynamic, dynamic> map = document.data() as Map<dynamic, dynamic>;
-          Routine r = Routine.fromMap(map);
-          routines.add(r);
-        }
-        print(routines);
+    try {
+      // Cancel existing subscription if it exists to prevent memory leaks
+      if (_subscription != null && !_subscription!.isPaused) {
+        await _subscription!.cancel();
+        _subscription = null;
+        _isSubscribed = false;
       }
-    );
+
+      // Only create subscription if not already subscribed
+      if (!_isSubscribed) {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user == null) {
+          throw Exception("Cannot load routines: User is not logged in");
+        }
+
+        _subscription = collection
+          .where("user", isEqualTo: user.uid)
+          .orderBy("creationDate")
+          .snapshots()
+          .listen(
+            (snapshot) {
+              routines.clear();
+              for(var document in snapshot.docs) {
+                try {
+                  Map<dynamic, dynamic> map = document.data() as Map<dynamic, dynamic>;
+                  Routine r = Routine.fromMap(map);
+                  routines.add(r);
+                } catch (e) {
+                  print("Error parsing routine document ${document.id}: $e");
+                }
+              }
+            },
+            onError: (error) {
+              print("Error in routines stream: $error");
+            }
+          );
+        _isSubscribed = true;
+      }
+    } catch (e) {
+      print("Error loading routines: $e");
+      rethrow;
+    }
   }
 
   @override
   Future<void> close() async {
-    subscription.cancel();
+    if (_subscription != null) {
+      await _subscription!.cancel();
+      _subscription = null;
+      _isSubscribed = false;
+    }
   }
 
   @override
@@ -88,8 +122,9 @@ class SavedRoutinesCloudDB implements RoutinesDBHandler {
     await collection.doc(routine.id).delete();
   }
 
+  // unneeded code - firebase already does the updating, so don't worry about this
   @override
-  Future<void> updateDB() async { // REDUNDANT CODE - NO NEED TO UPDATE THE DATABASE SINCE FIREBASE ALREADY DOES THAT
+  Future<void> updateDB() async {
     return;
   }
 

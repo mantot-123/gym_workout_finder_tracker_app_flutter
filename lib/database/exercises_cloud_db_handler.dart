@@ -7,9 +7,10 @@ import "../../models/exercise.dart";
 // TODO
 class SavedExercisesCloudDB implements ExercisesDBHandler {
   static final SavedExercisesCloudDB _handler = SavedExercisesCloudDB._internal();
-  late StreamSubscription<QuerySnapshot<Object?>> subscription;
+  StreamSubscription<QuerySnapshot<Object?>>? _subscription;
   CollectionReference collection = FirebaseFirestore.instance.collection("exercises");
   List<Exercise> exercises = [];
+  bool _isSubscribed = false;
 
   SavedExercisesCloudDB._internal();
 
@@ -22,24 +23,58 @@ class SavedExercisesCloudDB implements ExercisesDBHandler {
 
   @override
   Future<void> loadExercises() async {
-    // listens for any new exercises added and add them to the saved exercises list
-    subscription = collection
-      .where("user", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
-      .orderBy("creationDate")
-      .snapshots().listen((snapshot) {
-        exercises.clear();
-        for(var document in snapshot.docs) {
-          Map<dynamic, dynamic> map = document.data() as Map<dynamic, dynamic>;
-          Exercise e = Exercise.fromMap(map);
-          exercises.add(e);
-        }
+    try {
+      // Cancel existing subscription if it exists to prevent memory leaks
+      if (_subscription != null && !_subscription!.isPaused) {
+        await _subscription!.cancel();
+        _subscription = null;
+        _isSubscribed = false;
       }
-    );
+
+      // Only create subscription if not already subscribed
+      if (!_isSubscribed) {
+        final user = FirebaseAuth.instance.currentUser;
+        if (user == null) {
+          throw Exception("Cannot load exercises: User is not logged in");
+        }
+
+        // listens for any new exercises added and add them to the saved exercises list
+        _subscription = collection
+          .where("user", isEqualTo: user.uid)
+          .orderBy("creationDate")
+          .snapshots()
+          .listen(
+            (snapshot) {
+              exercises.clear();
+              for(var document in snapshot.docs) {
+                try {
+                  Map<dynamic, dynamic> map = document.data() as Map<dynamic, dynamic>;
+                  Exercise e = Exercise.fromMap(map);
+                  exercises.add(e);
+                } catch (e) {
+                  print("Error parsing exercise document ${document.id}: $e");
+                }
+              }
+            },
+            onError: (error) {
+              print("Error in exercises stream: $error");
+            }
+          );
+        _isSubscribed = true;
+      }
+    } catch (e) {
+      print("Error loading exercises: $e");
+      rethrow;
+    }
   }
 
   @override
   Future<void> close() async {
-    subscription.cancel();
+    if (_subscription != null) {
+      await _subscription!.cancel();
+      _subscription = null;
+      _isSubscribed = false;
+    }
   }
 
   @override

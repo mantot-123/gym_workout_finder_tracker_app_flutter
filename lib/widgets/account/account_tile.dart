@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import "package:firebase_auth/firebase_auth.dart";
 import 'package:gym_workout_finder_tracker_app_flutter/pages/auth/login.dart';
@@ -56,8 +55,8 @@ class _AccountTileState extends State<AccountTile> {
     return logOut;
   }
 
-  // build this if it detects a guest user
-  Widget _buildNotSignedInTile(BuildContext context) {
+  // build this for signed in users
+  Widget _buildSignedInTile(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -76,8 +75,8 @@ class _AccountTileState extends State<AccountTile> {
     );
   }
 
-  // build this for signed in users
-  Widget _buildAccountTile(BuildContext context) {
+  // build this for guest users (not signed in)
+  Widget _buildNotSignedInTile(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -112,10 +111,10 @@ class _AccountTileState extends State<AccountTile> {
               );
             }
             else if(snapshot.hasData) {
-              return _buildNotSignedInTile(context);
+              return _buildSignedInTile(context);
             }
 
-            return _buildAccountTile(context);
+            return _buildNotSignedInTile(context);
           }
         ),
       ),

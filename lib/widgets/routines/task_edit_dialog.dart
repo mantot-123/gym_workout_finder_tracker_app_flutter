@@ -47,7 +47,7 @@ class TaskEditDialog {
     repsHelperMsg = "";
   }
 
-  void save() {
+  Future<void> save() async {
     // TODO ADD NEW TASK TO ROUTINE
     Task newTask = Task(
       id: mode == 0 ? RngStrGen.generator(12) : task.id,
@@ -63,7 +63,8 @@ class TaskEditDialog {
       routine.taskListReplaceItem(newTask);
     }
 
-    routinesDB.updateDB(); // update the saved routines in the database
+    // update the routine in the local/cloud database
+    await routinesDB.updateRoutine(routine);
   }
 
 
@@ -76,7 +77,7 @@ class TaskEditDialog {
           Navigator.of(context).pop(task.name);
         }
       ),
-    );;
+    );
   }
 
   // INPUT BOXES
@@ -158,12 +159,12 @@ class TaskEditDialog {
   // SAVE, CANCEL AND DELETE ACTION BUTTONS
   List<Widget> _buildActionBtns(BuildContext context) {
     return [
-      TextButton(child: Text("Save"), onPressed: () {
+      TextButton(child: Text("Save"), onPressed: () async {
         // if there are errors in the form, show error dialog
         bool isValid = _formKey.currentState!.validate();
 
         if(isValid) { // saves + exits
-          save();
+          await save();
           clearForm();
           Navigator.of(context).pop(); // close edit dialog
         }
@@ -172,10 +173,10 @@ class TaskEditDialog {
       mode == 1 
       ? TextButton(
           child: Text("Delete", style: TextStyle(color: Colors.red)), 
-          onPressed : () {
+          onPressed : () async {
             // TODO DELETE FUNCTION
             routine.deleteTaskByID(task);
-            routinesDB.updateDB();
+            await routinesDB.updateRoutine(routine);
             clearForm();
             Navigator.of(context).pop();
           }
